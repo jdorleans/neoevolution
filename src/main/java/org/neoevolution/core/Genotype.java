@@ -1,0 +1,148 @@
+package org.neoevolution.core;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.neoevolution.mvc.AbstractEntity;
+import org.neoevolution.util.MapUtils;
+import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.RelatedToVia;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+@NodeEntity
+public class Genotype extends AbstractEntity {
+
+    private static final long serialVersionUID = -849596329356657600L;
+
+    private Integer generation;
+
+    private Boolean evaluated;
+
+    private Double fitness;
+
+    private Double adjustedFitness;
+
+    @RelatedTo(type="SPECIES")
+    @JsonBackReference
+    private Species species;
+
+    @RelatedTo(type="INPUT")
+    private Set<Neuron> inputs;
+
+    @RelatedTo(type="OUTPUT")
+    private Set<Neuron> outputs;
+
+    @RelatedTo(type="NEURON")
+    private Set<Neuron> neurons;
+
+    @RelatedToVia(type="SYNAPSE")
+    private Set<Synapse> synapses;
+
+
+    public Genotype() {
+        this(0, 0,0);
+    }
+
+    public Genotype(int generation, int inputs, int outputs)
+    {
+        int size = MapUtils.getSize(inputs + outputs);
+        this.generation = generation;
+        this.evaluated = false;
+        this.fitness = 0d;
+        this.adjustedFitness = 0d;
+        this.inputs = new LinkedHashSet<>(MapUtils.getSize(inputs, false));
+        this.outputs = new LinkedHashSet<>(MapUtils.getSize(outputs, false));
+        this.neurons = new LinkedHashSet<>(size);
+        this.synapses = new LinkedHashSet<>(size*size/2);
+    }
+
+
+    public void addInput(Neuron neuron) {
+        inputs.add(neuron);
+        neurons.add(neuron);
+    }
+
+    public void addHidden(Neuron neuron) {
+        neurons.add(neuron);
+    }
+
+    public void addOutput(Neuron neuron) {
+        outputs.add(neuron);
+        neurons.add(neuron);
+    }
+
+    public void addSynapse(Synapse synapse) {
+        synapses.add(synapse);
+    }
+
+
+    @Override
+    public String toString() {
+        return "GENOTYPE(g:"+ generation +", f:"+ fitness +")";
+    }
+
+    public Integer getGeneration() {
+        return generation;
+    }
+    public void setGeneration(Integer generation) {
+        this.generation = generation;
+    }
+
+    public Boolean isEvaluated() {
+        return evaluated;
+    }
+    public void setEvaluated(Boolean evaluated) {
+        this.evaluated = evaluated;
+    }
+
+    public Double getFitness() {
+        return fitness;
+    }
+    public void setFitness(Double fitness) {
+        this.fitness = fitness;
+    }
+
+    public Double getAdjustedFitness() {
+        return adjustedFitness;
+    }
+    public void setAdjustedFitness(Double adjustedFitness) {
+        this.adjustedFitness = adjustedFitness;
+    }
+
+    public Species getSpecies() {
+        return species;
+    }
+    public void setSpecies(Species species) {
+        this.species = species;
+    }
+
+    public Set<Neuron> getInputs() {
+        return inputs;
+    }
+    public void setInputs(Set<Neuron> inputs) {
+        this.inputs = inputs;
+    }
+
+    public Set<Neuron> getOutputs() {
+        return outputs;
+    }
+    public void setOutputs(Set<Neuron> outputs) {
+        this.outputs = outputs;
+    }
+
+    public Set<Neuron> getNeurons() {
+        return neurons;
+    }
+    public void setNeurons(Set<Neuron> neurons) {
+        this.neurons = neurons;
+    }
+
+    public Set<Synapse> getSynapses() {
+        return synapses;
+    }
+    public void setSynapses(Set<Synapse> synapses) {
+        this.synapses = synapses;
+    }
+
+}

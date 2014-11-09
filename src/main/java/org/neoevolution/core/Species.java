@@ -1,0 +1,107 @@
+package org.neoevolution.core;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.neoevolution.mvc.AbstractEntity;
+import org.neoevolution.util.MapUtils;
+import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+@NodeEntity
+public class Species extends AbstractEntity {
+
+    private static final long serialVersionUID = -2774570149581847246L;
+
+    private Integer generation;
+
+    private Boolean evaluated;
+
+    private Double fitness;
+
+    private Integer maxSize;
+
+    private Genotype bestGenotype;
+
+    @RelatedTo(type="GENOTYPE")
+    @JsonManagedReference
+    private Set<Genotype> genotypes;
+
+
+    public Species() {
+        this(0, 0);
+    }
+
+    public Species(int generation, int size)
+    {
+        this.generation = generation;
+        this.evaluated = false;
+        this.fitness = 0d;
+        this.maxSize = size;
+        this.genotypes = new LinkedHashSet<>(MapUtils.getSize(size));
+    }
+
+
+    public void addGenotype(Genotype genotype)
+    {
+        if (bestGenotype == null || genotype.getFitness() > bestGenotype.getFitness()) {
+            bestGenotype = genotype;
+        }
+        evaluated = !genotypes.add(genotype);
+        genotype.setSpecies(this);
+    }
+
+
+    @Override
+    public String toString() {
+        return "SPECIES(g:"+ generation +", f:"+ fitness +")";
+    }
+
+    public Integer getGeneration() {
+        return generation;
+    }
+    public void setGeneration(Integer generation) {
+        this.generation = generation;
+    }
+
+    public Boolean isEvaluated() {
+        return evaluated;
+    }
+    public void setEvaluated(Boolean evaluated) {
+        this.evaluated = evaluated;
+    }
+
+    public Double getFitness() {
+        return fitness;
+    }
+
+    public void setFitness(Double fitness) {
+        this.fitness = fitness;
+    }
+
+    public Integer getMaxSize() {
+        return maxSize;
+    }
+
+    public void setMaxSize(Integer maxSize) {
+        this.maxSize = maxSize;
+    }
+
+    public Genotype getBestGenotype() {
+        return bestGenotype;
+    }
+
+    public void setBestGenotype(Genotype bestGenotype) {
+        this.bestGenotype = bestGenotype;
+    }
+
+    public Set<Genotype> getGenotypes() {
+        return genotypes;
+    }
+
+    public void setGenotypes(Set<Genotype> genotypes) {
+        this.genotypes = genotypes;
+    }
+
+}
