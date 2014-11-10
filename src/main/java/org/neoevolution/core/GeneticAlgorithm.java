@@ -55,7 +55,7 @@ public class GeneticAlgorithm {
     // 5. Speciation
     public void evolve()
     {
-        while (population.getBestGenotype().getFitness() < 0.9) {
+        while (population.getBestGenotype().getFitness() < 0.99) {
             evolution();
         }
         populationService.save(population);
@@ -65,10 +65,10 @@ public class GeneticAlgorithm {
     {
         evaluation.evaluate(population);
         selection.select(population);
+        configuration.setGeneration(population.nextGeneration());
         List<Genotype> genotypes = reproduction.reproduce(population);
         mutation.mutate(genotypes);
         speciation.speciate(population, genotypes);
-        configuration.setGeneration(population.nextGeneration());
     }
 
 }

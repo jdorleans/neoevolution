@@ -77,7 +77,8 @@ public class Speciation {
     {
         double excess = calculateExcess(g1.getNeurons(), g2.getNeurons());
         excess += calculateExcess(g1.getSynapses(), g2.getSynapses());
-        excess = (configuration.getExcessFactor() * excess) / calculateTotalGenes(g1, g2);
+        excess = (configuration.getExcessFactor() * excess);
+//        excess = (configuration.getExcessFactor() * excess) / calculateTotalGenes(g1, g2);
         return excess;
     }
 
@@ -107,7 +108,7 @@ public class Speciation {
     private double calculateWeight(Set<Synapse> synapse1, Set<Synapse> synapse2)
     {
         int similar = 0;
-        double average = 0;
+        double weightDiff = 0;
 
         for (Synapse s1 : synapse1)
         {
@@ -115,10 +116,11 @@ public class Speciation {
             {
                 if (s1.getInnovation().equals(s2.getInnovation())) {
                     similar++;
-                    average += Math.abs(s1.getWeight() - s2.getWeight());
+                    weightDiff += Math.abs(s1.getWeight() - s2.getWeight());
+                    break;
                 }
             }
         }
-        return (configuration.getWeightFactor() * (average / similar));
+        return (configuration.getWeightFactor() * (weightDiff / similar));
     }
 }

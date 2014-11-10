@@ -25,7 +25,7 @@ public class ChangeWeightMutation extends AbstractMutation {
         int size = Randomizer.randomIntInclusive(synapses.size());
 
         for (int i = 0; i < size; i++) {
-            synapses.get(i).setWeight(Randomizer.randomInclusive());
+            synapses.get(i).setWeight(Randomizer.randomInclusive(-1, 1));
         }
     }
 

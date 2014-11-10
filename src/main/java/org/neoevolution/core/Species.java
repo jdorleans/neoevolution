@@ -16,8 +16,6 @@ public class Species extends AbstractEntity {
 
     private Integer generation;
 
-    private Boolean evaluated;
-
     private Double fitness;
 
     private Integer maxSize;
@@ -36,7 +34,6 @@ public class Species extends AbstractEntity {
     public Species(int generation, int size)
     {
         this.generation = generation;
-        this.evaluated = false;
         this.fitness = 0d;
         this.maxSize = size;
         this.genotypes = new LinkedHashSet<>(MapUtils.getSize(size));
@@ -48,7 +45,7 @@ public class Species extends AbstractEntity {
         if (bestGenotype == null || genotype.getFitness() > bestGenotype.getFitness()) {
             bestGenotype = genotype;
         }
-        evaluated = !genotypes.add(genotype);
+        genotypes.add(genotype);
         genotype.setSpecies(this);
     }
 
@@ -63,13 +60,6 @@ public class Species extends AbstractEntity {
     }
     public void setGeneration(Integer generation) {
         this.generation = generation;
-    }
-
-    public Boolean isEvaluated() {
-        return evaluated;
-    }
-    public void setEvaluated(Boolean evaluated) {
-        this.evaluated = evaluated;
     }
 
     public Double getFitness() {

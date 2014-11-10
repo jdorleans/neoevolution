@@ -19,7 +19,7 @@ public class SynapseFactory {
 
 
     public Synapse create(Neuron start, Neuron end) {
-        return create(start, end, Randomizer.random());
+        return create(start, end, Randomizer.randomInclusive(-1, 1));
     }
 
     public Synapse create(Neuron start, Neuron end, Double weight)
