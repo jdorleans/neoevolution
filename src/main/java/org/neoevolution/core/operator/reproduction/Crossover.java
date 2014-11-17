@@ -30,9 +30,9 @@ public class Crossover extends AbstractOperation implements Reproduction {
     }
 
     @Override
-    public List<Genotype> reproduce(Population population)
+    public Set<Genotype> reproduce(Population population)
     {
-        List<Genotype> offsprings = new ArrayList<>(getOffspringSize());
+        Set<Genotype> offsprings = new HashSet<>(getOffspringSize());
 
         for (Species species : population.getSpecies())
         {
@@ -83,7 +83,7 @@ public class Crossover extends AbstractOperation implements Reproduction {
     private Genotype reproduce(Parents parents)
     {
         Genotype dominant = parents.getDominant();
-        Genotype offspring = genotypeFactory.create();
+        Genotype offspring = genotypeFactory.create(false);
 
         Map<Long, Neuron> neurons = createNeuronsMap(offspring, dominant.getNeurons().size());
         Map<Long, Synapse> synapses = cloneDominantGenes(parents, offspring, neurons);

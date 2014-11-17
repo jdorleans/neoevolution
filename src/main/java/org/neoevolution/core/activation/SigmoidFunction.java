@@ -3,7 +3,7 @@ package org.neoevolution.core.activation;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class SigmoidFunction implements ActivationFunction {
+public final class SigmoidFunction extends AbstractActivationFunction implements ActivationFunction {
 
     @Override
     public ActivationFunctionType getType() {
@@ -11,7 +11,7 @@ public final class SigmoidFunction implements ActivationFunction {
     }
 
     @Override
-	public double calculate(double input) {
+	public double calculation(double input) {
         return (1d / (1d + Math.exp(-input)));
     }
 

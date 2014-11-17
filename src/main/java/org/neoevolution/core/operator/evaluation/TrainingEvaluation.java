@@ -44,9 +44,10 @@ public abstract class TrainingEvaluation implements Evaluation {
                     evaluate(genotype);
                     updateBestGenotype(population, species, genotype);
                 }
+                // FIXME - SPECIES WITH ONLY ONE GENOTYPE IS ALWAYS BEST THAN OTHERS WITH MANY GENOTYPE
                 speciesFitness += adjustFitness(genotype, size);
             }
-            speciesFitness /= size;
+//            speciesFitness /= size;
             totalFitness += speciesFitness;
             species.setFitness(speciesFitness);
             updateBestSpecies(population, species);
@@ -62,20 +63,22 @@ public abstract class TrainingEvaluation implements Evaluation {
 
         for (int idx = 0; idx < evaluations; idx++)
         {
-            Map<Neuron, Double> neurons = activateInputs(genotype, inputSet.get(idx));
-            Set<Long> activated = new HashSet<>(MapUtils.getSize(activations));
+            int size = MapUtils.getSize(genotype.getNeurons().size());
+            Map<Neuron, Double> neurons = new HashMap<>(size);
+            Set<Long> activated = activateInputs(genotype, inputSet.get(idx), neurons, activations);
 
-            // Should not have disconnected neurons (except input neurons)
-            while(activated.size() < activations)
+            while (activated.size() < activations)
             {
-                Map<Neuron, Double> nextNeurons = new HashMap<>();
+                Map<Neuron, Double> nextNeurons = new HashMap<>(size);
 
                 for (Neuron neuron : neurons.keySet()) {
                     neuron.activate(neurons.get(neuron));
-                    propagate(neuron, nextNeurons);
-                    activated.add(neuron.getInnovation());
+                    activated.addAll(propagate(neuron, nextNeurons));
                 }
                 neurons = nextNeurons;
+            }
+            for (Neuron neuron : neurons.keySet()) {
+                neuron.activate(neurons.get(neuron));
             }
             fitness += calculateFitness(genotype, outputSet.get(idx));
         }
@@ -85,59 +88,58 @@ public abstract class TrainingEvaluation implements Evaluation {
 
     private int getActivationSize(Genotype genotype)
     {
-        Set<Neuron> neurons = genotype.getNeurons();
-        int size = neurons.size();
+        int size = 0;
 
-        for (Neuron neuron : neurons) {
-            if (!isActive(neuron)) {
-                size--;
+        for (Neuron neuron : genotype.getOutputs()) {
+            size += getActiveInputSize(neuron);
+        }
+        return size;
+    }
+
+    private int getActiveInputSize(Neuron neuron)
+    {
+        int size = 0;
+
+        for (Synapse synapse : neuron.getInputs()) {
+            if (synapse.isEnabled()) {
+                size++;
             }
         }
         return size;
     }
 
-    private boolean isActive(Neuron neuron)
+    private Set<Long> activateInputs(Genotype genotype, List<Double> inputs, Map<Neuron, Double> neurons, int activations)
     {
-        boolean isActive = false;
-
-        for (Synapse synapse : neuron.getInputs()) {
-            if (synapse.isEnabled()) {
-                isActive = true;
-                break;
-            }
-        }
-        return isActive;
-    }
-
-    private Map<Neuron, Double> activateInputs(Genotype genotype, List<Double> inputs)
-    {
-        Map<Neuron, Double> nextNeurons = new HashMap<>();
-
         int idx = 0;
+        Set<Long> activated = new HashSet<>(MapUtils.getSize(activations));
+
         for (Neuron neuron : genotype.getInputs()) {
-            activateInput(idx, inputs, neuron);
-            propagate(neuron, nextNeurons);
-            idx++;
+            idx = activateInput(idx, inputs, neuron);
+            activated.addAll(propagate(neuron, neurons));
         }
-        return nextNeurons;
+        return activated;
     }
 
-    private void activateInput(int idx, List<Double> inputs, Neuron neuron)
+    private int activateInput(int idx, List<Double> inputs, Neuron neuron)
     {
         NeuronType type = neuron.getType();
 
         if (NeuronType.isInput(type)) {
             neuron.activate(inputs.get(idx));
+            idx++;
         } else if (NeuronType.isBias(type)) {
             neuron.activate(1d);
         }
+        return idx;
     }
 
-    private void propagate(Neuron start, Map<Neuron, Double> neurons)
+    private Set<Long> propagate(Neuron start, Map<Neuron, Double> neurons)
     {
-        Double activation = NumberUtils.getNotNull(start.getActivation());
+        Double activation = start.getActivation();
+        Set<Synapse> outputs = start.getOutputs();
+        Set<Long> activated = new HashSet<>(MapUtils.getSize(outputs.size()));
 
-        for (Synapse output : start.getOutputs())
+        for (Synapse output : outputs)
         {
             if (output.isEnabled())
             {
@@ -145,8 +147,13 @@ public abstract class TrainingEvaluation implements Evaluation {
                 Double value = NumberUtils.getNotNull(neurons.get(end));
                 value += activation * output.getWeight();
                 neurons.put(end, value);
+
+                if (NeuronType.isOutput(end.getType())) {
+                    activated.add(output.getInnovation());
+                }
             }
         }
+        return activated;
     }
 
     // TODO - Should we test only the last output impulse?

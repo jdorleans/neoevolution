@@ -33,6 +33,9 @@ public class GAConfiguration implements Serializable {
     @Value("${population.size}")
     private int populationSize;
 
+    @Value("${synapse.weight.range}")
+    private int weightRange;
+
     @Value("${mutation.weight.change.rate}")
     private double changeWeightRate;
 
@@ -126,6 +129,14 @@ public class GAConfiguration implements Serializable {
 
     public void setOutputSize(int outputSize) {
         this.outputSize = outputSize;
+    }
+
+    public int getWeightRange() {
+        return weightRange;
+    }
+
+    public void setWeightRange(int weightRange) {
+        this.weightRange = weightRange;
     }
 
     public int getPopulationSize() {
