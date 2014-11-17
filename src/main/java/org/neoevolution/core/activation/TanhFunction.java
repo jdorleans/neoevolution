@@ -3,7 +3,7 @@ package org.neoevolution.core.activation;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class TanhFunction implements ActivationFunction {
+public final class TanhFunction extends AbstractActivationFunction implements ActivationFunction {
 
     @Override
     public ActivationFunctionType getType() {
@@ -11,7 +11,7 @@ public final class TanhFunction implements ActivationFunction {
     }
 
     @Override
-	public double calculate(double input) {
+	public double calculation(double input) {
         return Math.tanh(input);
     }
 

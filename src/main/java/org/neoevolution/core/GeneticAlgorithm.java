@@ -1,6 +1,6 @@
 package org.neoevolution.core;
 
-import org.neoevolution.core.factory.PopulationFactory;
+import org.neoevolution.core.factory.GenotypeFactory;
 import org.neoevolution.core.operator.Speciation;
 import org.neoevolution.core.operator.evaluation.Evaluation;
 import org.neoevolution.core.operator.mutation.MutationManager;
@@ -11,18 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
+import java.util.Set;
 
 @Component
 public class GeneticAlgorithm {
 
     private Population population;
 
-    @Autowired
-    private PopulationService populationService;
+    private Set<Genotype> offsprings;
 
     @Autowired
-    private PopulationFactory populationFactory;
+    private GenotypeFactory genotypeFactory;
+
+    @Autowired
+    private PopulationService populationService;
 
     @Autowired
     private Evaluation evaluation;
@@ -44,7 +46,9 @@ public class GeneticAlgorithm {
 
     @PostConstruct
     private void init() {
-        population = populationFactory.create();
+        population = new Population(configuration.getMaxSpeciesSize());
+        offsprings = genotypeFactory.createList(configuration.getPopulationSize());
+        speciation.speciate(population, offsprings);
     }
 
 
@@ -66,9 +70,9 @@ public class GeneticAlgorithm {
         evaluation.evaluate(population);
         selection.select(population);
         configuration.setGeneration(population.nextGeneration());
-        List<Genotype> genotypes = reproduction.reproduce(population);
-        mutation.mutate(genotypes);
-        speciation.speciate(population, genotypes);
+        offsprings = reproduction.reproduce(population);
+        mutation.mutate(offsprings);
+        speciation.speciate(population, offsprings);
     }
 
 }

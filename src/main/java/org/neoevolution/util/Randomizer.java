@@ -81,12 +81,22 @@ public final class Randomizer {
     }
 
 
-    public static double round6(double value) {
-        return ((value * 1e6) / 1e6);
-    }
-
     public static <T> T random(T a, T b) {
         return (randomBoolean() ? a : b);
+    }
+
+    public static double round6(double value) {
+        return round(value, 6);
+    }
+
+    public static double round(double value, int places)
+    {
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
+        long factor = (long) Math.pow(10, places);
+        long v = (long) (value * factor);
+        return ((double) v / factor);
     }
 
 }

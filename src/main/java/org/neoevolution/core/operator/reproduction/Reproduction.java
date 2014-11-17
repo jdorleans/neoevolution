@@ -1,9 +1,12 @@
 package org.neoevolution.core.operator.reproduction;
 
+import org.neoevolution.core.Genotype;
 import org.neoevolution.core.Population;
+
+import java.util.Set;
 
 public interface Reproduction {
 
-    java.util.List<org.neoevolution.core.Genotype> reproduce(Population population);
+    Set<Genotype> reproduce(Population population);
 
 }

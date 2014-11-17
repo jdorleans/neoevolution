@@ -8,7 +8,9 @@ import org.neoevolution.util.GenotypeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -27,21 +29,25 @@ public class NaturalSelection implements Selection {
         int populationSize = configuration.getPopulationSize();
         Iterator<Species> species = population.getSpecies().iterator();
 
-        while(species.hasNext())
+        while (species.hasNext())
         {
             Species specie = species.next();
-            calculateMaxSize(specie, totalFitness, populationSize);
-            select(specie);
+            int maxSize = calculateMaxSize(specie, totalFitness, populationSize);
 
-            if (specie.getGenotypes().isEmpty()) {
+            if (maxSize > 0) {
+                select(specie);
+            }
+
+            if (maxSize == 0 || specie.getGenotypes().isEmpty()) {
                 species.remove();
             }
         }
     }
 
-    private void calculateMaxSize(Species specie, double totalFitness, int populationSize) {
+    private int calculateMaxSize(Species specie, double totalFitness, int populationSize) {
         int maxSize = (int) ((specie.getFitness() / totalFitness) * populationSize);
         specie.setMaxSize(maxSize);
+        return maxSize;
     }
 
     private void select(Species species)

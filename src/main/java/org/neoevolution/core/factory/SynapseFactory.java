@@ -1,5 +1,6 @@
 package org.neoevolution.core.factory;
 
+import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.Neuron;
 import org.neoevolution.core.Synapse;
 import org.neoevolution.core.innovation.SynapseInnovationManager;
@@ -17,9 +18,12 @@ public class SynapseFactory {
     @Autowired
     private SynapseInnovationManager innovation;
 
+    @Autowired
+    private GAConfiguration configuration;
 
     public Synapse create(Neuron start, Neuron end) {
-        return create(start, end, Randomizer.randomInclusive(-1, 1));
+        int weightRange = configuration.getWeightRange();
+        return create(start, end, Randomizer.randomInclusive(-weightRange, weightRange));
     }
 
     public Synapse create(Neuron start, Neuron end, Double weight)

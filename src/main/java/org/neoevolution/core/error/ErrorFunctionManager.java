@@ -27,7 +27,10 @@ public class ErrorFunctionManager {
 
     public ErrorFunction get()
     {
-        if (ErrorFunctionType.isMSE(type)) {
+        if (ErrorFunctionType.isDE(type)) {
+            return new DEFunction();
+        }
+        else if (ErrorFunctionType.isMSE(type)) {
             return new MSEFunction();
         }
         else if (ErrorFunctionType.isRMSE(type)) {

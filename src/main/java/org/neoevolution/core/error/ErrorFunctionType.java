@@ -6,7 +6,11 @@ package org.neoevolution.core.error;
  */
 public enum ErrorFunctionType {
 
-    MSE, RMSE;
+    DE, MSE, RMSE;
+
+    public static boolean isDE(ErrorFunctionType type) {
+        return DE.equals(type);
+    }
 
     public static boolean isMSE(ErrorFunctionType type) {
         return MSE.equals(type);

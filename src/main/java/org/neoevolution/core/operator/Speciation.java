@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -15,7 +14,7 @@ public class Speciation {
     @Autowired
     private GAConfiguration configuration;
 
-    public void speciate(Population population, List<Genotype> genotypes)
+    public void speciate(Population population, Set<Genotype> genotypes)
     {
         for (Genotype genotype : genotypes) {
             if (!speciate(genotype, population)) {
@@ -48,12 +47,11 @@ public class Speciation {
         updateCompatibilityThreshold(population);
     }
 
-    // FIXME - IS IT POSSIBLE TO HAVE NEGATIVE WEIGHT VALUES? HOW TO DEAL WITH THAT?
     private void updateCompatibilityThreshold(Population population)
     {
         int maxSpecies = configuration.getMaxSpeciesSize();
         double threshold = configuration.getCompatibilityThreshold();
-        double rate = (1d - threshold) * configuration.getCompatibilityRate();
+        double rate = threshold * configuration.getCompatibilityRate();
         int size = population.getSpecies().size();
 
         if (size > maxSpecies) {
@@ -65,11 +63,14 @@ public class Speciation {
     }
 
     private boolean isCompatible(Genotype g1, Genotype g2)  {
-        return (calculateDistance(g1, g2) < configuration.getCompatibilityThreshold());
+        double distance = calculateDistance(g1, g2);
+        return (distance < configuration.getCompatibilityThreshold());
     }
 
     private double calculateDistance(Genotype g1, Genotype g2) {
-        return (calculateExcess(g1, g2) + calculateWeight(g1.getSynapses(), g2.getSynapses()));
+        double excess = calculateExcess(g1, g2);
+        double weight = calculateWeight(g1.getSynapses(), g2.getSynapses());
+        return (excess + weight);
     }
 
     // Calculate Excess and Disjoint
@@ -78,7 +79,7 @@ public class Speciation {
         double excess = calculateExcess(g1.getNeurons(), g2.getNeurons());
         excess += calculateExcess(g1.getSynapses(), g2.getSynapses());
         excess = (configuration.getExcessFactor() * excess);
-//        excess = (configuration.getExcessFactor() * excess) / calculateTotalGenes(g1, g2);
+//        excess = (configuration.getExcessFactor() * excess) / calculateTotalGenes(g1, g2); // TODO - SHOULD DIVIDE?
         return excess;
     }
 
@@ -104,7 +105,6 @@ public class Speciation {
         return Math.max(totalG1, totalG2);
     }
 
-    // FIXME - IS IT POSSIBLE TO HAVE NEGATIVE WEIGHT VALUES? HOW TO DEAL WITH THAT?
     private double calculateWeight(Set<Synapse> synapse1, Set<Synapse> synapse2)
     {
         int similar = 0;

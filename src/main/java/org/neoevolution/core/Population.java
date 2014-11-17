@@ -31,7 +31,7 @@ public class Population extends AbstractEntity {
 
     public Population(int maxSpecies) {
         this.generation = 0;
-        this.species = new LinkedHashSet<>(MapUtils.getSize(maxSpecies));
+        this.species = new LinkedHashSet<>(MapUtils.getSize(maxSpecies*2));
     }
 
 
@@ -41,8 +41,14 @@ public class Population extends AbstractEntity {
 
     public void addSpecie(Species specie)
     {
-        if (bestSpecies == null || specie.getFitness() > bestSpecies.getFitness()) {
+        if (bestSpecies == null || specie.getFitness() > bestSpecies.getFitness())
+        {
             bestSpecies = specie;
+            Genotype specieBestGenotype = specie.getBestGenotype();
+
+            if (bestGenotype == null || specieBestGenotype.getFitness() > bestGenotype.getFitness()) {
+                bestGenotype = specieBestGenotype;
+            }
         }
         species.add(specie);
     }
