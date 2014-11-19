@@ -29,6 +29,10 @@ public class NaturalSelection implements Selection {
         int populationSize = configuration.getPopulationSize();
         Iterator<Species> species = population.getSpecies().iterator();
 
+//        int speciesSize = population.getSpecies().size();
+//        List<Genotype> bestSurvivals = new ArrayList<>(speciesSize);
+//        List<Species> survivalSpecies = new ArrayList<>(speciesSize);
+
         while (species.hasNext())
         {
             Species specie = species.next();
@@ -40,8 +44,24 @@ public class NaturalSelection implements Selection {
 
             if (maxSize == 0 || specie.getGenotypes().isEmpty()) {
                 species.remove();
+//                bestSurvivals.add(specie.getBestGenotype());
             }
+//            else {
+//                survivalSpecies.add(specie);
+//            }
         }
+//        int survivalSpeciesSize = survivalSpecies.size();
+//
+//        for (Genotype bestSurvival : bestSurvivals)
+//        {
+//            Species specie = survivalSpecies.get(Randomizer.randomInt(survivalSpeciesSize));
+//
+//            if (specie.getMaxSize() > specie.getGenotypes().size()) {
+//                specie.addGenotype(bestSurvival);
+//            } else {
+//                survivalSpecies.remove(specie);
+//            }
+//        }
     }
 
     private int calculateMaxSize(Species specie, double totalFitness, int populationSize) {
@@ -54,13 +74,7 @@ public class NaturalSelection implements Selection {
     {
         Set<Genotype> genotypes = species.getGenotypes();
         int size = genotypes.size();
-        Integer maxSize = species.getMaxSize();
-        int survivals = (int) (size * configuration.getSurvivalRate());
-
-        survivals = Math.min(maxSize, survivals);
-//        if (maxSize < survivals) {
-//            survivals = (int) (maxSize * configuration.getSurvivalRate());
-//        }
+        int survivals = (int) (species.getMaxSize() * configuration.getSurvivalRate());
 
         if (size > survivals)
         {
