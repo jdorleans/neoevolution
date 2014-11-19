@@ -62,6 +62,7 @@ public class GeneticAlgorithm {
         while (population.getBestGenotype().getFitness() < 0.99) {
             evolution();
         }
+        evaluation.evaluate(population);
         populationService.save(population);
     }
     

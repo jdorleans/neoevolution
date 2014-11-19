@@ -76,6 +76,30 @@ public class Genotype extends AbstractEntity {
         synapses.add(synapse);
     }
 
+    public int getInputsSize() {
+        return inputs.size();
+    }
+
+    public int getOutputsSize() {
+        return outputs.size();
+    }
+
+    public int getHiddensSize() {
+        return getNeuronsSize() - getInputsSize() - getOutputsSize();
+    }
+
+    public int getNeuronsSize() {
+        return neurons.size();
+    }
+
+    public int getSynapsesSize() {
+        return synapses.size();
+    }
+
+    public int getGenesSize() {
+        return getNeuronsSize() + getSynapsesSize();
+    }
+
 
     @Override
     public String toString() {

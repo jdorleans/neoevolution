@@ -100,9 +100,7 @@ public class Speciation {
     }
 
     private int calculateTotalGenes(Genotype g1, Genotype g2)  {
-        int totalG1 = g1.getNeurons().size() + g1.getSynapses().size();
-        int totalG2 = g1.getNeurons().size() + g1.getSynapses().size();
-        return Math.max(totalG1, totalG2);
+        return Math.max(g1.getGenesSize(), g2.getGenesSize());
     }
 
     private double calculateWeight(Set<Synapse> synapse1, Set<Synapse> synapse2)

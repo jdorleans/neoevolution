@@ -42,7 +42,7 @@ public abstract class TrainingEvaluation implements Evaluation {
             {
                 if (!genotype.isEvaluated()) {
                     evaluate(genotype);
-                    updateBestGenotype(population, species, genotype);
+                    updateBestGenotype(population, genotype);
                 }
                 // FIXME - SPECIES WITH ONLY ONE GENOTYPE IS ALWAYS BEST THAN OTHERS WITH MANY GENOTYPE
                 speciesFitness += adjustFitness(genotype, size);
@@ -63,7 +63,7 @@ public abstract class TrainingEvaluation implements Evaluation {
 
         for (int idx = 0; idx < evaluations; idx++)
         {
-            int size = MapUtils.getSize(genotype.getNeurons().size());
+            int size = MapUtils.getSize(genotype.getNeuronsSize());
             Map<Neuron, Double> neurons = new HashMap<>(size);
             Set<Long> activated = activateInputs(genotype, inputSet.get(idx), neurons, activations);
 
@@ -176,17 +176,9 @@ public abstract class TrainingEvaluation implements Evaluation {
         return adjustedFitness;
     }
 
-    private void updateBestGenotype(Population population, Species species, Genotype genotype)
-    {
-        Double fitness = genotype.getFitness();
-
-        if (species.getBestGenotype().getFitness() < fitness)
-        {
-            species.setBestGenotype(genotype);
-
-            if (population.getBestGenotype().getFitness() < fitness) {
-                population.setBestGenotype(genotype);
-            }
+    private void updateBestGenotype(Population population, Genotype genotype) {
+        if (population.getBestGenotype().getFitness() < genotype.getFitness()) {
+            population.setBestGenotype(genotype);
         }
     }
 

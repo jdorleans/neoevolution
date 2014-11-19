@@ -31,12 +31,12 @@ public class AddSynapseMutation extends AbstractMutation {
     {
         Set<Neuron> neurons = genotype.getNeurons();
         int size = neurons.size();
-        int maxOutgoing = size - genotype.getInputs().size() - 1;
+        int maxOutgoing = size - genotype.getInputsSize() - 1;
         Neuron start = selectStart(neurons, maxOutgoing);
 
         if (start != null)
         {
-            int maxIncoming = size - genotype.getOutputs().size() - 1;
+            int maxIncoming = size - genotype.getOutputsSize() - 1;
             Neuron end = selectEnd(start, neurons, maxIncoming);
 
             if (end != null) {

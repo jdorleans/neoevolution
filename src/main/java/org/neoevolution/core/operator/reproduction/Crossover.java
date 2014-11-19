@@ -85,7 +85,7 @@ public class Crossover extends AbstractOperation implements Reproduction {
         Genotype dominant = parents.getDominant();
         Genotype offspring = genotypeFactory.create(false);
 
-        Map<Long, Neuron> neurons = createNeuronsMap(offspring, dominant.getNeurons().size());
+        Map<Long, Neuron> neurons = createNeuronsMap(offspring, dominant.getNeuronsSize());
         Map<Long, Synapse> synapses = cloneDominantGenes(parents, offspring, neurons);
         cloneRecessiveGenes(parents.getHasDominant(), offspring, synapses, neurons);
         return offspring;

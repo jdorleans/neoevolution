@@ -54,7 +54,13 @@ public class NaturalSelection implements Selection {
     {
         Set<Genotype> genotypes = species.getGenotypes();
         int size = genotypes.size();
-        int survivals = (int) (species.getMaxSize() * configuration.getSurvivalRate());
+        Integer maxSize = species.getMaxSize();
+        int survivals = (int) (size * configuration.getSurvivalRate());
+
+        survivals = Math.min(maxSize, survivals);
+//        if (maxSize < survivals) {
+//            survivals = (int) (maxSize * configuration.getSurvivalRate());
+//        }
 
         if (size > survivals)
         {
