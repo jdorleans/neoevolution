@@ -9,7 +9,12 @@ public abstract class AbstractMutation extends AbstractOperation implements Muta
 
     @Override
     public void mutate(Genotype genotype) {
-        if (operate()) {
+        mutate(genotype, false);
+    }
+
+    @Override
+    public void mutate(Genotype genotype, boolean ignoreRate) {
+        if (ignoreRate || operate()) {
             mutation(genotype);
         }
     }

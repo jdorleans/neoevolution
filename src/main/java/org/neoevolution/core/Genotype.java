@@ -41,20 +41,26 @@ public class Genotype extends AbstractEntity {
 
 
     public Genotype() {
-        this(0, 0,0);
+        this(0, new LinkedHashSet<Neuron>(0), new LinkedHashSet<Neuron>(0));
     }
 
-    public Genotype(int generation, int inputs, int outputs)
+    public Genotype(int generation, Set<Neuron> inputs, Set<Neuron> outputs)
     {
-        int size = MapUtils.getSize(inputs + outputs);
         this.generation = generation;
         this.evaluated = false;
         this.fitness = 0d;
         this.adjustedFitness = 0d;
-        this.inputs = new LinkedHashSet<>(MapUtils.getSize(inputs, false));
-        this.outputs = new LinkedHashSet<>(MapUtils.getSize(outputs, false));
+        this.inputs = inputs;
+        this.outputs = outputs;
+        int size = MapUtils.getSize(getInputsSize() + getOutputsSize());
+        this.synapses = new LinkedHashSet<>(size*size);
+        initNeurons(size);
+    }
+
+    private void initNeurons(int size) {
         this.neurons = new LinkedHashSet<>(size);
-        this.synapses = new LinkedHashSet<>(size*size/2);
+        addNeurons(inputs);
+        addNeurons(outputs);
     }
 
 
@@ -63,8 +69,14 @@ public class Genotype extends AbstractEntity {
         neurons.add(neuron);
     }
 
-    public void addHidden(Neuron neuron) {
+    public void addNeuron(Neuron neuron) {
         neurons.add(neuron);
+    }
+
+    public void addNeurons(Set<Neuron> neurons) {
+        for (Neuron neuron : neurons) {
+            this.neurons.add(neuron);
+        }
     }
 
     public void addOutput(Neuron neuron) {

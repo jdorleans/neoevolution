@@ -24,14 +24,20 @@ public class GAConfiguration implements Serializable {
     @Value("${neuron.inputs}")
     private int inputSize;
 
-    @Value("${neuron.hidden}")
-    private int hiddenSize;
+    @Value("${neuron.hidden.min}")
+    private int hiddenMinSize;
+
+    @Value("${neuron.hidden.max}")
+    private int hiddenMaxSize;
 
     @Value("${neuron.outputs}")
     private int outputSize;
 
     @Value("${population.size}")
     private int populationSize;
+
+    @Value("${genotype.connected.fully}")
+    private boolean fullyConnected;
 
     @Value("${synapse.weight.range}")
     private int weightRange;
@@ -77,16 +83,16 @@ public class GAConfiguration implements Serializable {
     @Value("${reproduction.synapse.enable.penalty}")
     private double enableSynapsePenalty;
 
-    @Value("${activation.neuron.bias}")
+    @Value("${activation.bias}")
     private ActivationFunctionType activationBias;
 
-    @Value("${activation.neuron.input}")
+    @Value("${activation.input}")
     private ActivationFunctionType activationInput;
 
-    @Value("${activation.neuron.hidden}")
+    @Value("${activation.hidden}")
     private ActivationFunctionType activationHidden;
 
-    @Value("${activation.neuron.output}")
+    @Value("${activation.output}")
     private ActivationFunctionType activationOutput;
 
     @Value("${error.function}")
@@ -115,12 +121,20 @@ public class GAConfiguration implements Serializable {
         this.inputSize = inputSize;
     }
 
-    public int getHiddenSize() {
-        return hiddenSize;
+    public int getHiddenMinSize() {
+        return hiddenMinSize;
     }
 
-    public void setHiddenSize(int hiddenSize) {
-        this.hiddenSize = hiddenSize;
+    public void setHiddenMinSize(int hiddenMinSize) {
+        this.hiddenMinSize = hiddenMinSize;
+    }
+
+    public int getHiddenMaxSize() {
+        return hiddenMaxSize;
+    }
+
+    public void setHiddenMaxSize(int hiddenMaxSize) {
+        this.hiddenMaxSize = hiddenMaxSize;
     }
 
     public int getOutputSize() {
@@ -129,6 +143,14 @@ public class GAConfiguration implements Serializable {
 
     public void setOutputSize(int outputSize) {
         this.outputSize = outputSize;
+    }
+
+    public boolean isFullyConnected() {
+        return fullyConnected;
+    }
+
+    public void setFullyConnected(boolean fullyConnected) {
+        this.fullyConnected = fullyConnected;
     }
 
     public int getWeightRange() {

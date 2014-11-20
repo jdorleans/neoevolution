@@ -5,12 +5,15 @@ import org.neoevolution.core.Neuron;
 import org.neoevolution.core.NeuronType;
 import org.neoevolution.core.activation.ActivationFunctionManager;
 import org.neoevolution.core.innovation.NeuronInnovationManager;
+import org.neoevolution.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -67,22 +70,23 @@ public class NeuronFactory {
     }
 
     public Neuron createHidden(Neuron from, Neuron to) {
-        Neuron neuron = new Neuron(NeuronType.HIDDEN, functionManager.get(NeuronType.HIDDEN));
+        NeuronType type = NeuronType.HIDDEN;
+        Neuron neuron = new Neuron(type, functionManager.get(type));
         innovation.innovate(neuron, from, to);
         return neuron;
     }
 
-    public List<Neuron> createInputs() {
-        return copyList(inputs);
+    public Set<Neuron> createInputs() {
+        return copySet(inputs);
     }
 
-    public List<Neuron> createOutputs() {
-        return copyList(outputs);
+    public Set<Neuron> createOutputs() {
+        return copySet(outputs);
     }
 
-    private List<Neuron> copyList(List<Neuron> neurons)
+    private Set<Neuron> copySet(List<Neuron> neurons)
     {
-        List<Neuron> list = new ArrayList<>(neurons.size());
+        Set<Neuron> list = new LinkedHashSet<>(MapUtils.getSize(neurons.size(), false));
 
         for (Neuron neuron : neurons) {
             list.add(new Neuron(neuron));

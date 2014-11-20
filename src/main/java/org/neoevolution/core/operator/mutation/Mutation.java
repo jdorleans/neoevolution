@@ -6,4 +6,5 @@ public interface Mutation {
 
     void mutate(Genotype genotype);
 
+    void mutate(Genotype genotype, boolean ignoreRate);
 }

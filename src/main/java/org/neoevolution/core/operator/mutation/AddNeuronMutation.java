@@ -30,6 +30,13 @@ public class AddNeuronMutation extends AbstractMutation {
 
 
     @Override
+    public void mutate(Genotype genotype) {
+        if (genotype.getHiddensSize() < configuration.getHiddenMaxSize() && operate()) {
+            mutation(genotype);
+        }
+    }
+
+    @Override
     protected void mutation(Genotype genotype)
     {
         Synapse synapse = selectSynapse(genotype.getSynapses());
@@ -58,7 +65,7 @@ public class AddNeuronMutation extends AbstractMutation {
 
     private Neuron createNeuron(Genotype genotype, Neuron start, Neuron end) {
         Neuron neuron = factory.createHidden(start, end);
-        genotype.addHidden(neuron);
+        genotype.addNeuron(neuron);
         return neuron;
     }
 
