@@ -29,10 +29,6 @@ public class NaturalSelection implements Selection {
         int populationSize = configuration.getPopulationSize();
         Iterator<Species> species = population.getSpecies().iterator();
 
-//        int speciesSize = population.getSpecies().size();
-//        List<Genotype> bestSurvivals = new ArrayList<>(speciesSize);
-//        List<Species> survivalSpecies = new ArrayList<>(speciesSize);
-
         while (species.hasNext())
         {
             Species specie = species.next();
@@ -44,24 +40,9 @@ public class NaturalSelection implements Selection {
 
             if (maxSize == 0 || specie.getGenotypes().isEmpty()) {
                 species.remove();
-//                bestSurvivals.add(specie.getBestGenotype());
             }
-//            else {
-//                survivalSpecies.add(specie);
-//            }
         }
-//        int survivalSpeciesSize = survivalSpecies.size();
-//
-//        for (Genotype bestSurvival : bestSurvivals)
-//        {
-//            Species specie = survivalSpecies.get(Randomizer.randomInt(survivalSpeciesSize));
-//
-//            if (specie.getMaxSize() > specie.getGenotypes().size()) {
-//                specie.addGenotype(bestSurvival);
-//            } else {
-//                survivalSpecies.remove(specie);
-//            }
-//        }
+        updateBestSpecies(population);
     }
 
     private int calculateMaxSize(Species specie, double totalFitness, int populationSize) {
@@ -84,7 +65,41 @@ public class NaturalSelection implements Selection {
             for (int i = 0; i < deaths; i++) {
                 genotypes.remove(sorted.get(i));
             }
+
+            if (!genotypes.isEmpty()) {
+                updateBestGenotype(species);
+            }
         }
+    }
+
+    private void updateBestGenotype(Species species)
+    {
+        Genotype bestGenotype = null;
+
+        for (Genotype genotype : species.getGenotypes()) {
+            if (bestGenotype == null || genotype.getFitness() > bestGenotype.getFitness()) {
+                bestGenotype = genotype;
+            }
+        }
+        species.setBestGenotype(bestGenotype);
+    }
+
+    private void updateBestSpecies(Population population)
+    {
+        Species bestSpecies = null;
+        Genotype bestGenotype = null;
+
+        for (Species species : population.getSpecies())
+        {
+            if (bestSpecies == null || species.getFitness() > bestSpecies.getFitness()) {
+                bestSpecies = species;
+            }
+            if (bestGenotype == null || species.getBestGenotype().getFitness() > bestGenotype.getFitness()) {
+                bestGenotype = species.getBestGenotype();
+            }
+        }
+        population.setBestSpecies(bestSpecies);
+        population.setBestGenotype(bestGenotype);
     }
 
 }
