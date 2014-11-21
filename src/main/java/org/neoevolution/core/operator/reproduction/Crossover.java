@@ -3,6 +3,7 @@ package org.neoevolution.core.operator.reproduction;
 import org.neoevolution.core.*;
 import org.neoevolution.core.factory.GenotypeFactory;
 import org.neoevolution.core.operator.AbstractOperation;
+import org.neoevolution.util.GenotypeUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +35,23 @@ public class Crossover extends AbstractOperation implements Reproduction {
         double totalFitness = population.getFitness();
         int populationSize = configuration.getPopulationSize();
         Set<Genotype> offsprings = new HashSet<>(MapUtils.getSize(populationSize));
+        Set<Species> species = population.getSpecies();
+        population.setSpecies(new LinkedHashSet<Species>(species.size()));
+        population.setBestSpecies(null);
+        population.setBestGenotype(null);
 
-        for (Species species : population.getSpecies())
+        for (Species specie : species)
         {
-            int births = calculateBirths(species, totalFitness, populationSize);
+            int births = calculateBirths(specie, totalFitness, populationSize);
 
             for (int i = 0; i < births; i++) {
-                offsprings.add(reproduce(chooseParents(species.getGenotypes())));
+                offsprings.add(reproduce(chooseParents(specie.getGenotypes())));
             }
-            species.setGenotypes(new LinkedHashSet<Genotype>(births+1));
-            species.addGenotype(species.getBestGenotype());
+            if (births > 0) {
+                specie.setGenotypes(new LinkedHashSet<Genotype>(births + 1));
+                specie.addGenotype(specie.getBestGenotype());
+                population.addSpecie(specie);
+            }
         }
         return offsprings;
     }
@@ -54,14 +62,15 @@ public class Crossover extends AbstractOperation implements Reproduction {
 
     private Parents chooseParents(Set<Genotype> genotypes)
     {
-        int size = genotypes.size();
+        int size = (int) (genotypes.size() * configuration.getElitismRate());
+        size = Math.max(1, size);
         int pos = 0;
         int pos1 = Randomizer.randomInt(size);
         int pos2 = Randomizer.randomInt(size);
         Genotype g1 = null;
         Genotype g2 = null;
 
-        for (Genotype genotype : genotypes)
+        for (Genotype genotype : GenotypeUtils.sortByFitness(genotypes, false))
         {
             if (pos == pos1) {
                 g1 = genotype;

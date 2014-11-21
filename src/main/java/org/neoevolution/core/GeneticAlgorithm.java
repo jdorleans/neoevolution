@@ -69,7 +69,7 @@ public class GeneticAlgorithm {
     private void evolution() 
     {
         evaluation.evaluate(population);
-        selection.select(population);
+//        selection.select(population);
         configuration.setGeneration(population.nextGeneration());
         offsprings = reproduction.reproduce(population);
         mutation.mutate(offsprings);

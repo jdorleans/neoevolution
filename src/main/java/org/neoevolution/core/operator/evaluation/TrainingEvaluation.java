@@ -44,7 +44,6 @@ public abstract class TrainingEvaluation implements Evaluation {
                     evaluate(genotype);
                 }
                 updateBestGenotype(species, genotype);
-                // FIXME - SPECIES WITH ONE (OR FEW) GENOTYPES CAN BE BEST THAN OTHERS WITH MANY
                 speciesFitness += adjustFitness(genotype, size);
             }
             totalFitness += speciesFitness;
