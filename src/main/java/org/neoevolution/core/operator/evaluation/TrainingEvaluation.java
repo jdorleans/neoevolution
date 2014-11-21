@@ -42,12 +42,11 @@ public abstract class TrainingEvaluation implements Evaluation {
             {
                 if (!genotype.isEvaluated()) {
                     evaluate(genotype);
-                    updateBestGenotype(population, genotype);
                 }
-                // FIXME - SPECIES WITH ONLY ONE GENOTYPE IS ALWAYS BEST THAN OTHERS WITH MANY GENOTYPE
+                updateBestGenotype(species, genotype);
+                // FIXME - SPECIES WITH ONE (OR FEW) GENOTYPES CAN BE BEST THAN OTHERS WITH MANY
                 speciesFitness += adjustFitness(genotype, size);
             }
-//            speciesFitness /= size;
             totalFitness += speciesFitness;
             species.setFitness(speciesFitness);
             updateBestSpecies(population, species);
@@ -176,14 +175,20 @@ public abstract class TrainingEvaluation implements Evaluation {
         return adjustedFitness;
     }
 
-    private void updateBestGenotype(Population population, Genotype genotype) {
-        if (population.getBestGenotype().getFitness() < genotype.getFitness()) {
-            population.setBestGenotype(genotype);
+    private void updateBestGenotype(Species species, Genotype genotype) {
+        if (genotype.getFitness() > species.getBestGenotype().getFitness()) {
+            species.setBestGenotype(genotype);
         }
     }
 
-    private void updateBestSpecies(Population population, Species species) {
-        if (population.getBestSpecies().getFitness() < species.getFitness()) {
+    private void updateBestSpecies(Population population, Species species)
+    {
+        Genotype bestGenotype = species.getBestGenotype();
+
+        if (bestGenotype.getFitness() > population.getBestGenotype().getFitness()) {
+            population.setBestGenotype(bestGenotype);
+        }
+        if (species.getFitness() > population.getBestSpecies().getFitness()) {
             population.setBestSpecies(species);
         }
     }

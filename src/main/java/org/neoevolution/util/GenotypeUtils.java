@@ -10,13 +10,13 @@ import java.util.*;
  */
 public class GenotypeUtils {
 
-    public static List<Genotype> sortByFitness(Set<Genotype> genotypes, final boolean inverse)
+    public static List<Genotype> sortByFitness(Set<Genotype> genotypes, final boolean desc)
     {
         Comparator<Genotype> comparator = new Comparator<Genotype>()
         {
             @Override
             public int compare(Genotype g1, Genotype g2) {
-                if (inverse) {
+                if (desc) {
                     return g2.getFitness().compareTo(g1.getFitness());
                 } else {
                     return g1.getFitness().compareTo(g2.getFitness());

@@ -3,7 +3,6 @@ package org.neoevolution.core.operator.reproduction;
 import org.neoevolution.core.*;
 import org.neoevolution.core.factory.GenotypeFactory;
 import org.neoevolution.core.operator.AbstractOperation;
-import org.neoevolution.util.GenotypeUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,52 +31,50 @@ public class Crossover extends AbstractOperation implements Reproduction {
     @Override
     public Set<Genotype> reproduce(Population population)
     {
-        Set<Genotype> offsprings = new HashSet<>(getOffspringSize());
+        double totalFitness = population.getFitness();
+        int populationSize = configuration.getPopulationSize();
+        Set<Genotype> offsprings = new HashSet<>(MapUtils.getSize(populationSize));
 
         for (Species species : population.getSpecies())
         {
-            Set<Genotype> genotypes = species.getGenotypes();
-            int size = genotypes.size();
-            int maxSize = species.getMaxSize();
+            int births = calculateBirths(species, totalFitness, populationSize);
 
-            if (size < maxSize)
-            {
-                int births = maxSize - size;
-
-                for (int i = 0; i < births; i++) {
-                    offsprings.add(reproduce(chooseParents(genotypes)));
-                }
+            for (int i = 0; i < births; i++) {
+                offsprings.add(reproduce(chooseParents(species.getGenotypes())));
             }
+            species.setGenotypes(new LinkedHashSet<Genotype>(births+1));
+            species.addGenotype(species.getBestGenotype());
         }
         return offsprings;
     }
 
-    private int getOffspringSize() {
-        int size = configuration.getPopulationSize();
-        return Math.max(1, (int) (size - (size * configuration.getSurvivalRate())));
+    private int calculateBirths(Species specie, double totalFitness, int populationSize) {
+        return (int) ((specie.getFitness() / totalFitness) * populationSize);
     }
 
     private Parents chooseParents(Set<Genotype> genotypes)
     {
-        List<Genotype> parents = GenotypeUtils.sortByFitness(genotypes, true);
-        int pos1 = 0;
-        int pos2 = 0;
-        int size = getParentsSize(parents.size());
+        int size = genotypes.size();
+        int pos = 0;
+        int pos1 = Randomizer.randomInt(size);
+        int pos2 = Randomizer.randomInt(size);
+        Genotype g1 = null;
+        Genotype g2 = null;
 
-        if (size > 1)
+        for (Genotype genotype : genotypes)
         {
-            pos1 = Randomizer.randomInt(size);
-            do {
-                pos2 = Randomizer.randomInt(size);
-            } while (pos1 == pos2);
+            if (pos == pos1) {
+                g1 = genotype;
+            }
+            if (pos == pos2) {
+                g2 = genotype;
+            }
+            if (g1 != null && g2 != null) {
+                break;
+            }
+            pos++;
         }
-        return new Parents(parents.get(pos1), parents.get(pos2));
-    }
-
-    private int getParentsSize(int size) {
-        int minSize = Math.min(2, size);
-        int parents = (int) (size * configuration.getElitismRate());
-        return Math.max(minSize, parents);
+        return new Parents(g1, g2);
     }
 
     private Genotype reproduce(Parents parents)

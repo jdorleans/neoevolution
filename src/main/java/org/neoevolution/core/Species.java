@@ -18,8 +18,6 @@ public class Species extends AbstractEntity {
 
     private Double fitness;
 
-    private Integer maxSize;
-
     private Genotype bestGenotype;
 
     @RelatedTo(type="GENOTYPE")
@@ -31,11 +29,9 @@ public class Species extends AbstractEntity {
         this(0, 0);
     }
 
-    public Species(int generation, int size)
-    {
+    public Species(int generation, int size) {
         this.generation = generation;
         this.fitness = 0d;
-        this.maxSize = size;
         this.genotypes = new LinkedHashSet<>(MapUtils.getSize(size));
     }
 
@@ -55,6 +51,7 @@ public class Species extends AbstractEntity {
         return "SPECIES(g:"+ generation +", f:"+ fitness +")";
     }
 
+
     public Integer getGeneration() {
         return generation;
     }
@@ -65,23 +62,13 @@ public class Species extends AbstractEntity {
     public Double getFitness() {
         return fitness;
     }
-
     public void setFitness(Double fitness) {
         this.fitness = fitness;
-    }
-
-    public Integer getMaxSize() {
-        return maxSize;
-    }
-
-    public void setMaxSize(Integer maxSize) {
-        this.maxSize = maxSize;
     }
 
     public Genotype getBestGenotype() {
         return bestGenotype;
     }
-
     public void setBestGenotype(Genotype bestGenotype) {
         this.bestGenotype = bestGenotype;
     }
@@ -89,7 +76,6 @@ public class Species extends AbstractEntity {
     public Set<Genotype> getGenotypes() {
         return genotypes;
     }
-
     public void setGenotypes(Set<Genotype> genotypes) {
         this.genotypes = genotypes;
     }

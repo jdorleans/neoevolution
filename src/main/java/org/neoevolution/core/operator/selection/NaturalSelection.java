@@ -8,7 +8,7 @@ import org.neoevolution.util.GenotypeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -25,81 +25,35 @@ public class NaturalSelection implements Selection {
     @Override
     public void select(Population population)
     {
-        double totalFitness = population.getFitness();
-        int populationSize = configuration.getPopulationSize();
-        Iterator<Species> species = population.getSpecies().iterator();
+        Set<Species> species = population.getSpecies();
+        population.setSpecies(new LinkedHashSet<Species>(species.size()));
 
-        while (species.hasNext())
-        {
-            Species specie = species.next();
-            int maxSize = calculateMaxSize(specie, totalFitness, populationSize);
-
-            if (maxSize > 0) {
-                select(specie);
+        for (Species specie : species) {
+            if (select(specie)) {
+                population.addSpecie(specie);
             }
-
-            if (maxSize == 0 || specie.getGenotypes().isEmpty()) {
-                species.remove();
-            }
+            // FIXME - MUST UPDATE BEST SPECIES AND GENOTYPE FOR POPULATION
         }
-        updateBestSpecies(population);
     }
 
-    private int calculateMaxSize(Species specie, double totalFitness, int populationSize) {
-        int maxSize = (int) ((specie.getFitness() / totalFitness) * populationSize);
-        specie.setMaxSize(maxSize);
-        return maxSize;
-    }
-
-    private void select(Species species)
+    // FIXME - REVIEW SURVIVAL VS REPRODUCTION
+    private boolean select(Species species)
     {
         Set<Genotype> genotypes = species.getGenotypes();
         int size = genotypes.size();
-        int survivals = (int) (species.getMaxSize() * configuration.getSurvivalRate());
+        int survivalSize = (int) (size * configuration.getSurvivalRate());
+        boolean isAlive = survivalSize > 0;
 
-        if (size > survivals)
+        if (isAlive)
         {
-            int deaths = size - survivals;
+            int deaths = size - survivalSize;
             List<Genotype> sorted = GenotypeUtils.sortByFitness(genotypes, false);
 
             for (int i = 0; i < deaths; i++) {
                 genotypes.remove(sorted.get(i));
             }
-
-            if (!genotypes.isEmpty()) {
-                updateBestGenotype(species);
-            }
         }
-    }
-
-    private void updateBestGenotype(Species species)
-    {
-        Genotype bestGenotype = null;
-
-        for (Genotype genotype : species.getGenotypes()) {
-            if (bestGenotype == null || genotype.getFitness() > bestGenotype.getFitness()) {
-                bestGenotype = genotype;
-            }
-        }
-        species.setBestGenotype(bestGenotype);
-    }
-
-    private void updateBestSpecies(Population population)
-    {
-        Species bestSpecies = null;
-        Genotype bestGenotype = null;
-
-        for (Species species : population.getSpecies())
-        {
-            if (bestSpecies == null || species.getFitness() > bestSpecies.getFitness()) {
-                bestSpecies = species;
-            }
-            if (bestGenotype == null || species.getBestGenotype().getFitness() > bestGenotype.getFitness()) {
-                bestGenotype = species.getBestGenotype();
-            }
-        }
-        population.setBestSpecies(bestSpecies);
-        population.setBestGenotype(bestGenotype);
+        return isAlive;
     }
 
 }
