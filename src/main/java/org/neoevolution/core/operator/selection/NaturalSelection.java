@@ -27,12 +27,13 @@ public class NaturalSelection implements Selection {
     {
         Set<Species> species = population.getSpecies();
         population.setSpecies(new LinkedHashSet<Species>(species.size()));
+        population.setBestSpecies(null);
+        population.setBestGenotype(null);
 
         for (Species specie : species) {
             if (select(specie)) {
                 population.addSpecie(specie);
             }
-            // FIXME - MUST UPDATE BEST SPECIES AND GENOTYPE FOR POPULATION
         }
     }
 

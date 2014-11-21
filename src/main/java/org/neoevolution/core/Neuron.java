@@ -38,7 +38,7 @@ public class Neuron extends Gene {
     }
 
     public Neuron(Long innovation, NeuronType type, ActivationFunction function) {
-        super(null, innovation);
+        super(innovation);
         this.type = type;
         this.activation = null;
         this.function = function;

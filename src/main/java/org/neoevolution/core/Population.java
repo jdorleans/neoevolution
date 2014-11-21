@@ -1,6 +1,5 @@
 package org.neoevolution.core;
 
-import org.neoevolution.mvc.AbstractEntity;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -9,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Population extends AbstractEntity {
+public class Population extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = 6557027803394718011L;
 
@@ -30,6 +29,7 @@ public class Population extends AbstractEntity {
     }
 
     public Population(int maxSpecies) {
+        super();
         this.generation = 0;
         this.species = new LinkedHashSet<>(MapUtils.getSize(maxSpecies*2));
     }
@@ -41,14 +41,13 @@ public class Population extends AbstractEntity {
 
     public void addSpecie(Species specie)
     {
-        if (bestSpecies == null || specie.getFitness() > bestSpecies.getFitness())
-        {
-            bestSpecies = specie;
-            Genotype specieBestGenotype = specie.getBestGenotype();
+        Genotype specieBestGenotype = specie.getBestGenotype();
 
-            if (bestGenotype == null || specieBestGenotype.getFitness() > bestGenotype.getFitness()) {
-                bestGenotype = specieBestGenotype;
-            }
+        if (bestGenotype == null || specieBestGenotype.getFitness() > bestGenotype.getFitness()) {
+            bestGenotype = specieBestGenotype;
+        }
+        if (bestSpecies == null || specie.getFitness() > bestSpecies.getFitness()) {
+            bestSpecies = specie;
         }
         species.add(specie);
     }

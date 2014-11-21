@@ -1,7 +1,6 @@
 package org.neoevolution.core;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.neoevolution.mvc.AbstractEntity;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -11,7 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Genotype extends AbstractEntity {
+public class Genotype extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = -849596329356657600L;
 
@@ -46,6 +45,7 @@ public class Genotype extends AbstractEntity {
 
     public Genotype(int generation, Set<Neuron> inputs, Set<Neuron> outputs)
     {
+        super();
         this.generation = generation;
         this.evaluated = false;
         this.fitness = 0d;

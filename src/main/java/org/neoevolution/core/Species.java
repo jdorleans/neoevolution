@@ -1,7 +1,6 @@
 package org.neoevolution.core;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.neoevolution.mvc.AbstractEntity;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -10,7 +9,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Species extends AbstractEntity {
+public class Species extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = -2774570149581847246L;
 
@@ -30,6 +29,7 @@ public class Species extends AbstractEntity {
     }
 
     public Species(int generation, int size) {
+        super();
         this.generation = generation;
         this.fitness = 0d;
         this.genotypes = new LinkedHashSet<>(MapUtils.getSize(size));

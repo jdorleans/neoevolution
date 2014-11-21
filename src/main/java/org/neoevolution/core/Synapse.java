@@ -29,7 +29,7 @@ public class Synapse extends Gene {
     }
 
     public Synapse(Long innovation, Neuron start, Neuron end, Double weight, Boolean enabled) {
-        super(null, innovation);
+        super(innovation);
         this.start = start;
         this.end = end;
         this.weight = weight;
