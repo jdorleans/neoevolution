@@ -3,14 +3,15 @@ package org.neoevolution.core.operator.evaluation;
 import org.neoevolution.core.*;
 import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.core.error.ErrorFunctionManager;
-import org.neoevolution.util.MapUtils;
-import org.neoevolution.util.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
 
 public abstract class TrainingEvaluation implements Evaluation {
+
+    public static final double MAX_FITNESS = 1d;
 
     protected List<List<Double>> inputSet;
 
@@ -30,142 +31,85 @@ public abstract class TrainingEvaluation implements Evaluation {
     @Override
     public void evaluate(Population population)
     {
-        double totalFitness = 0;
+        double fitness = 0d;
 
-        for (Species species : population.getSpecies())
-        {
-            Set<Genotype> genotypes = species.getGenotypes();
-            int size = genotypes.size();
-            double speciesFitness = 0;
-
-            for (Genotype genotype : genotypes)
-            {
-                if (!genotype.isEvaluated()) {
-                    evaluate(genotype);
-                }
-                updateBestGenotype(species, genotype);
-                speciesFitness += adjustFitness(genotype, size);
-            }
-            totalFitness += speciesFitness;
-            species.setFitness(speciesFitness);
+        for (Species species : population.getSpecies()) {
+            fitness += evaluate(species);
             updateBestSpecies(population, species);
         }
-        population.setFitness(totalFitness);
+        population.setFitness(fitness);
+    }
+
+    private double evaluate(Species species)
+    {
+        double fitness = 0d;
+        Set<Genotype> genotypes = species.getGenotypes();
+        int size = genotypes.size();
+
+        for (Genotype genotype : genotypes)
+        {
+            if (!genotype.isEvaluated()) {
+                evaluate(genotype);
+            }
+            updateBestGenotype(species, genotype);
+            fitness += adjustFitness(genotype, size);
+        }
+        species.setFitness(fitness);
+        return fitness;
     }
 
     private void evaluate(Genotype genotype)
     {
         double fitness = 0d;
         int evaluations = inputSet.size();
-        int activations = getActivationSize(genotype);
 
-        for (int idx = 0; idx < evaluations; idx++)
-        {
-            int size = MapUtils.getSize(genotype.getNeuronsSize());
-            Map<Neuron, Double> neurons = new HashMap<>(size);
-            Set<Long> activated = activateInputs(genotype, inputSet.get(idx), neurons, activations);
-
-            while (activated.size() < activations)
-            {
-                Map<Neuron, Double> nextNeurons = new HashMap<>(size);
-
-                for (Neuron neuron : neurons.keySet()) {
-                    neuron.activate(neurons.get(neuron));
-                    activated.addAll(propagate(neuron, nextNeurons));
-                }
-                neurons = nextNeurons;
-            }
-            for (Neuron neuron : neurons.keySet()) {
-                neuron.activate(neurons.get(neuron));
-            }
-            fitness += calculateFitness(genotype, outputSet.get(idx));
+        for (int idx = 0; idx < evaluations; idx++) {
+            fitness += evaluate(genotype, inputSet.get(idx), outputSet.get(idx));
         }
         genotype.setFitness(fitness / evaluations);
         genotype.setEvaluated(true);
     }
 
-    private int getActivationSize(Genotype genotype)
+    private double evaluate(Genotype genotype, List<Double> inputs, List<Double> outputs)
     {
-        int size = 0;
-
-        for (Neuron neuron : genotype.getOutputs()) {
-            size += getActiveInputSize(neuron);
-        }
-        return size;
-    }
-
-    private int getActiveInputSize(Neuron neuron)
-    {
-        int size = 0;
-
-        for (Synapse synapse : neuron.getInputs()) {
-            if (synapse.isEnabled()) {
-                size++;
-            }
-        }
-        return size;
-    }
-
-    private Set<Long> activateInputs(Genotype genotype, List<Double> inputs, Map<Neuron, Double> neurons, int activations)
-    {
-        int idx = 0;
-        Set<Long> activated = new HashSet<>(MapUtils.getSize(activations));
-
-        for (Neuron neuron : genotype.getInputs()) {
-            idx = activateInput(idx, inputs, neuron);
-            activated.addAll(propagate(neuron, neurons));
-        }
-        return activated;
-    }
-
-    private int activateInput(int idx, List<Double> inputs, Neuron neuron)
-    {
-        NeuronType type = neuron.getType();
-
-        if (NeuronType.isInput(type)) {
-            neuron.activate(inputs.get(idx));
-            idx++;
-        } else if (NeuronType.isBias(type)) {
-            neuron.activate(1d);
-        }
-        return idx;
-    }
-
-    private Set<Long> propagate(Neuron start, Map<Neuron, Double> neurons)
-    {
-        Double activation = start.getActivation();
-        Set<Synapse> outputs = start.getOutputs();
-        Set<Long> activated = new HashSet<>(MapUtils.getSize(outputs.size()));
-
-        for (Synapse output : outputs)
-        {
-            if (output.isEnabled())
-            {
-                Neuron end = output.getEnd();
-                Double value = NumberUtils.getNotNull(neurons.get(end));
-                value += activation * output.getWeight();
-                neurons.put(end, value);
-
-                if (NeuronType.isOutput(end.getType())) {
-                    activated.add(output.getInnovation());
-                }
-            }
-        }
-        return activated;
-    }
-
-    // TODO - Should we test only the last output impulse?
-    // TODO - How to deal with output impulses at different moment of time?
-    private double calculateFitness(Genotype genotype, List<Double> outputs)
-    {
-        int idx = 0;
         errorFunction.reset();
+        stimuliInputs(genotype, inputs);
 
+        int idx = 0;
         for (Neuron neuron : genotype.getOutputs()) {
-            errorFunction.add(outputs.get(idx), neuron.getActivation());
+            double activation = activate(neuron);
+            errorFunction.add(outputs.get(idx), activation);
             idx++;
         }
-        return (1d - errorFunction.calculate());
+        return (MAX_FITNESS - errorFunction.calculate());
+    }
+
+    private void stimuliInputs(Genotype genotype, List<Double> inputs)
+    {
+        int idx = 0;
+        for (Neuron neuron : genotype.getInputs())
+        {
+            NeuronType type = neuron.getType();
+
+            if (NeuronType.isInput(type)) {
+                neuron.impulse(inputs.get(idx));
+                idx++;
+            } else if (NeuronType.isBias(type)) {
+                neuron.impulse(1d);
+            }
+        }
+    }
+
+    private double activate(Neuron neuron)
+    {
+        for (Synapse synapse : neuron.getInputs())
+        {
+            if (synapse.isEnabled()) {
+                double activation = activate(synapse.getStart());
+                neuron.impulse(activation * synapse.getWeight());
+            }
+        }
+        return neuron.activate();
     }
 
     private double adjustFitness(Genotype genotype, int size) {

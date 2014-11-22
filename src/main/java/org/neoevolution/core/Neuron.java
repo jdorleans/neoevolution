@@ -16,6 +16,8 @@ public class Neuron extends Gene {
 
     private NeuronType type;
 
+    private Double impulses;
+
     private Double activation;
 
     private ActivationFunction function;
@@ -40,6 +42,7 @@ public class Neuron extends Gene {
     public Neuron(Long innovation, NeuronType type, ActivationFunction function) {
         super(innovation);
         this.type = type;
+        this.impulses = 0d;
         this.activation = null;
         this.function = function;
         this.inputs = new LinkedHashSet<>();
@@ -59,10 +62,14 @@ public class Neuron extends Gene {
         outputs.add(synapse);
     }
 
-    public void activate(double value) {
-        activation = function.calculate(value);
+    public void impulse(double value) {
+        impulses += value;
     }
 
+    public double activate() {
+        activation = function.calculate(impulses);
+        return activation;
+    }
 
     @Override
     public String toString() {
@@ -76,10 +83,16 @@ public class Neuron extends Gene {
         this.type = type;
     }
 
+    public Double getImpulses() {
+        return impulses;
+    }
+    public void setImpulses(Double impulses) {
+        this.impulses = impulses;
+    }
+
     public Double getActivation() {
         return activation;
     }
-
     public void setActivation(Double activation) {
         this.activation = activation;
     }
