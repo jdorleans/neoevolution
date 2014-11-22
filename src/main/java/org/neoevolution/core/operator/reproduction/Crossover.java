@@ -37,7 +37,7 @@ public class Crossover extends AbstractOperation implements Reproduction {
 
         Map<Long, Neuron> neurons = createNeuronsMap(offspring, dominant.getNeuronsSize());
         Map<Long, Synapse> synapses = cloneDominantGenes(parents, offspring, neurons);
-        cloneRecessiveGenes(parents.getHasDominant(), offspring, synapses, neurons);
+        cloneRecessiveGenes(parents, offspring, synapses, neurons);
         return offspring;
     }
 
@@ -72,9 +72,9 @@ public class Crossover extends AbstractOperation implements Reproduction {
         return rate;
     }
 
-    private void cloneRecessiveGenes(boolean hasDominant, Genotype offspring, Map<Long, Synapse> synapses, Map<Long, Neuron> neurons)
+    private void cloneRecessiveGenes(Parents parents, Genotype offspring, Map<Long, Synapse> synapses, Map<Long, Neuron> neurons)
     {
-        if (!hasDominant)
+        if (!parents.isEquals() && !parents.getHasDominant())
         {
             double enableRate = configuration.getEnableSynapseRate();
 

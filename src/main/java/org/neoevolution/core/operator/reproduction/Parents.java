@@ -35,6 +35,10 @@ public class Parents {
         }
     }
 
+    public boolean isEquals() {
+        return dominant == recessive;
+    }
+
     public Genotype getDominant() {
         return dominant;
     }

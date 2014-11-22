@@ -76,25 +76,24 @@ public class NaturalSelection implements Selection {
         int generation = population.nextGeneration();
         double totalFitness = population.getFitness();
         int populationSize = configuration.getPopulationSize();
-        Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
         Set<Species> species = population.getSpecies();
+        Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
         population.setSpecies(MapUtils.<Species>createLinkedHashSet(species.size()));
         population.setBestSpecies(null);
         population.setBestGenotype(null);
 
         for (Species specie : species)
         {
-            int births = calculateBirths(specie, totalFitness, populationSize);
-            List<Genotype> genotypes = GenotypeUtils.sortByFitness(specie.getGenotypes(), false);
+            int size = calculateSpeciesSize(specie, totalFitness, populationSize);
 
-            for (int i = 0; i < births; i++) {
-                Parents parents = selectParents(genotypes);
-                Genotype offspring = reproduction.reproduce(parents, generation);
-                mutation.mutate(offspring);
-                offsprings.add(offspring);
-            }
-            if (births > 0) {
-                specie.setGenotypes(MapUtils.<Genotype>createLinkedHashSet(births + 1));
+            if (size > 0)
+            {
+                List<Genotype> genotypes = GenotypeUtils.sortByFitness(specie.getGenotypes(), true);
+
+                for (int i = 0; i < size; i++) {
+                    offsprings.add(reproduce(generation, genotypes));
+                }
+                specie.setGenotypes(MapUtils.<Genotype>createLinkedHashSet(size + 1));
                 specie.addGenotype(specie.getBestGenotype());
                 population.addSpecie(specie);
             }
@@ -102,21 +101,26 @@ public class NaturalSelection implements Selection {
         return offsprings;
     }
 
-    private int calculateBirths(Species specie, double totalFitness, int populationSize) {
+    private int calculateSpeciesSize(Species specie, double totalFitness, int populationSize) {
         return (int) ((specie.getFitness() / totalFitness) * populationSize);
+    }
+
+    private Genotype reproduce(int generation, List<Genotype> genotypes) {
+        Parents parents = selectParents(genotypes);
+        Genotype offspring = reproduction.reproduce(parents, generation);
+        mutation.mutate(offspring);
+        return offspring;
     }
 
     private Parents selectParents(List<Genotype> genotypes)
     {
-        int size = (int) (genotypes.size() * configuration.getElitismRate());
-        size = Math.max(1, size);
         int pos = 0;
+        int size = calculateParentSize(genotypes.size());
         int pos1 = Randomizer.randomInt(size);
         int pos2 = Randomizer.randomInt(size);
         Genotype g1 = null;
         Genotype g2 = null;
 
-        // FIXME - NO NEED TO SORT GENOTYPES FOR ALL ITERATIONS (MUST SORT BEFORE)
         for (Genotype genotype : genotypes)
         {
             if (pos == pos1) {
@@ -131,6 +135,10 @@ public class NaturalSelection implements Selection {
             pos++;
         }
         return new Parents(g1, g2);
+    }
+
+    private int calculateParentSize(int size) {
+        return Math.max(1, (int) (size * configuration.getElitismRate()));
     }
 
 }
