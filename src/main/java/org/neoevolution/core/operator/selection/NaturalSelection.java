@@ -13,7 +13,6 @@ import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,89 +32,67 @@ public class NaturalSelection implements Selection {
     @Autowired
     private GAConfiguration configuration;
 
-    // FIXME
-//    @Override
-    public void select2(Population population)
-    {
-        Set<Species> species = population.getSpecies();
-        population.setSpecies(new LinkedHashSet<Species>(species.size()));
-        population.setBestSpecies(null);
-        population.setBestGenotype(null);
-
-        for (Species specie : species) {
-            if (select(specie)) {
-                population.addSpecie(specie);
-            }
-        }
-    }
-
-    // FIXME - REVIEW SURVIVAL VS REPRODUCTION
-    private boolean select(Species species)
-    {
-        Set<Genotype> genotypes = species.getGenotypes();
-        int size = genotypes.size();
-        int survivalSize = (int) (size * configuration.getSurvivalRate());
-        boolean isAlive = survivalSize > 0;
-
-        if (isAlive)
-        {
-            int deaths = size - survivalSize;
-            List<Genotype> sorted = GenotypeUtils.sortByFitness(genotypes, false);
-
-            for (int i = 0; i < deaths; i++) {
-                genotypes.remove(sorted.get(i));
-            }
-        }
-        return isAlive;
-    }
-
-
     @Override
     public Set<Genotype> select(Population population)
     {
         int generation = population.nextGeneration();
         double totalFitness = population.getFitness();
         int populationSize = configuration.getPopulationSize();
-        Set<Species> species = population.getSpecies();
         Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
-        population.setSpecies(MapUtils.<Species>createLinkedHashSet(species.size()));
-        population.setBestSpecies(null);
-        population.setBestGenotype(null);
+        Set<Species> species = population.getSpecies();
+        removeSpecies(population, species.size());
 
         for (Species specie : species)
         {
-            int size = calculateSpeciesSize(specie, totalFitness, populationSize);
+            int newSize = calculateSize(specie, totalFitness, populationSize);
+            int actualSize = specie.getGenotypes().size();
+            int births = calculateBirths(actualSize, newSize);
+            int survivals = newSize - births;
 
-            if (size > 0)
-            {
-                List<Genotype> genotypes = GenotypeUtils.sortByFitness(specie.getGenotypes(), true);
+            List<Genotype> bestFirst = GenotypeUtils.sortByFitness(specie.getGenotypes(), true);
+            reproduce(generation, births, bestFirst, offsprings);
 
-                for (int i = 0; i < size; i++) {
-                    offsprings.add(reproduce(generation, genotypes));
-                }
-                specie.setGenotypes(MapUtils.<Genotype>createLinkedHashSet(size + 1));
-                specie.addGenotype(specie.getBestGenotype());
+            if (survivals > 0) {
+                kill(survivals, actualSize, bestFirst, specie);
                 population.addSpecie(specie);
             }
         }
         return offsprings;
     }
 
-    private int calculateSpeciesSize(Species specie, double totalFitness, int populationSize) {
-        return (int) ((specie.getFitness() / totalFitness) * populationSize);
+    private void removeSpecies(Population population, int size) {
+        population.setSpecies(MapUtils.<Species>createLinkedHashSet(size));
+        population.setBestSpecies(null);
+        population.setBestGenotype(null);
     }
 
-    private Genotype reproduce(int generation, List<Genotype> genotypes) {
-        Parents parents = selectParents(genotypes);
-        Genotype offspring = reproduction.reproduce(parents, generation);
-        mutation.mutate(offspring);
-        return offspring;
+    private void reproduce(int generation, int births, List<Genotype> bestFirst, Set<Genotype> offsprings)
+    {
+        for (int i = 0; i < births; i++) {
+            Parents parents = selectParents(bestFirst);
+            Genotype offspring = reproduction.reproduce(parents, generation);
+            mutation.mutate(offspring);
+            offsprings.add(offspring);
+        }
+    }
+
+    private void kill(int survivals, int actualSize, List<Genotype> bestFirst, Species species)
+    {
+        if (survivals < actualSize)
+        {
+            species.setBestGenotype(null);
+            species.setGenotypes(MapUtils.<Genotype>createLinkedHashSet(survivals));
+
+            for (int i = 0; i < survivals; i++) {
+                species.addGenotype(bestFirst.get(i));
+            }
+        }
     }
 
     private Parents selectParents(List<Genotype> genotypes)
     {
         int pos = 0;
-        int size = calculateParentSize(genotypes.size());
+        int size = calculateParents(genotypes.size());
         int pos1 = Randomizer.randomInt(size);
         int pos2 = Randomizer.randomInt(size);
         Genotype g1 = null;
@@ -137,7 +114,24 @@ public class NaturalSelection implements Selection {
         return new Parents(g1, g2);
     }
 
-    private int calculateParentSize(int size) {
+    private int calculateSize(Species specie, double totalFitness, int populationSize) {
+        return (int) ((specie.getFitness() / totalFitness) * populationSize);
+    }
+
+    private int calculateBirths(int actualSize, int newSize)
+    {
+        if (actualSize < newSize) {
+            return newSize - actualSize;
+        } else {
+            return newSize - calculateSurvivals(newSize);
+        }
+    }
+
+    private int calculateSurvivals(int size) {
+        return (int) (size * configuration.getSurvivalRate());
+    }
+
+    private int calculateParents(int size) {
         return Math.max(1, (int) (size * configuration.getElitismRate()));
     }
 

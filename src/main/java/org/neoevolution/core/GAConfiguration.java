@@ -69,9 +69,6 @@ public class GAConfiguration implements Serializable {
     @Value("${selection.survival.rate}")
     private double survivalRate;
 
-    @Value("${reproduction.rate}")
-    private double reproductionRate;
-
     @Value("${reproduction.elitism.rate}")
     private double elitismRate;
 
@@ -249,14 +246,6 @@ public class GAConfiguration implements Serializable {
 
     public void setSurvivalRate(double survivalRate) {
         this.survivalRate = survivalRate;
-    }
-
-    public double getReproductionRate() {
-        return reproductionRate;
-    }
-
-    public void setReproductionRate(double reproductionRate) {
-        this.reproductionRate = reproductionRate;
     }
 
     public double getElitismRate() {
