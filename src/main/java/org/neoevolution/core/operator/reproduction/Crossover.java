@@ -2,7 +2,6 @@ package org.neoevolution.core.operator.reproduction;
 
 import org.neoevolution.core.*;
 import org.neoevolution.core.factory.GenotypeFactory;
-import org.neoevolution.core.operator.AbstractOperation;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +15,13 @@ import java.util.Set;
  * @since 25/10/14.
  */
 @Component
-public class Crossover extends AbstractOperation implements Reproduction {
+public class Crossover implements Reproduction {
 
     @Autowired
     private GenotypeFactory genotypeFactory;
 
     @Autowired
     private GAConfiguration configuration;
-
-    @Override
-    protected void initRate() {
-        rate = configuration.getReproductionRate();
-    }
 
     @Override
     public Genotype reproduce(Parents parents, int generation)

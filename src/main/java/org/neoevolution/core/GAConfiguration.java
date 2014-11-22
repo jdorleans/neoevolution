@@ -43,6 +43,9 @@ public class GAConfiguration implements Serializable {
     @Value("${mutation.weight.change.rate}")
     private double changeWeightRate;
 
+    @Value("${mutation.weight.change.reset}")
+    private boolean changeWeightReset;
+
     @Value("${mutation.neuron.add.rate}")
     private double addNeuronRate;
 
@@ -162,6 +165,14 @@ public class GAConfiguration implements Serializable {
 
     public void setChangeWeightRate(double changeWeightRate) {
         this.changeWeightRate = changeWeightRate;
+    }
+
+    public boolean isChangeWeightReset() {
+        return changeWeightReset;
+    }
+
+    public void setChangeWeightReset(boolean changeWeightReset) {
+        this.changeWeightReset = changeWeightReset;
     }
 
     public double getAddNeuronRate() {

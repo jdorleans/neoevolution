@@ -31,8 +31,8 @@ public class AddNeuronMutation extends AbstractMutation {
 
     @Override
     public void mutate(Genotype genotype) {
-        if (genotype.getHiddensSize() < configuration.getHiddenMaxSize() && operate()) {
-            mutation(genotype);
+        if (genotype.getHiddensSize() < configuration.getHiddenMaxSize()) {
+            super.mutate(genotype);
         }
     }
 

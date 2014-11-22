@@ -12,12 +12,15 @@ import java.util.List;
 @Component
 public class ChangeWeightMutation extends AbstractMutation {
 
-    private double weightRange;
+    private double range;
+
+    private boolean reset;
 
     @Override
     protected void initRate() {
         rate = configuration.getChangeWeightRate();
-        weightRange = configuration.getWeightRange();
+        range = configuration.getWeightRange();
+        reset = configuration.isChangeWeightReset();
     }
 
     @Override
@@ -28,8 +31,26 @@ public class ChangeWeightMutation extends AbstractMutation {
         int size = Randomizer.randomIntInclusive(synapses.size());
 
         for (int i = 0; i < size; i++) {
-            synapses.get(i).setWeight(Randomizer.randomInclusive(-weightRange, weightRange));
+            Synapse synapse = synapses.get(i);
+            synapse.setWeight(calculateWeight(synapse.getWeight()));
         }
+    }
+
+    private double calculateWeight(double weight)
+    {
+        double value = Randomizer.randomInclusive(-range, range);
+
+        if (!reset)
+        {
+            value += weight;
+
+            if (value > range) {
+                value = range;
+            } else if (value < -range) {
+                value = -range;
+            }
+        }
+        return value;
     }
 
 }

@@ -40,7 +40,7 @@ public class NaturalSelection implements Selection {
         int populationSize = configuration.getPopulationSize();
         Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
         Set<Species> species = population.getSpecies();
-        removeSpecies(population, species.size());
+        removeSpecies(population);
 
         for (Species specie : species)
         {
@@ -60,7 +60,8 @@ public class NaturalSelection implements Selection {
         return offsprings;
     }
 
-    private void removeSpecies(Population population, int size) {
+    private void removeSpecies(Population population) {
+        int size = configuration.getMaxSpeciesSize() * 2;
         population.setSpecies(MapUtils.<Species>createLinkedHashSet(size));
         population.setBestSpecies(null);
         population.setBestGenotype(null);
