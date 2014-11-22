@@ -9,7 +9,8 @@ import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -35,9 +36,9 @@ public class Crossover extends AbstractOperation implements Reproduction {
         int generation = population.nextGeneration();
         double totalFitness = population.getFitness();
         int populationSize = configuration.getPopulationSize();
-        Set<Genotype> offsprings = new HashSet<>(MapUtils.getSize(populationSize));
+        Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
         Set<Species> species = population.getSpecies();
-        population.setSpecies(new LinkedHashSet<Species>(species.size()));
+        population.setSpecies(MapUtils.<Species>createLinkedHashSet(species.size()));
         population.setBestSpecies(null);
         population.setBestGenotype(null);
 
@@ -49,7 +50,7 @@ public class Crossover extends AbstractOperation implements Reproduction {
                 offsprings.add(reproduce(chooseParents(specie.getGenotypes()), generation));
             }
             if (births > 0) {
-                specie.setGenotypes(new LinkedHashSet<Genotype>(births + 1));
+                specie.setGenotypes(MapUtils.<Genotype>createLinkedHashSet(births + 1));
                 specie.addGenotype(specie.getBestGenotype());
                 population.addSpecie(specie);
             }
@@ -98,20 +99,6 @@ public class Crossover extends AbstractOperation implements Reproduction {
         return offspring;
     }
 
-    private Map<Long, Neuron> createNeuronsMap(Genotype offspring, int size)
-    {
-        Map<Long, Neuron> neurons = new HashMap<>(MapUtils.getSize(size));
-        putNeurons(offspring.getInputs(), neurons);
-        putNeurons(offspring.getOutputs(), neurons);
-        return neurons;
-    }
-
-    private void putNeurons(Set<Neuron> neurons, Map<Long, Neuron> neuronsMap) {
-        for (Neuron neuron : neurons) {
-            neuronsMap.put(neuron.getInnovation(), neuron);
-        }
-    }
-
     private Map<Long, Synapse> cloneDominantGenes(Parents parents, Genotype offspring, Map<Long, Neuron> neurons)
     {
         double enableRate = configuration.getEnableSynapseRate();
@@ -155,16 +142,6 @@ public class Crossover extends AbstractOperation implements Reproduction {
         }
     }
 
-    private Map<Long, Synapse> createSynapsesMap(Set<Synapse> synapses)
-    {
-        Map<Long, Synapse> map = new HashMap<>(MapUtils.getSize(synapses.size()));
-
-        for (Synapse synapse : synapses) {
-            map.put(synapse.getInnovation(), synapse);
-        }
-        return map;
-    }
-
     private Synapse clone(Synapse synapse, Map<Long, Neuron> neurons, Genotype offspring, double enableRate)
     {
         Synapse s = new Synapse(synapse);
@@ -194,6 +171,27 @@ public class Crossover extends AbstractOperation implements Reproduction {
             offspring.addNeuron(n);
         }
         return n;
+    }
+
+
+    private Map<Long, Neuron> createNeuronsMap(Genotype offspring, int size)
+    {
+        Map<Long, Neuron> neurons = MapUtils.createHashMap(size);
+        putGenes(offspring.getInputs(), neurons);
+        putGenes(offspring.getOutputs(), neurons);
+        return neurons;
+    }
+
+    private Map<Long, Synapse> createSynapsesMap(Set<Synapse> synapses) {
+        Map<Long, Synapse> map = MapUtils.createHashMap(synapses.size());
+        putGenes(synapses, map);
+        return map;
+    }
+
+    private <T extends Gene> void putGenes(Set<T> genes, Map<Long, T> geneMap) {
+        for (T gene : genes) {
+            geneMap.put(gene.getInnovation(), gene);
+        }
     }
 
 }
