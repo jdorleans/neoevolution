@@ -101,6 +101,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         }
     }
 
+    // FIXME - STILL HAVING SOME INFINITY LOOP (2 HIDDEN NEURONS)
     private double activate(Neuron neuron, Neuron from)
     {
         Set<Synapse> inputs = neuron.getInputs();

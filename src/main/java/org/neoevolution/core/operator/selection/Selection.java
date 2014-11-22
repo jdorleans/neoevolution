@@ -1,6 +1,9 @@
 package org.neoevolution.core.operator.selection;
 
+import org.neoevolution.core.Genotype;
 import org.neoevolution.core.Population;
+
+import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -8,6 +11,6 @@ import org.neoevolution.core.Population;
  */
 public interface Selection {
 
-    void select(Population population);
+    Set<Genotype> select(Population population);
 
 }

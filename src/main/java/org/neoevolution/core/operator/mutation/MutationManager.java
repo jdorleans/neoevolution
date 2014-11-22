@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -18,12 +17,9 @@ public class MutationManager {
     private List<Mutation> mutations;
 
 
-    public void mutate(Set<Genotype> genotypes)
-    {
-        for (Genotype genotype : genotypes) {
-            for (Mutation mutation : mutations) {
-                mutation.mutate(genotype);
-            }
+    public void mutate(Genotype genotype) {
+        for (Mutation mutation : mutations) {
+            mutation.mutate(genotype);
         }
     }
 
