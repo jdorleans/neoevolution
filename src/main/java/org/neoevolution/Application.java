@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,6 @@ import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 
 import java.io.File;
-import java.util.Arrays;
 
 @Configuration
 @ComponentScan(basePackages = "org.neoevolution")
@@ -39,20 +37,17 @@ public class Application extends Neo4jConfiguration implements CommandLineRunner
 
     @Override
     public void run(String... args) throws Exception {
-        geneticAlgorithm.evolve();
+        for (int i = 0; i < 10; i++) {
+            long start = System.currentTimeMillis();
+            System.out.println("Running: "+ (i+1));
+            geneticAlgorithm.evolve();
+            System.out.println("Finished in: " + (System.currentTimeMillis() - start));
+        }
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         FileUtils.deleteRecursively(new File("data"));
-        ConfigurableApplicationContext ctx = SpringApplication.run(Application.class, args);
-
-        System.out.println("Let's inspect the beans provided by Spring Boot:");
-        String[] beanNames = ctx.getBeanDefinitionNames();
-        Arrays.sort(beanNames);
-        for (String beanName : beanNames) {
-            System.out.println(beanName);
-        }
+        SpringApplication.run(Application.class, args);
     }
 
 }

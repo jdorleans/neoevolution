@@ -31,15 +31,15 @@ public class GenotypeFactory {
     private GAConfiguration configuration;
 
 
-    public Genotype createEmpty() {
+    public Genotype createEmpty(int generation) {
         Set<Neuron> inputs = neuronFactory.createInputs();
         Set<Neuron> outputs = neuronFactory.createOutputs();
-        return new Genotype(configuration.getGeneration(), inputs, outputs);
+        return new Genotype(generation, inputs, outputs);
     }
 
-    public Genotype create()
+    public Genotype create(int generation)
     {
-        Genotype genotype = createEmpty();
+        Genotype genotype = createEmpty(generation);
 
         if (configuration.isFullyConnected()) {
             connect(genotype);
@@ -58,12 +58,12 @@ public class GenotypeFactory {
         }
     }
 
-    public Set<Genotype> createList(int size)
+    public Set<Genotype> createList(int size, int generation)
     {
         Set<Genotype> genotypes = new HashSet<>(MapUtils.getSize(size));
 
         for (int i = 0; i < size; i++) {
-            genotypes.add(create());
+            genotypes.add(create(generation));
         }
         return genotypes;
     }

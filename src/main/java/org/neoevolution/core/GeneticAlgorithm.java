@@ -10,7 +10,6 @@ import org.neoevolution.mvc.service.PopulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Set;
 
 @Component
@@ -44,10 +43,10 @@ public class GeneticAlgorithm {
     @Autowired
     private GAConfiguration configuration;
 
-    @PostConstruct
+//    @PostConstruct
     private void init() {
         population = new Population(configuration.getMaxSpeciesSize());
-        offsprings = genotypeFactory.createList(configuration.getPopulationSize());
+        offsprings = genotypeFactory.createList(configuration.getPopulationSize(), population.getGeneration());
         speciation.speciate(population, offsprings);
     }
 
@@ -59,18 +58,18 @@ public class GeneticAlgorithm {
     // 5. Speciation
     public void evolve()
     {
+        init();
         while (population.getBestGenotype().getFitness() < 0.99) {
             evolution();
         }
         evaluation.evaluate(population);
-        populationService.save(population);
+//        populationService.save(population);
     }
     
     private void evolution() 
     {
         evaluation.evaluate(population);
 //        selection.select(population);
-        configuration.setGeneration(population.nextGeneration());
         offsprings = reproduction.reproduce(population);
         mutation.mutate(offsprings);
         speciation.speciate(population, offsprings);

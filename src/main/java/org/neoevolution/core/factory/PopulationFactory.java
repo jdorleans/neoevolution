@@ -25,7 +25,7 @@ public class PopulationFactory {
         int size = configuration.getPopulationSize();
         int maxSpecies = configuration.getMaxSpeciesSize();
         Population population = new Population(maxSpecies);
-        Species species = specieFactory.create(size);
+        Species species = specieFactory.create(size, population.getGeneration());
         population.addSpecie(species);
         population.setBestGenotype(species.getBestGenotype());
         return population;

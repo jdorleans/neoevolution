@@ -41,7 +41,7 @@ public class Speciation {
     private void createNewSpecie(Genotype genotype, Population population)
     {
         int size = configuration.getPopulationSize() / configuration.getMaxSpeciesSize();
-        Species species = new Species(configuration.getGeneration(), size);
+        Species species = new Species(population.getGeneration(), size);
         species.addGenotype(genotype);
         population.addSpecie(species);
         updateCompatibilityThreshold(population);

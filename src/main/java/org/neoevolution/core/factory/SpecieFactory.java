@@ -1,6 +1,5 @@
 package org.neoevolution.core.factory;
 
-import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.Species;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,16 +14,13 @@ public class SpecieFactory {
     @Autowired
     private GenotypeFactory genotypeFactory;
 
-    @Autowired
-    private GAConfiguration configuration;
 
-
-    public Species create(int size)
+    public Species create(int size, int generation)
     {
-        Species species = new Species(configuration.getGeneration(), size);
+        Species species = new Species(generation, size);
 
         for (int i = 0; i < size; i++) {
-            species.addGenotype(genotypeFactory.create());
+            species.addGenotype(genotypeFactory.create(generation));
         }
         return species;
     }

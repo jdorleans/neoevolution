@@ -19,8 +19,6 @@ public class GAConfiguration implements Serializable {
 
     private static final long serialVersionUID = 8173675508141965147L;
 
-    private int generation;
-
     @Value("${neuron.inputs}")
     private int inputSize;
 
@@ -104,14 +102,6 @@ public class GAConfiguration implements Serializable {
         maxSpeciesSize = Math.max(1, (int) (populationSize * speciesSizeRate));
     }
 
-
-    public int getGeneration() {
-        return generation;
-    }
-
-    public void setGeneration(int generation) {
-        this.generation = generation;
-    }
 
     public int getInputSize() {
         return inputSize;
