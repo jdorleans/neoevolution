@@ -1,6 +1,5 @@
 package org.neoevolution.core;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -17,10 +16,10 @@ public class Species extends AbstractInnovationEntity {
 
     private Double fitness;
 
+    @RelatedTo(type="BEST")
     private Genotype bestGenotype;
 
     @RelatedTo(type="GENOTYPE")
-    @JsonManagedReference
     private Set<Genotype> genotypes;
 
 
@@ -42,9 +41,13 @@ public class Species extends AbstractInnovationEntity {
             bestGenotype = genotype;
         }
         genotypes.add(genotype);
-        genotype.setSpecies(this);
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Species && super.equals(obj));
+    }
 
     @Override
     public String toString() {

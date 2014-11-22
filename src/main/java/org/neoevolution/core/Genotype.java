@@ -1,6 +1,5 @@
 package org.neoevolution.core;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
@@ -21,10 +20,6 @@ public class Genotype extends AbstractInnovationEntity {
     private Double fitness;
 
     private Double adjustedFitness;
-
-    @RelatedTo(type="SPECIES")
-    @JsonBackReference
-    private Species species;
 
     @RelatedTo(type="INPUT")
     private Set<Neuron> inputs;
@@ -114,6 +109,11 @@ public class Genotype extends AbstractInnovationEntity {
 
 
     @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Genotype && super.equals(obj));
+    }
+
+    @Override
     public String toString() {
         return "GENOTYPE(g:"+ generation +", f:"+ fitness +")";
     }
@@ -144,13 +144,6 @@ public class Genotype extends AbstractInnovationEntity {
     }
     public void setAdjustedFitness(Double adjustedFitness) {
         this.adjustedFitness = adjustedFitness;
-    }
-
-    public Species getSpecies() {
-        return species;
-    }
-    public void setSpecies(Species species) {
-        this.species = species;
     }
 
     public Set<Neuron> getInputs() {

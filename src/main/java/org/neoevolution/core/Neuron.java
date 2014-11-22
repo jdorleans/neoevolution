@@ -71,10 +71,22 @@ public class Neuron extends Gene {
         return activation;
     }
 
+    public void reset() {
+        impulses = 0d;
+        activation = null;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Neuron && super.equals(obj));
+    }
+
     @Override
     public String toString() {
         return type +"(i:"+ innovation +", a:"+ activation +")";
     }
+
 
     public NeuronType getType() {
         return type;

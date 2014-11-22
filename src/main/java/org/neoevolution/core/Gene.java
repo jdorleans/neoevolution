@@ -10,4 +10,9 @@ public abstract class Gene extends AbstractInnovationEntity {
         super(innovation);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Gene && super.equals(obj));
+    }
+
 }

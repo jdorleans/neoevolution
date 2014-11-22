@@ -16,8 +16,10 @@ public class Population extends AbstractInnovationEntity {
 
     private Integer generation;
 
+    @RelatedTo(type="BEST_GENOTYPE")
     private Genotype bestGenotype;
 
+    @RelatedTo(type="BEST_SPECIES")
     private Species bestSpecies;
 
     @RelatedTo(type="SPECIES")
@@ -50,6 +52,12 @@ public class Population extends AbstractInnovationEntity {
             bestSpecies = specie;
         }
         species.add(specie);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Population && super.equals(obj));
     }
 
 

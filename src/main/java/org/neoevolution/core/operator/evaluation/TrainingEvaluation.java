@@ -77,7 +77,7 @@ public abstract class TrainingEvaluation implements Evaluation {
 
         int idx = 0;
         for (Neuron neuron : genotype.getOutputs()) {
-            double activation = activate(neuron);
+            double activation = activate(neuron, null);
             errorFunction.add(outputs.get(idx), activation);
             idx++;
         }
@@ -89,6 +89,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         int idx = 0;
         for (Neuron neuron : genotype.getInputs())
         {
+            neuron.reset();
             NeuronType type = neuron.getType();
 
             if (NeuronType.isInput(type)) {
@@ -100,13 +101,25 @@ public abstract class TrainingEvaluation implements Evaluation {
         }
     }
 
-    private double activate(Neuron neuron)
+    private double activate(Neuron neuron, Neuron from)
     {
-        for (Synapse synapse : neuron.getInputs())
+        Set<Synapse> inputs = neuron.getInputs();
+
+        if (!inputs.isEmpty())
         {
-            if (synapse.isEnabled()) {
-                double activation = activate(synapse.getStart());
-                neuron.impulse(activation * synapse.getWeight());
+            neuron.reset();
+
+            for (Synapse synapse : inputs)
+            {
+                if (synapse.isEnabled())
+                {
+                    Neuron start = synapse.getStart();
+
+                    if (!start.equals(from)) {
+                        double activation = activate(start, neuron);
+                        neuron.impulse(activation * synapse.getWeight());
+                    }
+                }
             }
         }
         return neuron.activate();

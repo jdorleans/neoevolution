@@ -42,9 +42,15 @@ public class Synapse extends Gene {
 
 
     @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Synapse && super.equals(obj));
+    }
+
+    @Override
     public String toString() {
         return start.toString() +"-["+ enabled +", w:"+ weight +"]->"+ end.toString();
     }
+
 
     public Neuron getStart() {
         return start;
