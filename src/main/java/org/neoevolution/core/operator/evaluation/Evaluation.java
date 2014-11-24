@@ -8,6 +8,8 @@ import org.neoevolution.core.Population;
  */
 public interface Evaluation {
 
+    String getName();
+
     void evaluate(Population population);
 
 }

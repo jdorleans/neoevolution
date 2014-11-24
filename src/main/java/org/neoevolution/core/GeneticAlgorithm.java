@@ -1,9 +1,10 @@
 package org.neoevolution.core;
 
 import org.neoevolution.core.factory.GenotypeFactory;
-import org.neoevolution.core.operator.Speciation;
 import org.neoevolution.core.operator.evaluation.Evaluation;
+import org.neoevolution.core.operator.evaluation.EvaluationManager;
 import org.neoevolution.core.operator.selection.Selection;
+import org.neoevolution.core.operator.speciation.Speciation;
 import org.neoevolution.mvc.service.PopulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,8 +24,10 @@ public class GeneticAlgorithm {
     @Autowired
     private PopulationService populationService;
 
-    @Autowired
     private Evaluation evaluation;
+
+    @Autowired
+    private EvaluationManager evaluationManager;
 
     @Autowired
     private Selection selection;
@@ -35,8 +38,9 @@ public class GeneticAlgorithm {
     @Autowired
     private GAConfiguration configuration;
 
-//    @PostConstruct
+
     private void init() {
+        evaluation = evaluationManager.get();
         population = new Population(configuration.getMaxSpeciesSize());
         offsprings = genotypeFactory.createList(configuration.getPopulationSize(), population.getGeneration());
         speciation.speciate(population, offsprings);

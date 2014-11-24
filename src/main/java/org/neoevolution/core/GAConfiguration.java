@@ -96,6 +96,9 @@ public class GAConfiguration implements Serializable {
     @Value("${error.function}")
     private ErrorFunctionType errorFunction;
 
+    @Value("${evaluation.function}")
+    private String evaluationFunction;
+
 
     @PostConstruct
     private void init() {
@@ -305,5 +308,13 @@ public class GAConfiguration implements Serializable {
 
     public void setErrorFunction(ErrorFunctionType errorFunction) {
         this.errorFunction = errorFunction;
+    }
+
+    public String getEvaluationFunction() {
+        return evaluationFunction;
+    }
+
+    public void setEvaluationFunction(String evaluationFunction) {
+        this.evaluationFunction = evaluationFunction;
     }
 }

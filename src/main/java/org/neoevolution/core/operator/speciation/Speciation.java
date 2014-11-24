@@ -1,4 +1,4 @@
-package org.neoevolution.core.operator;
+package org.neoevolution.core.operator.speciation;
 
 import org.neoevolution.core.*;
 import org.neoevolution.util.MapUtils;

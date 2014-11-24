@@ -8,6 +8,11 @@ import java.util.List;
 @Component
 public class XOREvaluation extends TrainingEvaluation {
 
+    @Override
+    public String getName() {
+        return "XOR";
+    }
+
     public XOREvaluation()
     {
         List<Double> input1 = new ArrayList<>(2);
