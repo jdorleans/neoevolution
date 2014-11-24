@@ -3,6 +3,7 @@ package org.neoevolution.core.operator.evaluation;
 import org.neoevolution.core.*;
 import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.core.error.ErrorFunctionManager;
+import org.neoevolution.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -73,24 +74,27 @@ public abstract class TrainingEvaluation implements Evaluation {
     private double evaluate(Genotype genotype, List<Double> inputs, List<Double> outputs)
     {
         errorFunction.reset();
-        stimuliInputs(genotype, inputs);
+        Set<Long> stimulated = stimuliInputs(genotype, inputs);
 
         int idx = 0;
         for (Neuron neuron : genotype.getOutputs()) {
-            double activation = activate(neuron, null);
+            double activation = activate(neuron, stimulated);
             errorFunction.add(outputs.get(idx), activation);
             idx++;
         }
         return (MAX_FITNESS - errorFunction.calculate());
     }
 
-    private void stimuliInputs(Genotype genotype, List<Double> inputs)
+    private Set<Long> stimuliInputs(Genotype genotype, List<Double> inputs)
     {
         int idx = 0;
+        Set<Long> stimulated = MapUtils.createHashSet(genotype.getNeuronsSize());
+
         for (Neuron neuron : genotype.getInputs())
         {
             neuron.reset();
             NeuronType type = neuron.getType();
+            stimulated.add(neuron.getInnovation());
 
             if (NeuronType.isInput(type)) {
                 neuron.impulse(inputs.get(idx));
@@ -99,27 +103,21 @@ public abstract class TrainingEvaluation implements Evaluation {
                 neuron.impulse(1d);
             }
         }
+        return stimulated;
     }
 
-    // FIXME - STILL HAVING SOME INFINITY LOOP (2 HIDDEN NEURONS)
-    private double activate(Neuron neuron, Neuron from)
+    private double activate(Neuron neuron, Set<Long> stimulated)
     {
-        Set<Synapse> inputs = neuron.getInputs();
-
-        if (!inputs.isEmpty())
+        if (!stimulated.contains(neuron.getInnovation()))
         {
             neuron.reset();
+            stimulated.add(neuron.getInnovation());
 
-            for (Synapse synapse : inputs)
+            for (Synapse synapse : neuron.getInputs())
             {
-                if (synapse.isEnabled())
-                {
-                    Neuron start = synapse.getStart();
-
-                    if (!start.equals(from)) {
-                        double activation = activate(start, neuron);
-                        neuron.impulse(activation * synapse.getWeight());
-                    }
+                if (synapse.isEnabled()) {
+                    double activation = activate(synapse.getStart(), stimulated);
+                    neuron.impulse(activation * synapse.getWeight());
                 }
             }
         }
