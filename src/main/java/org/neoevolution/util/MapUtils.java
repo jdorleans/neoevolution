@@ -28,15 +28,15 @@ public class MapUtils {
     }
 
     public static <K, V> Map<K, V> createHashMap(int size) {
-        return new HashMap<>(MapUtils.getSize(size));
+        return new HashMap<>(getSize(size));
     }
 
     public static <E> Set<E> createHashSet(int size) {
-        return new HashSet<>(MapUtils.getSize(size));
+        return new HashSet<>(getSize(size));
     }
 
     public static <E> Set<E> createLinkedHashSet(int size) {
-        return new LinkedHashSet<>(MapUtils.getSize(size));
+        return new LinkedHashSet<>(getSize(size));
     }
 
 }

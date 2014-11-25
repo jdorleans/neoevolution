@@ -8,7 +8,6 @@ import org.neoevolution.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -60,7 +59,7 @@ public class GenotypeFactory {
 
     public Set<Genotype> createList(int size, int generation)
     {
-        Set<Genotype> genotypes = new HashSet<>(MapUtils.getSize(size));
+        Set<Genotype> genotypes = MapUtils.createHashSet(size);
 
         for (int i = 0; i < size; i++) {
             genotypes.add(create(generation));

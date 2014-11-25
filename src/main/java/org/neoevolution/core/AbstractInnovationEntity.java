@@ -6,14 +6,8 @@ public abstract class AbstractInnovationEntity extends AbstractEntity {
 
     private static final long serialVersionUID = -5237757583908066829L;
 
-    protected transient static long count;
-
     protected Long innovation;
 
-
-    protected AbstractInnovationEntity() {
-        this(count++);
-    }
 
     protected AbstractInnovationEntity(Long innovation) {
         super();

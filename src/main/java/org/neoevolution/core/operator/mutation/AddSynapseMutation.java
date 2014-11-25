@@ -72,9 +72,8 @@ public class AddSynapseMutation extends AbstractMutation {
     {
         boolean isStart = false;
         NeuronType type = neuron.getType();
-        boolean isOutput = NeuronType.isOutput(type);
 
-        if (!isOutput)
+        if (!NeuronType.isOutput(type))
         {
             if (!NeuronType.isHidden(type)) {
                 maxOutgoing++;

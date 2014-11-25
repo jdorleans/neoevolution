@@ -4,13 +4,14 @@ import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
 public class Population extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = 6557027803394718011L;
+
+    private transient static long count;
 
     private Double fitness;
 
@@ -31,9 +32,9 @@ public class Population extends AbstractInnovationEntity {
     }
 
     public Population(int maxSpecies) {
-        super();
+        super(count++);
         this.generation = 0;
-        this.species = new LinkedHashSet<>(MapUtils.getSize(maxSpecies*2));
+        this.species = MapUtils.createLinkedHashSet(maxSpecies*2);
     }
 
 

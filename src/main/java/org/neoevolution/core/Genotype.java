@@ -13,6 +13,8 @@ public class Genotype extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = -849596329356657600L;
 
+    private transient static long count;
+
     private Integer generation;
 
     private Boolean evaluated;
@@ -40,7 +42,7 @@ public class Genotype extends AbstractInnovationEntity {
 
     public Genotype(int generation, Set<Neuron> inputs, Set<Neuron> outputs)
     {
-        super();
+        super(count++);
         this.generation = generation;
         this.evaluated = false;
         this.fitness = 0d;
