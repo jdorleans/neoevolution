@@ -37,7 +37,7 @@ public class Application extends Neo4jConfiguration implements CommandLineRunner
 
     @Override
     public void run(String... args) throws Exception {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 50; i++) {
             long start = System.currentTimeMillis();
             System.out.println("Running: "+ (i+1));
             geneticAlgorithm.evolve();
