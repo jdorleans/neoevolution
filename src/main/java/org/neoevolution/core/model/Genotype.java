@@ -1,4 +1,4 @@
-package org.neoevolution.core;
+package org.neoevolution.core.model;
 
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -9,17 +9,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Genotype extends AbstractInnovationEntity {
+public class Genotype extends AbstractFitnessEntity {
 
     private static final long serialVersionUID = -849596329356657600L;
 
     private transient static long count;
 
-    private Integer generation;
-
     private Boolean evaluated;
-
-    private Double fitness;
 
     private Double adjustedFitness;
 
@@ -42,10 +38,8 @@ public class Genotype extends AbstractInnovationEntity {
 
     public Genotype(int generation, Set<Neuron> inputs, Set<Neuron> outputs)
     {
-        super(count++);
-        this.generation = generation;
+        super(count++, generation);
         this.evaluated = false;
-        this.fitness = 0d;
         this.adjustedFitness = 0d;
         this.inputs = inputs;
         this.outputs = outputs;
@@ -117,14 +111,7 @@ public class Genotype extends AbstractInnovationEntity {
 
     @Override
     public String toString() {
-        return "GENOTYPE(g:"+ generation +", f:"+ fitness +")";
-    }
-
-    public Integer getGeneration() {
-        return generation;
-    }
-    public void setGeneration(Integer generation) {
-        this.generation = generation;
+        return "GENOTYPE(i:"+ innovation +", g:"+ generation +", f:"+ fitness +")";
     }
 
     public Boolean isEvaluated() {
@@ -132,13 +119,6 @@ public class Genotype extends AbstractInnovationEntity {
     }
     public void setEvaluated(Boolean evaluated) {
         this.evaluated = evaluated;
-    }
-
-    public Double getFitness() {
-        return fitness;
-    }
-    public void setFitness(Double fitness) {
-        this.fitness = fitness;
     }
 
     public Double getAdjustedFitness() {

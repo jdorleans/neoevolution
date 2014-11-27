@@ -1,6 +1,6 @@
 package org.neoevolution.core.innovation;
 
-import org.neoevolution.core.Synapse;
+import org.neoevolution.core.model.Synapse;
 import org.springframework.stereotype.Component;
 
 @Component

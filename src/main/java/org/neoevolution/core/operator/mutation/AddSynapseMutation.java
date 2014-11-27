@@ -1,9 +1,9 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.Genotype;
-import org.neoevolution.core.Neuron;
-import org.neoevolution.core.NeuronType;
-import org.neoevolution.core.Synapse;
+import org.neoevolution.core.model.Genotype;
+import org.neoevolution.core.model.Neuron;
+import org.neoevolution.core.model.NeuronType;
+import org.neoevolution.core.model.Synapse;
 import org.neoevolution.core.factory.SynapseFactory;
 import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;

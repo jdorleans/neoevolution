@@ -1,8 +1,8 @@
 package org.neoevolution.core.factory;
 
 import org.neoevolution.core.GAConfiguration;
-import org.neoevolution.core.Neuron;
-import org.neoevolution.core.NeuronType;
+import org.neoevolution.core.model.Neuron;
+import org.neoevolution.core.model.NeuronType;
 import org.neoevolution.core.activation.ActivationFunctionManager;
 import org.neoevolution.core.innovation.NeuronInnovationManager;
 import org.neoevolution.util.MapUtils;

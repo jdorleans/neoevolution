@@ -1,8 +1,8 @@
 package org.neoevolution.core.factory;
 
 import org.neoevolution.core.GAConfiguration;
-import org.neoevolution.core.Genotype;
-import org.neoevolution.core.Neuron;
+import org.neoevolution.core.model.Genotype;
+import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.operator.mutation.AddSynapseMutation;
 import org.neoevolution.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package org.neoevolution.util;
 
-import org.neoevolution.core.Neuron;
+import org.neoevolution.core.model.Neuron;
 import org.springframework.util.StopWatch;
 
 import java.util.*;

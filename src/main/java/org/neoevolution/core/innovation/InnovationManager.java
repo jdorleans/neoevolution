@@ -1,7 +1,7 @@
 package org.neoevolution.core.innovation;
 
-import org.neoevolution.core.Gene;
-import org.neoevolution.core.Neuron;
+import org.neoevolution.core.model.Gene;
+import org.neoevolution.core.model.Neuron;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

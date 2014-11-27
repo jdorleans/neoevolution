@@ -1,4 +1,4 @@
-package org.neoevolution.core;
+package org.neoevolution.core.model;
 
 import org.springframework.data.neo4j.annotation.EndNode;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;

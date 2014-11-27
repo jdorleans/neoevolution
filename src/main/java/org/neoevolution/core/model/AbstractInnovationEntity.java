@@ -1,4 +1,4 @@
-package org.neoevolution.core;
+package org.neoevolution.core.model;
 
 import org.neoevolution.mvc.AbstractEntity;
 

@@ -1,6 +1,7 @@
 package org.neoevolution.core.operator.speciation;
 
 import org.neoevolution.core.*;
+import org.neoevolution.core.model.*;
 import org.neoevolution.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

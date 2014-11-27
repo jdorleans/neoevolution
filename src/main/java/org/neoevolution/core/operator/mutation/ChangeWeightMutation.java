@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.Genotype;
-import org.neoevolution.core.Synapse;
+import org.neoevolution.core.model.Genotype;
+import org.neoevolution.core.model.Synapse;
 import org.neoevolution.util.Randomizer;
 import org.springframework.stereotype.Component;
 

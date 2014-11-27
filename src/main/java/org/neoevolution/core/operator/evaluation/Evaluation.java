@@ -1,6 +1,6 @@
 package org.neoevolution.core.operator.evaluation;
 
-import org.neoevolution.core.Population;
+import org.neoevolution.core.model.Population;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

@@ -1,8 +1,8 @@
 package org.neoevolution.core.factory;
 
 import org.neoevolution.core.GAConfiguration;
-import org.neoevolution.core.Neuron;
-import org.neoevolution.core.Synapse;
+import org.neoevolution.core.model.Neuron;
+import org.neoevolution.core.model.Synapse;
 import org.neoevolution.core.innovation.SynapseInnovationManager;
 import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;

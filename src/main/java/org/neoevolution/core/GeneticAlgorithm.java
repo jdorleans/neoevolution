@@ -1,6 +1,8 @@
 package org.neoevolution.core;
 
 import org.neoevolution.core.factory.GenotypeFactory;
+import org.neoevolution.core.model.Genotype;
+import org.neoevolution.core.model.Population;
 import org.neoevolution.core.operator.evaluation.Evaluation;
 import org.neoevolution.core.operator.evaluation.EvaluationManager;
 import org.neoevolution.core.operator.selection.Selection;

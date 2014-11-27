@@ -1,4 +1,4 @@
-package org.neoevolution.core;
+package org.neoevolution.core.model;
 
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -7,15 +7,11 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 import java.util.Set;
 
 @NodeEntity
-public class Population extends AbstractInnovationEntity {
+public class Population extends AbstractFitnessEntity {
 
     private static final long serialVersionUID = 6557027803394718011L;
 
     private transient static long count;
-
-    private Double fitness;
-
-    private Integer generation;
 
     @RelatedTo(type="BEST_GENOTYPE")
     private Genotype bestGenotype;
@@ -33,7 +29,6 @@ public class Population extends AbstractInnovationEntity {
 
     public Population(int maxSpecies) {
         super(count++);
-        this.generation = 0;
         this.species = MapUtils.createLinkedHashSet(maxSpecies*2);
     }
 
@@ -61,20 +56,6 @@ public class Population extends AbstractInnovationEntity {
         return (obj instanceof Population && super.equals(obj));
     }
 
-
-    public Double getFitness() {
-        return fitness;
-    }
-    public void setFitness(Double fitness) {
-        this.fitness = fitness;
-    }
-
-    public Integer getGeneration() {
-        return generation;
-    }
-    public void setGeneration(Integer generation) {
-        this.generation = generation;
-    }
 
     public Genotype getBestGenotype() {
         return bestGenotype;

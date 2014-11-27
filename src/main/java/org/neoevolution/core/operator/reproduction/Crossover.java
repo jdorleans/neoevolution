@@ -2,6 +2,10 @@ package org.neoevolution.core.operator.reproduction;
 
 import org.neoevolution.core.*;
 import org.neoevolution.core.factory.GenotypeFactory;
+import org.neoevolution.core.model.Gene;
+import org.neoevolution.core.model.Genotype;
+import org.neoevolution.core.model.Neuron;
+import org.neoevolution.core.model.Synapse;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.Genotype;
+import org.neoevolution.core.model.Genotype;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

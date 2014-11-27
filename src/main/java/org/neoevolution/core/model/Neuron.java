@@ -1,4 +1,4 @@
-package org.neoevolution.core;
+package org.neoevolution.core.model;
 
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.core.activation.ActivationFunction;
@@ -16,9 +16,9 @@ public class Neuron extends Gene {
 
     private NeuronType type;
 
-    private Double impulses;
+    private transient Double impulses;
 
-    private Double activation;
+    private transient Double activation;
 
     private ActivationFunction function;
 

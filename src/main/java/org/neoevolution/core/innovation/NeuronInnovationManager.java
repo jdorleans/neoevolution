@@ -1,6 +1,6 @@
 package org.neoevolution.core.innovation;
 
-import org.neoevolution.core.Neuron;
+import org.neoevolution.core.model.Neuron;
 import org.springframework.stereotype.Component;
 
 @Component

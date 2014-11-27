@@ -1,6 +1,6 @@
 package org.neoevolution.util;
 
-import org.neoevolution.core.Genotype;
+import org.neoevolution.core.model.Genotype;
 
 import java.util.*;
 

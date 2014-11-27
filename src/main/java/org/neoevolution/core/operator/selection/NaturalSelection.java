@@ -1,9 +1,9 @@
 package org.neoevolution.core.operator.selection;
 
 import org.neoevolution.core.GAConfiguration;
-import org.neoevolution.core.Genotype;
-import org.neoevolution.core.Population;
-import org.neoevolution.core.Species;
+import org.neoevolution.core.model.Genotype;
+import org.neoevolution.core.model.Population;
+import org.neoevolution.core.model.Species;
 import org.neoevolution.core.operator.mutation.MutationManager;
 import org.neoevolution.core.operator.reproduction.Parents;
 import org.neoevolution.core.operator.reproduction.Reproduction;

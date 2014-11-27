@@ -1,8 +1,8 @@
 package org.neoevolution.core.factory;
 
 import org.neoevolution.core.GAConfiguration;
-import org.neoevolution.core.Population;
-import org.neoevolution.core.Species;
+import org.neoevolution.core.model.Population;
+import org.neoevolution.core.model.Species;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

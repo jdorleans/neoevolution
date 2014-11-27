@@ -1,6 +1,6 @@
 package org.neoevolution.core.operator.reproduction;
 
-import org.neoevolution.core.Genotype;
+import org.neoevolution.core.model.Genotype;
 
 public interface Reproduction {
 

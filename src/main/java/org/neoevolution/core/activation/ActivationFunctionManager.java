@@ -1,7 +1,7 @@
 package org.neoevolution.core.activation;
 
 import org.neoevolution.core.GAConfiguration;
-import org.neoevolution.core.NeuronType;
+import org.neoevolution.core.model.NeuronType;
 import org.neoevolution.util.Randomizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
