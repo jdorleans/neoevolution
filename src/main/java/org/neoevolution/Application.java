@@ -36,13 +36,20 @@ public class Application extends Neo4jConfiguration implements CommandLineRunner
 
 
     @Override
-    public void run(String... args) throws Exception {
-        for (int i = 0; i < 50; i++) {
+    public void run(String... args) throws Exception
+    {
+        int runs = 50;
+        long startTotal = System.currentTimeMillis();
+
+        for (int i = 0; i < runs; i++) {
             long start = System.currentTimeMillis();
             System.out.println("Running: "+ (i+1));
             geneticAlgorithm.evolve();
             System.out.println("Finished in: " + (System.currentTimeMillis() - start));
         }
+        long total = System.currentTimeMillis() - startTotal;
+        System.out.println("TOTAL TIME: " + total);
+        System.out.println("AVERAGE TIME: " + total/runs);
     }
 
     public static void main(String[] args) throws Exception {
