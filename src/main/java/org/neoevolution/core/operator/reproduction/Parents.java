@@ -3,8 +3,8 @@ package org.neoevolution.core.operator.reproduction;
 import org.neoevolution.core.model.Genotype;
 
 /**
- * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
- * @since 27/10/14
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since Oct 27 2014
  */
 public class Parents {
 

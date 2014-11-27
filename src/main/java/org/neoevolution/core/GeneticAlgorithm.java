@@ -7,10 +7,11 @@ import org.neoevolution.core.operator.evaluation.Evaluation;
 import org.neoevolution.core.operator.evaluation.EvaluationManager;
 import org.neoevolution.core.operator.selection.Selection;
 import org.neoevolution.core.operator.speciation.Speciation;
-import org.neoevolution.mvc.service.PopulationService;
+import org.neoevolution.core.stop.FitnessStop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.Set;
 
 @Component
@@ -18,13 +19,8 @@ public class GeneticAlgorithm {
 
     private Population population;
 
-    private Set<Genotype> offsprings;
-
     @Autowired
     private GenotypeFactory genotypeFactory;
-
-    @Autowired
-    private PopulationService populationService;
 
     private Evaluation evaluation;
 
@@ -38,13 +34,17 @@ public class GeneticAlgorithm {
     private Speciation speciation;
 
     @Autowired
+    private FitnessStop stopCondition;
+
+    @Autowired
     private GAConfiguration configuration;
 
 
+    @PostConstruct
     private void init() {
-        evaluation = evaluationManager.get();
+        evaluation = evaluationManager.getCached();
         population = new Population(configuration.getMaxSpeciesSize());
-        offsprings = genotypeFactory.createList(configuration.getPopulationSize(), population.getGeneration());
+        Set<Genotype> offsprings = genotypeFactory.createList(configuration.getPopulationSize(), population.getGeneration());
         speciation.speciate(population, offsprings);
     }
 
@@ -54,20 +54,33 @@ public class GeneticAlgorithm {
     // 3. Reproduction
     // 4. Mutation
     // 5. Speciation
-    public void evolve()
+    public void evolve() {
+        evolve(true);
+    }
+
+    public void evolve(boolean reset)
     {
-        init();
-        while (population.getBestGenotype().getFitness() < 0.99) {
+        if (reset) {
+            init();
+        }
+        while (!stopCondition.isStop(population)) {
             evolution();
         }
         evaluation.evaluate(population);
-//        populationService.save(population);
     }
     
     private void evolution() {
         evaluation.evaluate(population);
-        offsprings = selection.select(population);
+        Set<Genotype> offsprings = selection.select(population);
         speciation.speciate(population, offsprings);
+    }
+
+
+    public Population getPopulation() {
+        return population;
+    }
+    public void setPopulation(Population population) {
+        this.population = population;
     }
 
 }

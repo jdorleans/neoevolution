@@ -30,6 +30,11 @@ public class EvaluationManager {
 
 
     public Evaluation get() {
+        init();
+        return evaluation;
+    }
+
+    public Evaluation getCached() {
         return evaluation;
     }
 
