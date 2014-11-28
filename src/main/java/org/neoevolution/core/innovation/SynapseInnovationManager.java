@@ -1,10 +1,9 @@
 package org.neoevolution.core.innovation;
 
-import org.neoevolution.core.model.Synapse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SynapseInnovationManager extends InnovationManager<Synapse> {
+public class SynapseInnovationManager extends InnovationManager {
 
     public static final String SEPARATOR = "-";
 
@@ -14,7 +13,7 @@ public class SynapseInnovationManager extends InnovationManager<Synapse> {
     }
 
     public SynapseInnovationManager(String code) {
-        this(code, CAPACITY*100);
+        this(code, SIZE *100);
     }
 
     public SynapseInnovationManager(String code, int capacity) {

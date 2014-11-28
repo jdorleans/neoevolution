@@ -4,7 +4,7 @@ import org.neoevolution.core.model.Neuron;
 import org.springframework.stereotype.Component;
 
 @Component
-public class NeuronInnovationManager extends InnovationManager<Neuron> {
+public class NeuronInnovationManager extends InnovationManager {
 
     public static final String SEPARATOR = ":";
 
@@ -14,7 +14,7 @@ public class NeuronInnovationManager extends InnovationManager<Neuron> {
     }
 
     public NeuronInnovationManager(String code) {
-        this(code, CAPACITY);
+        this(code, SIZE);
     }
 
     public NeuronInnovationManager(String code, int capacity) {

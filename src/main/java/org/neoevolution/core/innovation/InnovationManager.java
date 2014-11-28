@@ -2,13 +2,13 @@ package org.neoevolution.core.innovation;
 
 import org.neoevolution.core.model.Gene;
 import org.neoevolution.core.model.Neuron;
+import org.neoevolution.util.MapUtils;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class InnovationManager<T extends Gene> {
+public abstract class InnovationManager {
 
-    public static final int CAPACITY = 5000;
+    protected static final int SIZE = 5000;
 
     protected String code;
 
@@ -18,13 +18,13 @@ public abstract class InnovationManager<T extends Gene> {
 
 
     protected InnovationManager(String code) {
-        this(code, CAPACITY);
+        this(code, SIZE);
     }
 
-    protected InnovationManager(String code, int capacity) {
+    protected InnovationManager(String code, int size) {
         this.code = code;
         this.current = 0l;
-        this.innovations = new ConcurrentHashMap<>(capacity);
+        this.innovations = MapUtils.createConcurrentHashMap(size);
     }
 
 

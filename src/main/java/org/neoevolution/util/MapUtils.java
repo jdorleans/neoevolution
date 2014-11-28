@@ -1,6 +1,7 @@
 package org.neoevolution.util;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -37,6 +38,10 @@ public class MapUtils {
 
     public static <E> Set<E> createLinkedHashSet(int size) {
         return new LinkedHashSet<>(getSize(size));
+    }
+
+    public static <K, V> Map<K, V> createConcurrentHashMap(int size) {
+        return new ConcurrentHashMap<>(getSize(size));
     }
 
 }
