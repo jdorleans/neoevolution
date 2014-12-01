@@ -1,5 +1,6 @@
 package org.neoevolution.mvc.service;
 
+import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.innovation.NeuronInnovation;
 import org.neoevolution.mvc.repository.NeuronInnovationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +26,27 @@ public class NeuronInnovationService {
         innovations = new HashMap<>();
     }
 
+    public NeuronInnovation create(Long configId)  {
+        NeuronInnovation innovation = new NeuronInnovation();
+        innovation.setConfigId(configId);
+        repository.save(innovation);
+        return innovation;
+    }
 
-    public NeuronInnovation findByConfigIdOrCreate(Long id)
+
+    public NeuronInnovation findOrCreate(GAConfiguration configuration)
     {
-        NeuronInnovation innovation = innovations.get(id);
+        Long configId = configuration.getId();
+        NeuronInnovation innovation = innovations.get(configId);
 
         if (innovation == null)
         {
-            innovation = repository.findByConfigId(id);
+            innovation = repository.findByConfigId(configId);
 
             if (innovation == null) {
-                innovation = new NeuronInnovation();
-                innovation.setConfigId(id);
-                repository.save(innovation);
+                innovation = create(configId);
             }
-            innovations.put(id, innovation);
+            innovations.put(configId, innovation);
         }
         return innovation;
     }
