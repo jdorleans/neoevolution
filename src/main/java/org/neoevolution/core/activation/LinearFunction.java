@@ -1,8 +1,5 @@
 package org.neoevolution.core.activation;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public final class LinearFunction extends AbstractActivationFunction implements ActivationFunction {
 
     @Override

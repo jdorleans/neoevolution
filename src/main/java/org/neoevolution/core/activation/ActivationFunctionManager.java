@@ -2,56 +2,42 @@ package org.neoevolution.core.activation;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.NeuronType;
+import org.neoevolution.util.ClassUtils;
+import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@Component
 public class ActivationFunctionManager {
 
-    @Autowired
-    private GAConfiguration configuration;
-
-    @Autowired
-    private List<ActivationFunction> functions;
-
-    private Map<NeuronType, ActivationFunction> mapFunctions;
+    private Map<NeuronType, ActivationFunction> functions;
 
 
-    @PostConstruct
-    private void init()
-    {
-        mapFunctions = new HashMap<>(functions.size());
-        mapFunctions.put(NeuronType.BIAS, find(configuration.getActivationBias()));
-        mapFunctions.put(NeuronType.INPUT, find(configuration.getActivationInput()));
-        mapFunctions.put(NeuronType.HIDDEN, find(configuration.getActivationHidden()));
-        mapFunctions.put(NeuronType.OUTPUT, find(configuration.getActivationOutput()));
+    public ActivationFunctionManager(GAConfiguration configuration) {
+        configure(configuration);
     }
 
-
-    public ActivationFunction get(NeuronType type)
+    public void configure(GAConfiguration configuration)
     {
-        ActivationFunction function = mapFunctions.get(type);
-
-        if (function == null) {
-            function = functions.get(Randomizer.randomInt(functions.size()));
-        }
-        return function;
+        functions = MapUtils.createHashMap(4);
+        configure(NeuronType.BIAS, configuration.getActivationBias());
+        configure(NeuronType.INPUT, configuration.getActivationInput());
+        configure(NeuronType.HIDDEN, configuration.getActivationHidden());
+        configure(NeuronType.OUTPUT, configuration.getActivationOutput());
     }
 
-    private ActivationFunction find(ActivationFunctionType type)
-    {
-        for (ActivationFunction function : functions) {
-            if (function.getType().equals(type)) {
-                return function;
-            }
-        }
-        return null;
+    public void configure(NeuronType type, String name) {
+        functions.put(type, ClassUtils.<ActivationFunction>create(name));
+    }
+
+    public ActivationFunction get(NeuronType type) {
+        return functions.get(type);
+    }
+
+    public ActivationFunction getRandom() {
+        NeuronType[] types = NeuronType.values();
+        NeuronType type = types[Randomizer.randomInt(types.length)];
+        return functions.get(type);
     }
 
 }

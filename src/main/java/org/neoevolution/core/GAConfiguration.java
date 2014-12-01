@@ -1,110 +1,98 @@
 package org.neoevolution.core;
 
-import org.neoevolution.core.activation.ActivationFunctionType;
-import org.neoevolution.core.error.ErrorFunctionType;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.neoevolution.mvc.AbstractEntity;
+import org.springframework.data.neo4j.annotation.NodeEntity;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 22/10/14.
+ * @since Oct 22 2014
  */
-@Configuration
-@PropertySource("classpath:ga-config.properties")
-public class GAConfiguration implements Serializable {
+@NodeEntity
+public class GAConfiguration extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 8173675508141965147L;
+    private static final long serialVersionUID = -2126831555723317376L;
 
-    @Value("${neuron.inputs}")
-    private int inputSize;
-
-    @Value("${neuron.hidden.min}")
-    private int hiddenMinSize;
-
-    @Value("${neuron.hidden.max}")
-    private int hiddenMaxSize;
-
-    @Value("${neuron.outputs}")
-    private int outputSize;
-
-    @Value("${population.size}")
     private int populationSize;
 
-    @Value("${genotype.connected.fully}")
+    private int inputSize;
+
+    private int outputSize;
+
+    private int hiddenMinSize;
+
+    private int hiddenMaxSize;
+
     private boolean fullyConnected;
 
-    @Value("${synapse.weight.range}")
     private int weightRange;
 
-    @Value("${mutation.weight.change.rate}")
-    private double changeWeightRate;
+    private String activationBias;
 
-    @Value("${mutation.weight.change.reset}")
-    private boolean changeWeightReset;
+    private String activationInput;
 
-    @Value("${mutation.neuron.add.rate}")
-    private double addNeuronRate;
+    private String activationHidden;
 
-    @Value("${mutation.synapse.add.rate}")
-    private double addSynapseRate;
+    private String activationOutput;
 
-    private int maxSpeciesSize;
+    private String errorFunction;
 
-    @Value("${speciation.size.rate}")
-    private double speciesSizeRate;
+    private List<String> stopFunctions;
 
-    @Value("${speciation.excess.factor}")
-    private double excessFactor;
-
-    @Value("${speciation.weight.factor}")
-    private double weightFactor;
-
-    @Value("${speciation.compatibility.rate}")
-    private double compatibilityRate;
-
-    @Value("${speciation.compatibility.threshold}")
-    private double compatibilityThreshold;
-
-    @Value("${selection.survival.rate}")
-    private double survivalRate;
-
-    @Value("${reproduction.elitism.rate}")
-    private double elitismRate;
-
-    @Value("${reproduction.synapse.enable.rate}")
-    private double enableSynapseRate;
-
-    @Value("${reproduction.synapse.enable.penalty}")
-    private double enableSynapsePenalty;
-
-    @Value("${activation.bias}")
-    private ActivationFunctionType activationBias;
-
-    @Value("${activation.input}")
-    private ActivationFunctionType activationInput;
-
-    @Value("${activation.hidden}")
-    private ActivationFunctionType activationHidden;
-
-    @Value("${activation.output}")
-    private ActivationFunctionType activationOutput;
-
-    @Value("${error.function}")
-    private ErrorFunctionType errorFunction;
-
-    @Value("${evaluation.function}")
     private String evaluationFunction;
 
+    private String selectionFunction;
 
-    @PostConstruct
-    private void init() {
-        maxSpeciesSize = Math.max(1, (int) (populationSize * speciesSizeRate));
+    private String reproductionFunction;
+
+    private double survivalRate;
+
+    private double elitismRate;
+
+    private double enableSynapseRate;
+
+    private double enableSynapsePenalty;
+
+    private String addNeuronFunction;
+
+    private double addNeuronRate;
+
+    private String addSynapseFunction;
+
+    private double addSynapseRate;
+
+    private String weightSynapseFunction;
+
+    private double weightSynapseRate;
+
+    private boolean weightSynapseReset;
+
+    private String speciationFunction;
+
+    private double speciesSizeRate;
+
+    private double excessFactor;
+
+    private double weightFactor;
+
+    private double compatibilityRate;
+
+    private double compatibilityThreshold;
+
+
+    public int getPopulationSize() {
+        return populationSize;
     }
 
+    public void setPopulationSize(int populationSize) {
+        this.populationSize = populationSize;
+    }
+
+    public int getMaxSpeciesSize() {
+        return Math.max(1, (int) (populationSize * speciesSizeRate));
+    }
 
     public int getInputSize() {
         return inputSize;
@@ -112,6 +100,14 @@ public class GAConfiguration implements Serializable {
 
     public void setInputSize(int inputSize) {
         this.inputSize = inputSize;
+    }
+
+    public int getOutputSize() {
+        return outputSize;
+    }
+
+    public void setOutputSize(int outputSize) {
+        this.outputSize = outputSize;
     }
 
     public int getHiddenMinSize() {
@@ -130,14 +126,6 @@ public class GAConfiguration implements Serializable {
         this.hiddenMaxSize = hiddenMaxSize;
     }
 
-    public int getOutputSize() {
-        return outputSize;
-    }
-
-    public void setOutputSize(int outputSize) {
-        this.outputSize = outputSize;
-    }
-
     public boolean isFullyConnected() {
         return fullyConnected;
     }
@@ -154,44 +142,92 @@ public class GAConfiguration implements Serializable {
         this.weightRange = weightRange;
     }
 
-    public int getPopulationSize() {
-        return populationSize;
+    public String getActivationBias() {
+        return activationBias;
     }
 
-    public void setPopulationSize(int populationSize) {
-        this.populationSize = populationSize;
+    public void setActivationBias(String activationBias) {
+        this.activationBias = activationBias;
     }
 
-    public double getChangeWeightRate() {
-        return changeWeightRate;
+    public String getActivationInput() {
+        return activationInput;
     }
 
-    public void setChangeWeightRate(double changeWeightRate) {
-        this.changeWeightRate = changeWeightRate;
+    public void setActivationInput(String activationInput) {
+        this.activationInput = activationInput;
     }
 
-    public boolean isChangeWeightReset() {
-        return changeWeightReset;
+    public String getActivationHidden() {
+        return activationHidden;
     }
 
-    public void setChangeWeightReset(boolean changeWeightReset) {
-        this.changeWeightReset = changeWeightReset;
+    public void setActivationHidden(String activationHidden) {
+        this.activationHidden = activationHidden;
     }
 
-    public double getAddNeuronRate() {
-        return addNeuronRate;
+    public String getActivationOutput() {
+        return activationOutput;
     }
 
-    public void setAddNeuronRate(double addNeuronRate) {
-        this.addNeuronRate = addNeuronRate;
+    public void setActivationOutput(String activationOutput) {
+        this.activationOutput = activationOutput;
     }
 
-    public double getAddSynapseRate() {
-        return addSynapseRate;
+    public String getErrorFunction() {
+        return errorFunction;
     }
 
-    public void setAddSynapseRate(double addSynapseRate) {
-        this.addSynapseRate = addSynapseRate;
+    public void setErrorFunction(String errorFunction) {
+        this.errorFunction = errorFunction;
+    }
+
+    public List<String> getStopFunctions() {
+        return stopFunctions;
+    }
+
+    public void setStopFunctions(List<String> stopFunctions) {
+        this.stopFunctions = stopFunctions;
+    }
+
+    public String getEvaluationFunction() {
+        return evaluationFunction;
+    }
+
+    public void setEvaluationFunction(String evaluationFunction) {
+        this.evaluationFunction = evaluationFunction;
+    }
+
+    public String getSelectionFunction() {
+        return selectionFunction;
+    }
+
+    public void setSelectionFunction(String selectionFunction) {
+        this.selectionFunction = selectionFunction;
+    }
+
+    public String getReproductionFunction() {
+        return reproductionFunction;
+    }
+
+    public void setReproductionFunction(String reproductionFunction) {
+        this.reproductionFunction = reproductionFunction;
+    }
+
+    public double getSurvivalRate() {
+        return survivalRate;
+    }
+
+    public void setSurvivalRate(double survivalRate) {
+        this.survivalRate = survivalRate;
+    }
+
+    public double getElitismRate() {
+        return elitismRate;
+    }
+
+    public void setElitismRate(double elitismRate) {
+        this.elitismRate = elitismRate;
     }
 
     public double getEnableSynapseRate() {
@@ -210,8 +246,68 @@ public class GAConfiguration implements Serializable {
         this.enableSynapsePenalty = enableSynapsePenalty;
     }
 
-    public int getMaxSpeciesSize() {
-        return maxSpeciesSize;
+    public String getAddNeuronFunction() {
+        return addNeuronFunction;
+    }
+
+    public void setAddNeuronFunction(String addNeuronFunction) {
+        this.addNeuronFunction = addNeuronFunction;
+    }
+
+    public double getAddNeuronRate() {
+        return addNeuronRate;
+    }
+
+    public void setAddNeuronRate(double addNeuronRate) {
+        this.addNeuronRate = addNeuronRate;
+    }
+
+    public String getAddSynapseFunction() {
+        return addSynapseFunction;
+    }
+
+    public void setAddSynapseFunction(String addSynapseFunction) {
+        this.addSynapseFunction = addSynapseFunction;
+    }
+
+    public double getAddSynapseRate() {
+        return addSynapseRate;
+    }
+
+    public void setAddSynapseRate(double addSynapseRate) {
+        this.addSynapseRate = addSynapseRate;
+    }
+
+    public String getWeightSynapseFunction() {
+        return weightSynapseFunction;
+    }
+
+    public void setWeightSynapseFunction(String weightSynapseFunction) {
+        this.weightSynapseFunction = weightSynapseFunction;
+    }
+
+    public double getWeightSynapseRate() {
+        return weightSynapseRate;
+    }
+
+    public void setWeightSynapseRate(double weightSynapseRate) {
+        this.weightSynapseRate = weightSynapseRate;
+    }
+
+    public boolean isWeightSynapseReset() {
+        return weightSynapseReset;
+    }
+
+    public void setWeightSynapseReset(boolean weightSynapseReset) {
+        this.weightSynapseReset = weightSynapseReset;
+    }
+
+    public String getSpeciationFunction() {
+        return speciationFunction;
+    }
+
+    public void setSpeciationFunction(String speciationFunction) {
+        this.speciationFunction = speciationFunction;
     }
 
     public double getSpeciesSizeRate() {
@@ -254,67 +350,4 @@ public class GAConfiguration implements Serializable {
         this.compatibilityThreshold = compatibilityThreshold;
     }
 
-    public double getSurvivalRate() {
-        return survivalRate;
-    }
-
-    public void setSurvivalRate(double survivalRate) {
-        this.survivalRate = survivalRate;
-    }
-
-    public double getElitismRate() {
-        return elitismRate;
-    }
-
-    public void setElitismRate(double elitismRate) {
-        this.elitismRate = elitismRate;
-    }
-
-    public ActivationFunctionType getActivationBias() {
-        return activationBias;
-    }
-
-    public void setActivationBias(ActivationFunctionType activationBias) {
-        this.activationBias = activationBias;
-    }
-
-    public ActivationFunctionType getActivationInput() {
-        return activationInput;
-    }
-
-    public void setActivationInput(ActivationFunctionType activationInput) {
-        this.activationInput = activationInput;
-    }
-
-    public ActivationFunctionType getActivationHidden() {
-        return activationHidden;
-    }
-
-    public void setActivationHidden(ActivationFunctionType activationHidden) {
-        this.activationHidden = activationHidden;
-    }
-
-    public ActivationFunctionType getActivationOutput() {
-        return activationOutput;
-    }
-
-    public void setActivationOutput(ActivationFunctionType activationOutput) {
-        this.activationOutput = activationOutput;
-    }
-
-    public ErrorFunctionType getErrorFunction() {
-        return errorFunction;
-    }
-
-    public void setErrorFunction(ErrorFunctionType errorFunction) {
-        this.errorFunction = errorFunction;
-    }
-
-    public String getEvaluationFunction() {
-        return evaluationFunction;
-    }
-
-    public void setEvaluationFunction(String evaluationFunction) {
-        this.evaluationFunction = evaluationFunction;
-    }
 }

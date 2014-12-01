@@ -2,29 +2,26 @@ package org.neoevolution.core.innovation;
 
 import org.neoevolution.core.model.Gene;
 import org.neoevolution.core.model.Neuron;
-import org.neoevolution.util.MapUtils;
+import org.neoevolution.mvc.AbstractEntity;
+import org.neoevolution.util.MapProperties;
 
-import java.util.Map;
+public abstract class Innovation extends AbstractEntity {
 
-public abstract class InnovationManager {
-
-    protected static final int SIZE = 5000;
+    private static final long serialVersionUID = -6763412711915520799L;
 
     protected String code;
 
     protected Long current;
 
-    protected Map<String, Long> innovations;
+    protected Long configId;
+
+    protected MapProperties innovations;
 
 
-    protected InnovationManager(String code) {
-        this(code, SIZE);
-    }
-
-    protected InnovationManager(String code, int size) {
+    protected Innovation(String code) {
         this.code = code;
         this.current = 0l;
-        this.innovations = MapUtils.createConcurrentHashMap(size);
+        this.innovations = new MapProperties();
     }
 
 
@@ -35,7 +32,7 @@ public abstract class InnovationManager {
         if (innovation == null)
         {
             String key = key(from, to);
-            innovation = innovations.get(key);
+            innovation = get(key);
 
             if (innovation == null) {
                 innovation = next(key);
@@ -51,11 +48,11 @@ public abstract class InnovationManager {
 
     protected synchronized Long next(String key)
     {
-        Long innovation = innovations.get(key);
+        Long innovation = get(key);
 
         if (innovation == null) {
             innovation = next();
-            innovations.put(key, innovation);
+            put(key, innovation);
         }
         return innovation;
     }
@@ -65,6 +62,22 @@ public abstract class InnovationManager {
     }
 
 
+    protected Long get(String key) {
+        return innovations.getLong(key);
+    }
+
+    protected void put(String key, Long value) {
+        innovations.setProperty(key, value);
+    }
+
+
+    public String getCode() {
+        return code;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Long getCurrent() {
         return current;
     }
@@ -72,10 +85,17 @@ public abstract class InnovationManager {
         this.current = current;
     }
 
-    public Map<String, Long> getInnovations() {
+    public Long getConfigId() {
+        return configId;
+    }
+    public void setConfigId(Long configId) {
+        this.configId = configId;
+    }
+
+    public MapProperties getInnovations() {
         return innovations;
     }
-    public void setInnovations(Map<String, Long> innovations) {
+    public void setInnovations(MapProperties innovations) {
         this.innovations = innovations;
     }
 

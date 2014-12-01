@@ -1,12 +1,9 @@
 package org.neoevolution.core.operator.evaluation;
 
 import org.neoevolution.core.error.ErrorFunction;
-import org.neoevolution.core.error.ErrorFunctionManager;
 import org.neoevolution.core.model.*;
 import org.neoevolution.util.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Set;
 
@@ -20,14 +17,6 @@ public abstract class TrainingEvaluation implements Evaluation {
 
     protected ErrorFunction errorFunction;
 
-    @Autowired
-    protected ErrorFunctionManager errorFunctionManager;
-
-
-    @PostConstruct
-    private void init() {
-        errorFunction = errorFunctionManager.get();
-    }
 
     @Override
     public void evaluate(Population population)
@@ -146,6 +135,28 @@ public abstract class TrainingEvaluation implements Evaluation {
         if (species.getFitness() > population.getBestSpecies().getFitness()) {
             population.setBestSpecies(species);
         }
+    }
+
+
+    public List<List<Double>> getInputSet() {
+        return inputSet;
+    }
+    public void setInputSet(List<List<Double>> inputSet) {
+        this.inputSet = inputSet;
+    }
+
+    public List<List<Double>> getOutputSet() {
+        return outputSet;
+    }
+    public void setOutputSet(List<List<Double>> outputSet) {
+        this.outputSet = outputSet;
+    }
+
+    public ErrorFunction getErrorFunction() {
+        return errorFunction;
+    }
+    public void setErrorFunction(ErrorFunction errorFunction) {
+        this.errorFunction = errorFunction;
     }
 
 }

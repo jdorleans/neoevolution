@@ -1,28 +1,28 @@
 package org.neoevolution.core.operator.mutation;
 
+import org.neoevolution.core.factory.SynapseFactory;
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.NeuronType;
 import org.neoevolution.core.model.Synapse;
-import org.neoevolution.core.factory.SynapseFactory;
 import org.neoevolution.util.Randomizer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Component
 public class AddSynapseMutation extends AbstractMutation {
 
-    @Autowired
-    private SynapseFactory factory;
+    private SynapseFactory synapseFactory;
 
 
-    @Override
-    protected void initRate() {
-        rate = configuration.getAddSynapseRate();
+    public AddSynapseMutation() {
+        super();
+    }
+
+    public AddSynapseMutation(double rate, SynapseFactory synapseFactory) {
+        super(rate);
+        this.synapseFactory = synapseFactory;
     }
 
 
@@ -128,9 +128,16 @@ public class AddSynapseMutation extends AbstractMutation {
     }
 
     private Synapse create(Neuron start, Neuron end, Genotype genotype) {
-        Synapse synapse = factory.create(start, end);
+        Synapse synapse = synapseFactory.create(start, end);
         genotype.getSynapses().add(synapse);
         return synapse;
+    }
+
+    public SynapseFactory getSynapseFactory() {
+        return synapseFactory;
+    }
+    public void setSynapseFactory(SynapseFactory synapseFactory) {
+        this.synapseFactory = synapseFactory;
     }
 
 }

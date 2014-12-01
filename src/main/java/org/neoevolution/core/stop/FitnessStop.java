@@ -1,13 +1,11 @@
 package org.neoevolution.core.stop;
 
 import org.neoevolution.core.model.Population;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Nov 27 2014
  */
-@Component
 public class FitnessStop implements StopCondition {
 
     private static final Double DEFAULT = 0.9;

@@ -1,19 +1,25 @@
 package org.neoevolution.core.factory;
 
+import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.Species;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 22/10/14.
+ * @since Oct 10 2014
  */
-@Component
-public class SpecieFactory {
+public class SpeciesFactory {
 
-    @Autowired
     private GenotypeFactory genotypeFactory;
 
+
+    public SpeciesFactory(GAConfiguration configuration) {
+        genotypeFactory = new GenotypeFactory(configuration);
+    }
+
+
+    public Species create(int size) {
+        return create(size, 0);
+    }
 
     public Species create(int size, int generation)
     {

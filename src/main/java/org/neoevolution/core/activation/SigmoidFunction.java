@@ -1,8 +1,5 @@
 package org.neoevolution.core.activation;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public final class SigmoidFunction extends AbstractActivationFunction implements ActivationFunction {
 
     @Override

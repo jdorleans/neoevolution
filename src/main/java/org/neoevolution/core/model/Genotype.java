@@ -87,7 +87,7 @@ public class Genotype extends AbstractFitnessEntity {
         return outputs.size();
     }
 
-    public int getHiddensSize() {
+    public int getHiddenSize() {
         return getNeuronsSize() - getInputsSize() - getOutputsSize();
     }
 

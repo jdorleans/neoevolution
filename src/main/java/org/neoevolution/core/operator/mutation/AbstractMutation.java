@@ -1,11 +1,7 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.util.Randomizer;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import javax.annotation.PostConstruct;
 
 public abstract class AbstractMutation implements Mutation {
 
@@ -13,28 +9,21 @@ public abstract class AbstractMutation implements Mutation {
 
     protected double rate;
 
-    @Autowired
-    protected GAConfiguration configuration;
-
 
     protected AbstractMutation() {
-        this.rate = RATE;
+        this(RATE);
     }
 
+    protected AbstractMutation(double rate) {
+        this.rate = rate;
+    }
 
-    @PostConstruct
-    protected abstract void initRate();
 
     protected abstract void mutation(Genotype genotype);
 
     @Override
     public void mutate(Genotype genotype) {
-        mutate(genotype, false);
-    }
-
-    @Override
-    public void mutate(Genotype genotype, boolean ignoreRate) {
-        if (ignoreRate || Randomizer.randomBoolean(rate)) {
+        if (Randomizer.randomBoolean(rate)) {
             mutation(genotype);
         }
     }

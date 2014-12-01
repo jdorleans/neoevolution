@@ -1,37 +1,45 @@
 package org.neoevolution.core.operator.mutation;
 
+import org.neoevolution.core.factory.NeuronFactory;
+import org.neoevolution.core.factory.SynapseFactory;
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.Synapse;
-import org.neoevolution.core.factory.NeuronFactory;
-import org.neoevolution.core.factory.SynapseFactory;
 import org.neoevolution.util.Randomizer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Component
 public class AddNeuronMutation extends AbstractMutation {
 
-    @Autowired
-    private NeuronFactory factory;
+    public static final int MAX_HIDDEN = 10;
 
-    @Autowired
+    private int maxHidden;
+
+    private NeuronFactory neuronFactory;
+
     private SynapseFactory synapseFactory;
 
 
-    @Override
-    protected void initRate() {
-        rate = configuration.getAddNeuronRate();
+    public AddNeuronMutation() {
+        this(MAX_HIDDEN);
+    }
+
+    public AddNeuronMutation(int maxHidden) {
+        super();
+        this.maxHidden = maxHidden;
+    }
+
+    public AddNeuronMutation(int rate, int maxHidden) {
+        super(rate);
+        this.maxHidden = maxHidden;
     }
 
 
     @Override
     public void mutate(Genotype genotype) {
-        if (genotype.getHiddensSize() < configuration.getHiddenMaxSize()) {
+        if (genotype.getHiddenSize() < maxHidden) {
             super.mutate(genotype);
         }
     }
@@ -64,7 +72,7 @@ public class AddNeuronMutation extends AbstractMutation {
     }
 
     private Neuron createNeuron(Genotype genotype, Neuron start, Neuron end) {
-        Neuron neuron = factory.createHidden(start, end);
+        Neuron neuron = neuronFactory.createHidden(start, end);
         genotype.addNeuron(neuron);
         return neuron;
     }
@@ -72,6 +80,28 @@ public class AddNeuronMutation extends AbstractMutation {
     private void createSynapse(Neuron start, Neuron end, Double weight, Genotype genotype) {
         Synapse synapse = synapseFactory.create(start, end, weight);
         genotype.addSynapse(synapse);
+    }
+
+
+    public int getMaxHidden() {
+        return maxHidden;
+    }
+    public void setMaxHidden(int maxHidden) {
+        this.maxHidden = maxHidden;
+    }
+
+    public NeuronFactory getNeuronFactory() {
+        return neuronFactory;
+    }
+    public void setNeuronFactory(NeuronFactory neuronFactory) {
+        this.neuronFactory = neuronFactory;
+    }
+
+    public SynapseFactory getSynapseFactory() {
+        return synapseFactory;
+    }
+    public void setSynapseFactory(SynapseFactory synapseFactory) {
+        this.synapseFactory = synapseFactory;
     }
 
 }

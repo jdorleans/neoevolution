@@ -1,24 +1,22 @@
 package org.neoevolution.core.innovation;
 
 import org.neoevolution.core.model.Neuron;
-import org.springframework.stereotype.Component;
+import org.springframework.data.neo4j.annotation.NodeEntity;
 
-@Component
-public class NeuronInnovationManager extends InnovationManager {
+@NodeEntity
+public class NeuronInnovation extends Innovation {
+
+    private static final long serialVersionUID = -366999622471119752L;
 
     public static final String SEPARATOR = ":";
 
 
-    public NeuronInnovationManager() {
+    public NeuronInnovation() {
         this(SEPARATOR);
     }
 
-    public NeuronInnovationManager(String code) {
-        this(code, SIZE);
-    }
-
-    public NeuronInnovationManager(String code, int capacity) {
-        super(code, capacity);
+    public NeuronInnovation(String code) {
+        super(code);
     }
 
 
@@ -33,7 +31,7 @@ public class NeuronInnovationManager extends InnovationManager {
         if (innovation == null) {
             innovation = next();
             neuron.setInnovation(innovation);
-            innovations.put(key(neuron), innovation);
+            put(key(neuron), innovation);
         }
         return innovation;
     }

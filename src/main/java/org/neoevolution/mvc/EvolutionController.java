@@ -1,9 +1,8 @@
 package org.neoevolution.mvc;
 
+import org.neoevolution.core.GAConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -16,20 +15,20 @@ public class EvolutionController {
     @Autowired
     private EvolutionService service;
 
-    @RequestMapping
-    public void evolve() {
-        service.evolve();
+    @RequestMapping(method = RequestMethod.POST)
+    public void evolve(@RequestBody GAConfiguration configuration) {
+        service.evolve(configuration);
     }
 
-    @RequestMapping(value = "/test/{runs}")
-    public void test(@PathVariable int runs)
+    @RequestMapping(value = "/test/{runs}", method = RequestMethod.POST)
+    public void test(@PathVariable int runs, @RequestBody GAConfiguration configuration)
     {
         long startTotal = System.currentTimeMillis();
 
         for (int i = 0; i < runs; i++) {
             long start = System.currentTimeMillis();
             System.out.println("Running: "+ (i+1));
-            service.evolve();
+            service.evolve(configuration);
             System.out.println("Finished in: " + (System.currentTimeMillis() - start));
         }
         long total = System.currentTimeMillis() - startTotal;

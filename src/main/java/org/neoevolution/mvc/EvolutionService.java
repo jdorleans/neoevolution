@@ -1,6 +1,8 @@
 package org.neoevolution.mvc;
 
+import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.GeneticAlgorithm;
+import org.neoevolution.core.factory.GeneticAlgorithmFactory;
 import org.neoevolution.mvc.service.PopulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,15 +15,13 @@ import org.springframework.stereotype.Service;
 public class EvolutionService {
 
     @Autowired
-    private GeneticAlgorithm geneticAlgorithm;
-
-    @Autowired
     private PopulationService populationService;
 
 
-    public void evolve() {
+    public void evolve(GAConfiguration configuration) {
+        GeneticAlgorithmFactory factory = new GeneticAlgorithmFactory();
+        GeneticAlgorithm geneticAlgorithm = factory.create();
         geneticAlgorithm.evolve();
-//        populationService.save(algorithm.getPopulation());
     }
 
 }

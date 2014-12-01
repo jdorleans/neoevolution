@@ -1,7 +1,6 @@
 package org.neoevolution.core.stop;
 
 import org.neoevolution.core.model.Population;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.List;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Nov 27 2014
  */
-@Component
 public class ComposedStop implements StopCondition {
 
     private List<StopCondition> conditions;

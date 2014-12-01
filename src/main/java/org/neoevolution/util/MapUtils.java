@@ -40,6 +40,10 @@ public class MapUtils {
         return new LinkedHashSet<>(getSize(size));
     }
 
+    public static <E> Set<E> createLinkedHashSet(int size, boolean useMinimum) {
+        return new LinkedHashSet<>(getSize(size, useMinimum));
+    }
+
     public static <K, V> Map<K, V> createConcurrentHashMap(int size) {
         return new ConcurrentHashMap<>(getSize(size));
     }

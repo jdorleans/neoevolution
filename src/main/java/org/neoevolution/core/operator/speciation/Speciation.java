@@ -1,19 +1,40 @@
 package org.neoevolution.core.operator.speciation;
 
-import org.neoevolution.core.*;
+import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.*;
 import org.neoevolution.util.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Component
 public class Speciation {
 
-    @Autowired
-    private GAConfiguration configuration;
+    private int populationSize;
+
+    private int maxSpeciesSize;
+
+    private double threshold;
+
+    private double excessFactor;
+
+    private double weightFactor;
+
+    private double compatibilityRate;
+
+
+    public Speciation() { }
+
+
+    public void configure(GAConfiguration configuration)
+    {
+        populationSize = configuration.getPopulationSize();
+        maxSpeciesSize = configuration.getMaxSpeciesSize();
+        threshold = configuration.getCompatibilityThreshold();
+        excessFactor = configuration.getExcessFactor();
+        weightFactor = configuration.getWeightFactor();
+        compatibilityRate = configuration.getCompatibilityRate();
+    }
+
 
     public void speciate(Population population, Set<Genotype> genotypes)
     {
@@ -41,7 +62,7 @@ public class Speciation {
 
     private void createNewSpecie(Genotype genotype, Population population)
     {
-        int size = configuration.getPopulationSize() / configuration.getMaxSpeciesSize();
+        int size = Math.max(1, populationSize / maxSpeciesSize);
         Species species = new Species(population.getGeneration(), size);
         species.addGenotype(genotype);
         population.addSpecie(species);
@@ -50,22 +71,19 @@ public class Speciation {
 
     private void updateCompatibilityThreshold(Population population)
     {
-        int maxSpecies = configuration.getMaxSpeciesSize();
-        double threshold = configuration.getCompatibilityThreshold();
-        double rate = threshold * configuration.getCompatibilityRate();
         int size = population.getSpecies().size();
+        double rate = threshold * compatibilityRate;
 
-        if (size > maxSpecies) {
+        if (size > maxSpeciesSize) {
             threshold += rate;
-        } else if (size < maxSpecies) {
+        } else if (size < maxSpeciesSize) {
             threshold -= rate;
         }
-        configuration.setCompatibilityThreshold(threshold);
     }
 
     private boolean isCompatible(Genotype g1, Genotype g2)  {
         double distance = calculateDistance(g1, g2);
-        return (distance < configuration.getCompatibilityThreshold());
+        return (distance < threshold);
     }
 
     private double calculateDistance(Genotype g1, Genotype g2) {
@@ -79,7 +97,7 @@ public class Speciation {
     {
         double excess = calculateExcess(g1.getNeurons(), g2.getNeurons());
         excess += calculateExcess(g1.getSynapses(), g2.getSynapses());
-        excess = (configuration.getExcessFactor() * excess);
+        excess = excessFactor * excess;
 //        excess = (configuration.getExcessFactor() * excess) / calculateTotalGenes(g1, g2); // TODO - SHOULD DIVIDE?
         return excess;
     }
@@ -120,6 +138,7 @@ public class Speciation {
                 }
             }
         }
-        return (configuration.getWeightFactor() * (weightDiff / similar));
+        return (weightFactor * (weightDiff / similar));
     }
+
 }

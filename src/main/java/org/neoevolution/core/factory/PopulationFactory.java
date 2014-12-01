@@ -2,32 +2,34 @@ package org.neoevolution.core.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.Population;
-import org.neoevolution.core.model.Species;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.neoevolution.core.operator.speciation.Speciation;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 22/10/14.
+ * @since Oct 22 2014
  */
-@Component
 public class PopulationFactory {
 
-    @Autowired
-    private SpecieFactory specieFactory;
+    private int populationSize;
 
-    @Autowired
-    private GAConfiguration configuration;
+    private int maxSpeciesSize;
+
+    private Speciation speciation;
+
+    private GenotypeFactory genotypeFactory;
 
 
-    public Population create()
-    {
-        int size = configuration.getPopulationSize();
-        int maxSpecies = configuration.getMaxSpeciesSize();
-        Population population = new Population(maxSpecies);
-        Species species = specieFactory.create(size, population.getGeneration());
-        population.addSpecie(species);
-        population.setBestGenotype(species.getBestGenotype());
+    public PopulationFactory(GAConfiguration configuration) {
+        populationSize = configuration.getPopulationSize();
+        maxSpeciesSize = configuration.getMaxSpeciesSize();
+        genotypeFactory = new GenotypeFactory(configuration);
+        speciation = new SpeciationFactory(configuration).create();
+    }
+
+
+    public Population create() {
+        Population population = new Population(maxSpeciesSize);
+        speciation.speciate(population, genotypeFactory.createList(populationSize));
         return population;
     }
 

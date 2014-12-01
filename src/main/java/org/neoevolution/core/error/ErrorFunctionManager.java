@@ -1,27 +1,20 @@
 package org.neoevolution.core.error;
 
 import org.neoevolution.core.GAConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 01/11/14.
  */
-@Component
 public class ErrorFunctionManager {
 
     private ErrorFunctionType type;
 
-    @Autowired
     private GAConfiguration configuration;
 
 
-    @PostConstruct
     private void init() {
-        type = configuration.getErrorFunction();
+//        type = configuration.getErrorFunction();
     }
 
 

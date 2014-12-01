@@ -1,6 +1,6 @@
 package org.neoevolution.core.operator.reproduction;
 
-import org.neoevolution.core.*;
+import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.factory.GenotypeFactory;
 import org.neoevolution.core.model.Gene;
 import org.neoevolution.core.model.Genotype;
@@ -8,8 +8,6 @@ import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.Synapse;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Set;
@@ -18,13 +16,10 @@ import java.util.Set;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 25/10/14.
  */
-@Component
 public class Crossover implements Reproduction {
 
-    @Autowired
     private GenotypeFactory genotypeFactory;
 
-    @Autowired
     private GAConfiguration configuration;
 
     @Override

@@ -4,14 +4,12 @@ import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.core.model.Population;
 import org.neoevolution.core.model.Species;
-import org.neoevolution.core.operator.mutation.MutationManager;
+import org.neoevolution.core.operator.mutation.ComposedMutation;
 import org.neoevolution.core.operator.reproduction.Parents;
 import org.neoevolution.core.operator.reproduction.Reproduction;
 import org.neoevolution.util.GenotypeUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Set;
@@ -20,16 +18,12 @@ import java.util.Set;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 18/10/14.
  */
-@Component
 public class NaturalSelection implements Selection {
 
-    @Autowired
     private Reproduction reproduction;
 
-    @Autowired
-    private MutationManager mutation;
+    private ComposedMutation mutation;
 
-    @Autowired
     private GAConfiguration configuration;
 
     @Override

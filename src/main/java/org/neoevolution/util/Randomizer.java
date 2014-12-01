@@ -61,7 +61,7 @@ public final class Randomizer {
 
     public static double randomInclusive() {
         double value = random();
-        return round6((random() < 0.5 ? 1-value : value));
+        return round6((randomBoolean() ? 1-value : value));
     }
 
     public static double random(double value) {

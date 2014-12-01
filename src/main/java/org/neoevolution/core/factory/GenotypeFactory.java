@@ -4,30 +4,38 @@ import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.operator.mutation.AddSynapseMutation;
+import org.neoevolution.util.ClassUtils;
 import org.neoevolution.util.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 22/10/14.
+ * @since Oct 10 2014
  */
-@Component
 public class GenotypeFactory {
 
-    @Autowired
+    private boolean isFullyConnected;
+
     private NeuronFactory neuronFactory;
 
-    @Autowired
     private SynapseFactory synapseFactory;
 
-    @Autowired
     private AddSynapseMutation addSynapseMutation;
 
-    @Autowired
-    private GAConfiguration configuration;
+
+    public GenotypeFactory(GAConfiguration configuration) {
+        isFullyConnected = configuration.isFullyConnected();
+        neuronFactory = new NeuronFactory(configuration);
+        synapseFactory = new SynapseFactory(configuration);
+        initAddSynapseMutation(configuration, synapseFactory);
+    }
+
+    private void initAddSynapseMutation(GAConfiguration configuration, SynapseFactory synapseFactory) {
+        addSynapseMutation = ClassUtils.create(configuration.getAddSynapseFunction());
+        addSynapseMutation.setRate(1d);
+        addSynapseMutation.setSynapseFactory(synapseFactory);
+    }
 
 
     public Genotype createEmpty(int generation) {
@@ -40,10 +48,10 @@ public class GenotypeFactory {
     {
         Genotype genotype = createEmpty(generation);
 
-        if (configuration.isFullyConnected()) {
+        if (isFullyConnected) {
             connect(genotype);
         } else {
-            addSynapseMutation.mutate(genotype, true);
+            addSynapseMutation.mutate(genotype);
         }
         return genotype;
     }
@@ -55,6 +63,10 @@ public class GenotypeFactory {
                 genotype.addSynapse(synapseFactory.create(input, output));
             }
         }
+    }
+
+    public Set<Genotype> createList(int size) {
+        return createList(size, 0);
     }
 
     public Set<Genotype> createList(int size, int generation)

@@ -1,29 +1,47 @@
 package org.neoevolution.core.factory;
 
 import org.neoevolution.core.GAConfiguration;
+import org.neoevolution.core.innovation.SynapseInnovation;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.Synapse;
-import org.neoevolution.core.innovation.SynapseInnovationManager;
-import org.neoevolution.util.Randomizer;
+import org.neoevolution.core.operator.mutation.WeightSynapseMutation;
+import org.neoevolution.mvc.service.SynapseInnovationService;
+import org.neoevolution.util.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Configurable;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 22/10/14.
+ * @since Oct 22 2014
  */
-@Component
+@Configurable(preConstruction = true)
 public class SynapseFactory {
 
-    @Autowired
-    private SynapseInnovationManager innovation;
+    private SynapseInnovation innovation;
 
     @Autowired
-    private GAConfiguration configuration;
+    private SynapseInnovationService innovationService;
+
+    private WeightSynapseMutation weightSynapseMutation;
+
+
+    public SynapseFactory(GAConfiguration configuration) {
+        this.innovation = innovationService.findByConfigIdOrCreate(configuration.getId());
+        initWeightSynapseMutation(configuration);
+    }
+
+    private void initWeightSynapseMutation(GAConfiguration configuration) {
+        weightSynapseMutation = ClassUtils.create(configuration.getWeightSynapseFunction());
+        weightSynapseMutation.setRate(1d);
+        weightSynapseMutation.setRange(configuration.getWeightRange());
+        weightSynapseMutation.setReset(configuration.isWeightSynapseReset());
+    }
+
 
     public Synapse create(Neuron start, Neuron end) {
-        int weightRange = configuration.getWeightRange();
-        return create(start, end, Randomizer.randomInclusive(-weightRange, weightRange));
+        Synapse synapse = create(start, end, 0d);
+        weightSynapseMutation.mutate(synapse);
+        return synapse;
     }
 
     public Synapse create(Neuron start, Neuron end, Double weight)
