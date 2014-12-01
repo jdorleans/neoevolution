@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.Species;
@@ -7,15 +7,21 @@ import org.neoevolution.core.model.Species;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Oct 10 2014
  */
-public class SpeciesFactory {
+public class SpeciesFactory<C extends GAConfiguration> implements ConfigurableFactory<Species, C> {
 
-    private GenotypeFactory genotypeFactory;
+    private GenotypeFactory<C> genotypeFactory;
 
 
-    public SpeciesFactory(GAConfiguration configuration) {
-        genotypeFactory = new GenotypeFactory(configuration);
+    @Override
+    public void configure(C configuration) {
+        genotypeFactory = new GenotypeFactory<>();
+        genotypeFactory.configure(configuration);
     }
 
+    @Override
+    public Species create() {
+        return create(0, 0);
+    }
 
     public Species create(int size) {
         return create(size, 0);

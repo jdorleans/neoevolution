@@ -37,15 +37,15 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
 
     private String activationOutput;
 
-    private String errorFunction;
+    private String errorFactory;
 
     private List<String> stopFunctions;
 
-    private String evaluationFunction;
+    private String evaluationFactory;
 
-    private String selectionFunction;
+    private String selectionFactory;
 
-    private String reproductionFunction;
+    private String reproductionFactory;
 
     private double survivalRate;
 
@@ -55,21 +55,23 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
 
     private double enableSynapsePenalty;
 
-    private String addNeuronFunction;
+    private String mutationFactory;
+
+    private String addNeuronMutationFactory;
 
     private double addNeuronRate;
 
-    private String addSynapseFunction;
+    private String addSynapseMutationFactory;
 
     private double addSynapseRate;
 
-    private String weightSynapseFunction;
+    private String weightSynapseMutationFactory;
 
     private double weightSynapseRate;
 
     private boolean weightSynapseReset;
 
-    private String speciationFunction;
+    private String speciationFactory;
 
     private double speciesSizeRate;
 
@@ -174,12 +176,12 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
         this.activationOutput = activationOutput;
     }
 
-    public String getErrorFunction() {
-        return errorFunction;
+    public String getErrorFactory() {
+        return errorFactory;
     }
 
-    public void setErrorFunction(String errorFunction) {
-        this.errorFunction = errorFunction;
+    public void setErrorFactory(String errorFactory) {
+        this.errorFactory = errorFactory;
     }
 
     public List<String> getStopFunctions() {
@@ -190,28 +192,28 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
         this.stopFunctions = stopFunctions;
     }
 
-    public String getEvaluationFunction() {
-        return evaluationFunction;
+    public String getEvaluationFactory() {
+        return evaluationFactory;
     }
 
-    public void setEvaluationFunction(String evaluationFunction) {
-        this.evaluationFunction = evaluationFunction;
+    public void setEvaluationFactory(String evaluationFactory) {
+        this.evaluationFactory = evaluationFactory;
     }
 
-    public String getSelectionFunction() {
-        return selectionFunction;
+    public String getSelectionFactory() {
+        return selectionFactory;
     }
 
-    public void setSelectionFunction(String selectionFunction) {
-        this.selectionFunction = selectionFunction;
+    public void setSelectionFactory(String selectionFactory) {
+        this.selectionFactory = selectionFactory;
     }
 
-    public String getReproductionFunction() {
-        return reproductionFunction;
+    public String getReproductionFactory() {
+        return reproductionFactory;
     }
 
-    public void setReproductionFunction(String reproductionFunction) {
-        this.reproductionFunction = reproductionFunction;
+    public void setReproductionFactory(String reproductionFactory) {
+        this.reproductionFactory = reproductionFactory;
     }
 
     public double getSurvivalRate() {
@@ -246,12 +248,20 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
         this.enableSynapsePenalty = enableSynapsePenalty;
     }
 
-    public String getAddNeuronFunction() {
-        return addNeuronFunction;
+    public String getMutationFactory() {
+        return mutationFactory;
     }
 
-    public void setAddNeuronFunction(String addNeuronFunction) {
-        this.addNeuronFunction = addNeuronFunction;
+    public void setMutationFactory(String mutationFactory) {
+        this.mutationFactory = mutationFactory;
+    }
+
+    public String getAddNeuronMutationFactory() {
+        return addNeuronMutationFactory;
+    }
+
+    public void setAddNeuronMutationFactory(String addNeuronMutationFactory) {
+        this.addNeuronMutationFactory = addNeuronMutationFactory;
     }
 
     public double getAddNeuronRate() {
@@ -262,12 +272,12 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
         this.addNeuronRate = addNeuronRate;
     }
 
-    public String getAddSynapseFunction() {
-        return addSynapseFunction;
+    public String getAddSynapseMutationFactory() {
+        return addSynapseMutationFactory;
     }
 
-    public void setAddSynapseFunction(String addSynapseFunction) {
-        this.addSynapseFunction = addSynapseFunction;
+    public void setAddSynapseMutationFactory(String addSynapseMutationFactory) {
+        this.addSynapseMutationFactory = addSynapseMutationFactory;
     }
 
     public double getAddSynapseRate() {
@@ -278,12 +288,12 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
         this.addSynapseRate = addSynapseRate;
     }
 
-    public String getWeightSynapseFunction() {
-        return weightSynapseFunction;
+    public String getWeightSynapseMutationFactory() {
+        return weightSynapseMutationFactory;
     }
 
-    public void setWeightSynapseFunction(String weightSynapseFunction) {
-        this.weightSynapseFunction = weightSynapseFunction;
+    public void setWeightSynapseMutationFactory(String weightSynapseMutationFactory) {
+        this.weightSynapseMutationFactory = weightSynapseMutationFactory;
     }
 
     public double getWeightSynapseRate() {
@@ -302,12 +312,12 @@ public class GAConfiguration extends AbstractEntity implements Serializable {
         this.weightSynapseReset = weightSynapseReset;
     }
 
-    public String getSpeciationFunction() {
-        return speciationFunction;
+    public String getSpeciationFactory() {
+        return speciationFactory;
     }
 
-    public void setSpeciationFunction(String speciationFunction) {
-        this.speciationFunction = speciationFunction;
+    public void setSpeciationFactory(String speciationFactory) {
+        this.speciationFactory = speciationFactory;
     }
 
     public double getSpeciesSizeRate() {

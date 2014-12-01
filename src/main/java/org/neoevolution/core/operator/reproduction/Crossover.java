@@ -1,11 +1,10 @@
 package org.neoevolution.core.operator.reproduction;
 
-import org.neoevolution.core.GAConfiguration;
-import org.neoevolution.core.factory.GenotypeFactory;
 import org.neoevolution.core.model.Gene;
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.Synapse;
+import org.neoevolution.factory.GenotypeFactory;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 
@@ -18,9 +17,12 @@ import java.util.Set;
  */
 public class Crossover implements Reproduction {
 
+    private double enableSynapseRate;
+
+    private double enableSynapsePenalty;
+
     private GenotypeFactory genotypeFactory;
 
-    private GAConfiguration configuration;
 
     @Override
     public Genotype reproduce(Parents parents, int generation)
@@ -36,19 +38,17 @@ public class Crossover implements Reproduction {
 
     private Map<Long, Synapse> cloneDominantGenes(Parents parents, Genotype offspring, Map<Long, Neuron> neurons)
     {
-        double enableRate = configuration.getEnableSynapseRate();
-        double enablePenalty = configuration.getEnableSynapsePenalty();
         Map<Long, Synapse> recessiveSynapses = createSynapsesMap(parents.getRecessive().getSynapses());
 
         for (Synapse s1 : parents.getDominant().getSynapses())
         {
             Synapse synapse = s1;
-            double rate = enableRate;
+            double rate = enableSynapseRate;
             Long innovation = s1.getInnovation();
             Synapse s2 = recessiveSynapses.get(innovation);
 
             if (s2 != null) {
-                rate = calculateRate(s1, s2, enableRate, enablePenalty);
+                rate = calculateRate(s1, s2);
                 synapse = Randomizer.random(s1, s2);
                 recessiveSynapses.remove(innovation);
             }
@@ -57,22 +57,19 @@ public class Crossover implements Reproduction {
         return recessiveSynapses;
     }
 
-    private double calculateRate(Synapse s1, Synapse s2, double rate, double penalty)
+    private double calculateRate(Synapse s1, Synapse s2)
     {
         if (!s1.isEnabled() && !s2.isEnabled()) {
-            return rate / penalty;
+            return enableSynapseRate / enableSynapsePenalty;
         }
-        return rate;
+        return enableSynapseRate;
     }
 
     private void cloneRecessiveGenes(Parents parents, Genotype offspring, Map<Long, Synapse> synapses, Map<Long, Neuron> neurons)
     {
-        if (!parents.isEquals() && !parents.getHasDominant())
-        {
-            double enableRate = configuration.getEnableSynapseRate();
-
+        if (!parents.isEquals() && !parents.getHasDominant()) {
             for (Synapse s2 : synapses.values()) {
-                clone(s2, neurons, offspring, enableRate); // excess or disjoint
+                clone(s2, neurons, offspring, enableSynapseRate); // excess or disjoint
             }
         }
     }
@@ -127,6 +124,28 @@ public class Crossover implements Reproduction {
         for (T gene : genes) {
             geneMap.put(gene.getInnovation(), gene);
         }
+    }
+
+
+    public double getEnableSynapseRate() {
+        return enableSynapseRate;
+    }
+    public void setEnableSynapseRate(double enableSynapseRate) {
+        this.enableSynapseRate = enableSynapseRate;
+    }
+
+    public double getEnableSynapsePenalty() {
+        return enableSynapsePenalty;
+    }
+    public void setEnableSynapsePenalty(double enableSynapsePenalty) {
+        this.enableSynapsePenalty = enableSynapsePenalty;
+    }
+
+    public GenotypeFactory getGenotypeFactory() {
+        return genotypeFactory;
+    }
+    public void setGenotypeFactory(GenotypeFactory genotypeFactory) {
+        this.genotypeFactory = genotypeFactory;
     }
 
 }

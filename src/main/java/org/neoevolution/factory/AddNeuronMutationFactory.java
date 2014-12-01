@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.operator.mutation.AddNeuronMutation;
@@ -11,16 +11,18 @@ public class AddNeuronMutationFactory<C extends GAConfiguration>
         extends AbstractConfigurableFactory<AddNeuronMutation, C>
         implements MutationFactory<AddNeuronMutation, C> {
 
-    private NeuronFactory neuronFactory;
+    private NeuronFactory<C> neuronFactory;
 
-    private SynapseFactory synapseFactory;
+    private SynapseFactory<C> synapseFactory;
 
 
     @Override
     public void configure(C configuration) {
         super.configure(configuration);
-        neuronFactory = new NeuronFactory(configuration);
-        synapseFactory = new SynapseFactory(configuration);
+        neuronFactory = new NeuronFactory<>();
+        neuronFactory.configure(configuration);
+        synapseFactory = new SynapseFactory<>();
+        synapseFactory.configure(configuration);
     }
 
     @Override

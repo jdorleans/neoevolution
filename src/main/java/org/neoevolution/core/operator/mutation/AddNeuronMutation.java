@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.factory.NeuronFactory;
-import org.neoevolution.core.factory.SynapseFactory;
+import org.neoevolution.factory.NeuronFactory;
+import org.neoevolution.factory.SynapseFactory;
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.Synapse;

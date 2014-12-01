@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.innovation.SynapseInnovation;
@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Configurable;
  * @since Oct 22 2014
  */
 @Configurable(preConstruction = true)
-public class SynapseFactory {
+public class SynapseFactory<C extends GAConfiguration> implements ConfigurableFactory<Synapse, C> {
 
     private SynapseInnovation innovation;
 
@@ -25,18 +25,24 @@ public class SynapseFactory {
     private WeightSynapseMutation weightSynapseMutation;
 
 
-    public SynapseFactory(GAConfiguration configuration) {
+    @Override
+    public void configure(C configuration) {
         this.innovation = innovationService.findByConfigIdOrCreate(configuration.getId());
         initWeightSynapseMutation(configuration);
     }
 
-    private void initWeightSynapseMutation(GAConfiguration configuration) {
-        weightSynapseMutation = ClassUtils.create(configuration.getWeightSynapseFunction());
+    private void initWeightSynapseMutation(C configuration) {
+        WeightSynapseMutationFactory<C> factory = ClassUtils.create(configuration.getWeightSynapseMutationFactory());
+        factory.configure(configuration);
+        weightSynapseMutation = factory.create();
         weightSynapseMutation.setRate(1d);
-        weightSynapseMutation.setRange(configuration.getWeightRange());
-        weightSynapseMutation.setReset(configuration.isWeightSynapseReset());
     }
 
+
+    @Override
+    public Synapse create() {
+        return new Synapse();
+    }
 
     public Synapse create(Neuron start, Neuron end) {
         Synapse synapse = create(start, end, 0d);

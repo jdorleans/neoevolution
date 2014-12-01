@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 
@@ -15,6 +16,7 @@ import java.io.File;
 
 @Configuration
 @ComponentScan(basePackages = "org.neoevolution")
+@EnableSpringConfigured
 @EnableAutoConfiguration
 @EnableNeo4jRepositories(basePackages = "org.neoevolution.mvc.repository")
 public class Application extends Neo4jConfiguration {

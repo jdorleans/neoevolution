@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.operator.reproduction.Reproduction;

@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.operator.evaluation.XOREvaluation;
@@ -9,7 +9,8 @@ import org.neoevolution.core.operator.evaluation.XOREvaluation;
  */
 public class XOREvaluationFactory extends TrainingEvaluationFactory<XOREvaluation, GAConfiguration> {
 
-    public XOREvaluation creation() {
+    @Override
+    protected XOREvaluation creation() {
         return new XOREvaluation();
     }
 

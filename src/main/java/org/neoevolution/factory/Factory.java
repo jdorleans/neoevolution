@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

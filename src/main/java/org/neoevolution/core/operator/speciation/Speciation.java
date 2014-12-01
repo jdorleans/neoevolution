@@ -1,6 +1,5 @@
 package org.neoevolution.core.operator.speciation;
 
-import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.*;
 import org.neoevolution.util.MapUtils;
 
@@ -20,20 +19,6 @@ public class Speciation {
     private double weightFactor;
 
     private double compatibilityRate;
-
-
-    public Speciation() { }
-
-
-    public void configure(GAConfiguration configuration)
-    {
-        populationSize = configuration.getPopulationSize();
-        maxSpeciesSize = configuration.getMaxSpeciesSize();
-        threshold = configuration.getCompatibilityThreshold();
-        excessFactor = configuration.getExcessFactor();
-        weightFactor = configuration.getWeightFactor();
-        compatibilityRate = configuration.getCompatibilityRate();
-    }
 
 
     public void speciate(Population population, Set<Genotype> genotypes)
@@ -139,6 +124,49 @@ public class Speciation {
             }
         }
         return (weightFactor * (weightDiff / similar));
+    }
+
+
+    public int getPopulationSize() {
+        return populationSize;
+    }
+    public void setPopulationSize(int populationSize) {
+        this.populationSize = populationSize;
+    }
+
+    public int getMaxSpeciesSize() {
+        return maxSpeciesSize;
+    }
+    public void setMaxSpeciesSize(int maxSpeciesSize) {
+        this.maxSpeciesSize = maxSpeciesSize;
+    }
+
+    public double getThreshold() {
+        return threshold;
+    }
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    public double getCompatibilityRate() {
+        return compatibilityRate;
+    }
+    public void setCompatibilityRate(double compatibilityRate) {
+        this.compatibilityRate = compatibilityRate;
+    }
+    
+    public double getExcessFactor() {
+        return excessFactor;
+    }
+    public void setExcessFactor(double excessFactor) {
+        this.excessFactor = excessFactor;
+    }
+
+    public double getWeightFactor() {
+        return weightFactor;
+    }
+    public void setWeightFactor(double weightFactor) {
+        this.weightFactor = weightFactor;
     }
 
 }

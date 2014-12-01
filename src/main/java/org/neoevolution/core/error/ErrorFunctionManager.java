@@ -14,7 +14,7 @@ public class ErrorFunctionManager {
 
 
     private void init() {
-//        type = configuration.getErrorFunction();
+//        type = configuration.getErrorFactory();
     }
 
 

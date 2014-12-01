@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 
@@ -11,6 +11,7 @@ public abstract class AbstractConfigurableFactory<T, C extends GAConfiguration> 
     protected C configuration;
 
 
+    @Override
     public void configure(C configuration) {
         this.configuration = configuration;
     }

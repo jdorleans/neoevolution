@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.activation.ActivationFunctionManager;
@@ -19,7 +19,7 @@ import java.util.Set;
  * @since Oct 22 2014
  */
 @Configurable(preConstruction = true)
-public class NeuronFactory {
+public class NeuronFactory<C extends GAConfiguration> implements ConfigurableFactory<Neuron, C> {
 
     private List<Neuron> inputs;
 
@@ -33,7 +33,8 @@ public class NeuronFactory {
     private ActivationFunctionManager functionManager;
 
 
-    public NeuronFactory(GAConfiguration configuration) {
+    @Override
+    public void configure(C configuration) {
         this.innovation = innovationService.findByConfigIdOrCreate(configuration.getId());
         this.functionManager = new ActivationFunctionManager(configuration);
         initInputs(configuration.getInputSize());
@@ -41,8 +42,10 @@ public class NeuronFactory {
     }
 
 
+
+    // FIXME - FACTORY IS CREATED MANY TIMES, THUS WE MUST REUSE INNOVATION!!!
     private void initInputs(int inputs) {
-        this.inputs = createList(inputs + 1, NeuronType.INPUT);
+        this.inputs = createList(inputs, NeuronType.INPUT);
         this.inputs.add(create(NeuronType.BIAS));
     }
 
@@ -53,12 +56,18 @@ public class NeuronFactory {
 
     private List<Neuron> createList(int size, NeuronType type)
     {
-        List<Neuron> neurons = new ArrayList<>(size);
+        List<Neuron> neurons = new ArrayList<>(size + 1);
 
         for (int i = 0; i < size; i++) {
             neurons.add(create(type));
         }
         return neurons;
+    }
+
+
+    @Override
+    public Neuron create() {
+        return new Neuron();
     }
 
     private Neuron create(NeuronType type) {

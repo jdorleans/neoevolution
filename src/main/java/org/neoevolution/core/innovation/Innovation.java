@@ -3,7 +3,8 @@ package org.neoevolution.core.innovation;
 import org.neoevolution.core.model.Gene;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.mvc.AbstractEntity;
-import org.neoevolution.util.MapProperties;
+import org.springframework.data.neo4j.fieldaccess.DynamicProperties;
+import org.springframework.data.neo4j.fieldaccess.DynamicPropertiesContainer;
 
 public abstract class Innovation extends AbstractEntity {
 
@@ -15,13 +16,13 @@ public abstract class Innovation extends AbstractEntity {
 
     protected Long configId;
 
-    protected MapProperties innovations;
+    protected DynamicProperties innovations;
 
 
     protected Innovation(String code) {
         this.code = code;
         this.current = 0l;
-        this.innovations = new MapProperties();
+        this.innovations = new DynamicPropertiesContainer();
     }
 
 
@@ -63,7 +64,7 @@ public abstract class Innovation extends AbstractEntity {
 
 
     protected Long get(String key) {
-        return innovations.getLong(key);
+        return (Long) innovations.getProperty(key);
     }
 
     protected void put(String key, Long value) {
@@ -90,13 +91,6 @@ public abstract class Innovation extends AbstractEntity {
     }
     public void setConfigId(Long configId) {
         this.configId = configId;
-    }
-
-    public MapProperties getInnovations() {
-        return innovations;
-    }
-    public void setInnovations(MapProperties innovations) {
-        this.innovations = innovations;
     }
 
 }

@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.model.Genotype;
@@ -13,28 +13,32 @@ import java.util.Set;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Oct 10 2014
  */
-public class GenotypeFactory {
+public class GenotypeFactory<C extends GAConfiguration>
+        extends AbstractConfigurableFactory<Genotype, C>
+        implements ConfigurableFactory<Genotype, C> {
 
-    private boolean isFullyConnected;
+    private NeuronFactory<C> neuronFactory;
 
-    private NeuronFactory neuronFactory;
-
-    private SynapseFactory synapseFactory;
+    private SynapseFactory<C> synapseFactory;
 
     private AddSynapseMutation addSynapseMutation;
 
 
-    public GenotypeFactory(GAConfiguration configuration) {
-        isFullyConnected = configuration.isFullyConnected();
-        neuronFactory = new NeuronFactory(configuration);
-        synapseFactory = new SynapseFactory(configuration);
-        initAddSynapseMutation(configuration, synapseFactory);
+    @Override
+    public void configure(C configuration) {
+        super.configure(configuration);
+        neuronFactory = new NeuronFactory<>();
+        neuronFactory.configure(configuration);
+        synapseFactory = new SynapseFactory<>();
+        synapseFactory.configure(configuration);
+        initAddSynapseMutation(configuration);
     }
 
-    private void initAddSynapseMutation(GAConfiguration configuration, SynapseFactory synapseFactory) {
-        addSynapseMutation = ClassUtils.create(configuration.getAddSynapseFunction());
+    private void initAddSynapseMutation(GAConfiguration configuration) {
+        AddSynapseMutationFactory<GAConfiguration> factory = ClassUtils.create(configuration.getAddSynapseMutationFactory());
+        factory.configure(configuration);
+        addSynapseMutation = factory.create();
         addSynapseMutation.setRate(1d);
-        addSynapseMutation.setSynapseFactory(synapseFactory);
     }
 
 
@@ -44,11 +48,16 @@ public class GenotypeFactory {
         return new Genotype(generation, inputs, outputs);
     }
 
+    @Override
+    public Genotype create() {
+        return create(0);
+    }
+
     public Genotype create(int generation)
     {
         Genotype genotype = createEmpty(generation);
 
-        if (isFullyConnected) {
+        if (configuration.isFullyConnected()) {
             connect(genotype);
         } else {
             addSynapseMutation.mutate(genotype);

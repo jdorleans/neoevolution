@@ -1,9 +1,10 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.GeneticAlgorithm;
 import org.neoevolution.core.operator.evaluation.Evaluation;
 import org.neoevolution.core.operator.selection.Selection;
+import org.neoevolution.core.stop.FitnessStop;
 import org.neoevolution.core.stop.StopCondition;
 import org.neoevolution.util.ClassUtils;
 
@@ -17,30 +18,36 @@ public class GeneticAlgorithmFactory extends AbstractConfigurableFactory<Genetic
 
     private SelectionFactory<Selection, GAConfiguration> selectionFactory;
 
+    private SpeciationFactory<GAConfiguration> speciationFactory;
+
+    private PopulationFactory<GAConfiguration> populationFactory;
+
+    // FIXME
     private StopCondition stopCondition;
-
-    private SpeciationFactory speciationFactory;
-
-    private PopulationFactory populationFactory;
 
 
     @Override
     public void configure(GAConfiguration configuration) {
         super.configure(configuration);
-        evaluationFactory = ClassUtils.create(configuration.getEvaluationFunction());
+        evaluationFactory = ClassUtils.create(configuration.getEvaluationFactory());
         evaluationFactory.configure(configuration);
-        selectionFactory = ClassUtils.create(configuration.getSelectionFunction());
+        selectionFactory = ClassUtils.create(configuration.getSelectionFactory());
         selectionFactory.configure(configuration);
-        speciationFactory = new SpeciationFactory(configuration);
-        populationFactory = new PopulationFactory(configuration);
+        speciationFactory = ClassUtils.create(configuration.getSpeciationFactory());
+        speciationFactory.configure(configuration);
+        populationFactory = new PopulationFactory<>(); // FIXME - GENERIC
+        populationFactory.configure(configuration);
     }
 
+    @Override
     public GeneticAlgorithm create()
     {
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm();
         geneticAlgorithm.setEvaluation(evaluationFactory.create());
+        geneticAlgorithm.setSelection(selectionFactory.create());
         geneticAlgorithm.setSpeciation(speciationFactory.create());
         geneticAlgorithm.setPopulation(populationFactory.create());
+        geneticAlgorithm.setStopCondition(new FitnessStop(0.9)); // FIXME
         return geneticAlgorithm;
     }
 

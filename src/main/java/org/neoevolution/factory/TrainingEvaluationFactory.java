@@ -1,4 +1,4 @@
-package org.neoevolution.core.factory;
+package org.neoevolution.factory;
 
 import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.error.ErrorFunction;
@@ -19,10 +19,11 @@ public abstract class TrainingEvaluationFactory<T extends TrainingEvaluation, C 
     @Override
     public void configure(C configuration) {
         super.configure(configuration);
-        errorFunctionFactory = ClassUtils.create(configuration.getErrorFunction());
+        errorFunctionFactory = ClassUtils.create(configuration.getErrorFactory());
     }
 
 
+    @Override
     public T create() {
         T evaluation = creation();
         evaluation.setErrorFunction(errorFunctionFactory.create());

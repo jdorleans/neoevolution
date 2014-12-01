@@ -22,12 +22,6 @@ public class GeneticAlgorithm {
     private StopCondition stopCondition;
 
 
-    public GeneticAlgorithm() { }
-
-    public GeneticAlgorithm(Population population) {
-        this.population = population;
-    }
-
     // 1. Evaluation
     // 2. Selection
     // 3. Reproduction

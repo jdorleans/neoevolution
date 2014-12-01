@@ -5,8 +5,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.neoevolution.core.factory.NeuronFactory;
-import org.neoevolution.core.factory.SynapseFactory;
+import org.neoevolution.factory.NeuronFactory;
+import org.neoevolution.factory.SynapseFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AddNeuronMutationTest {
