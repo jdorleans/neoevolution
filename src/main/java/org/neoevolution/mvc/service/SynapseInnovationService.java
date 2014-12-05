@@ -5,42 +5,23 @@ import org.neoevolution.mvc.repository.SynapseInnovationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Nov 30 2014
  */
 @Service
-public class SynapseInnovationService {
+public class SynapseInnovationService extends AbstractInnovationService<SynapseInnovation, SynapseInnovationRepository> {
 
     @Autowired
-    private SynapseInnovationRepository repository;
-
-    private Map<Long, SynapseInnovation> innovations;
-
-
-    public SynapseInnovationService() {
-        innovations = new HashMap<>();
+    public SynapseInnovationService(SynapseInnovationRepository repository) {
+        super(repository);
     }
 
-
-    public SynapseInnovation findByConfigIdOrCreate(Long id)
-    {
-        SynapseInnovation innovation = innovations.get(id);
-
-        if (innovation == null)
-        {
-            innovation = repository.findByConfigId(id);
-
-            if (innovation == null) {
-                innovation = new SynapseInnovation();
-                innovation.setConfigId(id);
-                repository.save(innovation);
-            }
-            innovations.put(id, innovation);
-        }
+    @Override
+    public SynapseInnovation create(Long configId) {
+        SynapseInnovation innovation = new SynapseInnovation();
+        innovation.setConfigId(configId);
+        repository.save(innovation);
         return innovation;
     }
 

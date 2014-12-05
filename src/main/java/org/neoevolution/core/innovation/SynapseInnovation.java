@@ -3,7 +3,7 @@ package org.neoevolution.core.innovation;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 @NodeEntity
-public class SynapseInnovation extends Innovation {
+public class SynapseInnovation extends AbstractInnovation {
 
     private static final long serialVersionUID = -8113077369569030102L;
 

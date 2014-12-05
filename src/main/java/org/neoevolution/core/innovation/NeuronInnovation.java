@@ -4,7 +4,7 @@ import org.neoevolution.core.model.Neuron;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 @NodeEntity
-public class NeuronInnovation extends Innovation {
+public class NeuronInnovation extends AbstractInnovation {
 
     private static final long serialVersionUID = -366999622471119752L;
 
@@ -24,15 +24,9 @@ public class NeuronInnovation extends Innovation {
         return (code + neuron.getInnovation());
     }
 
-    public synchronized Long innovate(Neuron neuron)
-    {
+    public synchronized Long innovate(Neuron neuron) {
         Long innovation = neuron.getInnovation();
-
-        if (innovation == null) {
-            innovation = next();
-            neuron.setInnovation(innovation);
-            put(key(neuron), innovation);
-        }
+        put(key(neuron), innovation);
         return innovation;
     }
 

@@ -27,7 +27,7 @@ public class SynapseFactory<C extends GAConfiguration> implements ConfigurableFa
 
     @Override
     public void configure(C configuration) {
-        this.innovation = innovationService.findByConfigIdOrCreate(configuration.getId());
+        this.innovation = innovationService.findOrCreate(configuration.getId());
         initWeightSynapseMutation(configuration);
     }
 

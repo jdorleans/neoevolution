@@ -6,7 +6,7 @@ import org.neoevolution.mvc.AbstractEntity;
 import org.springframework.data.neo4j.fieldaccess.DynamicProperties;
 import org.springframework.data.neo4j.fieldaccess.DynamicPropertiesContainer;
 
-public abstract class Innovation extends AbstractEntity {
+public abstract class AbstractInnovation extends AbstractEntity {
 
     private static final long serialVersionUID = -6763412711915520799L;
 
@@ -19,7 +19,7 @@ public abstract class Innovation extends AbstractEntity {
     protected DynamicProperties innovations;
 
 
-    protected Innovation(String code) {
+    protected AbstractInnovation(String code) {
         this.code = code;
         this.current = 0l;
         this.innovations = new DynamicPropertiesContainer();

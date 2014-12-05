@@ -35,45 +35,37 @@ public class NeuronFactory<C extends GAConfiguration> implements ConfigurableFac
 
     @Override
     public void configure(C configuration) {
-        this.innovation = innovationService.findByConfigIdOrCreate(configuration.getId());
+        this.innovation = innovationService.findOrCreate(configuration.getId());
         this.functionManager = new ActivationFunctionManager(configuration);
-        initInputs(configuration.getInputSize());
-        initOutputs(configuration.getOutputSize());
+        initNeurons(configuration.getInputSize(), configuration.getOutputSize());
     }
 
-
-
-    // FIXME - FACTORY IS CREATED MANY TIMES, THUS WE MUST REUSE INNOVATION!!!
-    private void initInputs(int inputs) {
-        this.inputs = createList(inputs, NeuronType.INPUT);
-        this.inputs.add(create(NeuronType.BIAS));
-    }
-
-    private void initOutputs(int outputs) {
-        this.outputs = createList(outputs, NeuronType.OUTPUT);
-    }
-
-
-    private List<Neuron> createList(int size, NeuronType type)
+    private void initNeurons(int inputSize, int outputSize)
     {
-        List<Neuron> neurons = new ArrayList<>(size + 1);
+        inputs = new ArrayList<>(inputSize + 1);
+        outputs = new ArrayList<>(outputSize);
+        createNeurons(inputSize, inputs, NeuronType.INPUT);
+        inputs.add(create(NeuronType.BIAS));
+        createNeurons(outputSize, outputs, NeuronType.OUTPUT);
+    }
 
+    private void createNeurons(int size, List<Neuron> neurons, NeuronType type) {
         for (int i = 0; i < size; i++) {
             neurons.add(create(type));
         }
-        return neurons;
+    }
+
+    private Neuron create(NeuronType type) {
+        long innov = inputs.size() + outputs.size() + 1;
+        Neuron neuron = new Neuron(innov, type, functionManager.get(type));
+        innovation.innovate(neuron);
+        return neuron;
     }
 
 
     @Override
     public Neuron create() {
         return new Neuron();
-    }
-
-    private Neuron create(NeuronType type) {
-        Neuron neuron = new Neuron(type, functionManager.get(type));
-        innovation.innovate(neuron);
-        return neuron;
     }
 
     public Neuron createHidden(Neuron from, Neuron to) {

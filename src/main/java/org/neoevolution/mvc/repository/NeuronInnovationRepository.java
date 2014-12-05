@@ -7,8 +7,6 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Nov 30 2014
  */
-public interface NeuronInnovationRepository extends GraphRepository<NeuronInnovation> {
-
-    NeuronInnovation findByConfigId(Long configId);
+public interface NeuronInnovationRepository extends InnovationRepository<NeuronInnovation>, GraphRepository<NeuronInnovation> {
 
 }
