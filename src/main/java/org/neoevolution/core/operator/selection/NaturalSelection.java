@@ -128,11 +128,11 @@ public class NaturalSelection implements Selection {
     }
 
     private int calculateSurvivals(int size) {
-        return (int) (size * survivalRate);
+        return (int) Math.round(size * survivalRate);
     }
 
     private int calculateParents(int size) {
-        return Math.max(1, (int) (size * elitismRate));
+        return Math.max(1, (int) Math.round(size * elitismRate));
     }
 
     public double getSurvivalRate() {
