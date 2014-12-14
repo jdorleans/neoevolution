@@ -111,7 +111,7 @@ public class AddSynapseMutation extends AbstractMutation {
     private boolean isEnd(Neuron start, Neuron neuron, int maxIncoming) {
         NeuronType type = neuron.getType();
         boolean isEnd = (!start.equals(neuron) && !NeuronType.isBias(type) && !NeuronType.isInput(type));
-        return (isEnd && neuron.getInputs().size() < maxIncoming && !hasEnd(start, neuron));
+        return (isEnd && (neuron.getInputs().size() < maxIncoming) && !hasEnd(start, neuron));
     }
 
     private boolean hasEnd(Neuron start, Neuron neuron)

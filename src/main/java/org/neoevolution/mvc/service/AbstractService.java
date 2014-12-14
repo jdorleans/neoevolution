@@ -21,9 +21,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
 
 
     @Transactional
-    public void save(T entity)
-    {
-        System.out.println("Saving: "+ entity);
+    public void save(T entity) {
         beforeSave(entity);
         repository.save(entity);
         afterSave(entity);

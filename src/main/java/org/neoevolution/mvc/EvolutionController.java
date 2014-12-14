@@ -29,6 +29,7 @@ public class EvolutionController {
             long start = System.currentTimeMillis();
             System.out.println("Running: "+ (i+1));
             service.evolve(configuration);
+            configuration.setId(null);
             System.out.println("Finished in: " + (System.currentTimeMillis() - start));
         }
         long total = System.currentTimeMillis() - startTotal;
