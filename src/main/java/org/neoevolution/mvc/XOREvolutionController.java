@@ -1,6 +1,6 @@
 package org.neoevolution.mvc;
 
-import org.neoevolution.core.GAConfiguration;
+import org.neoevolution.core.configuration.XORConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/evolution")
-public class EvolutionController {
+public class XOREvolutionController {
 
     @Autowired
-    private EvolutionService service;
+    private XOREvolutionService service;
 
     @RequestMapping(method = RequestMethod.POST)
-    public void evolve(@RequestBody GAConfiguration configuration) {
+    public void evolve(@RequestBody XORConfiguration configuration) {
         service.evolve(configuration);
     }
 
     @RequestMapping(value = "/test/{runs}", method = RequestMethod.POST)
-    public void test(@PathVariable int runs, @RequestBody GAConfiguration configuration)
+    public void test(@PathVariable int runs, @RequestBody XORConfiguration configuration)
     {
         long startTotal = System.currentTimeMillis();
 

@@ -1,11 +1,10 @@
 package org.neoevolution.core.operator.selection;
 
 import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Population;
 import org.neoevolution.core.model.Species;
-import org.neoevolution.core.operator.mutation.Mutation;
+import org.neoevolution.core.operator.mutation.ComposedMutation;
+import org.neoevolution.core.operator.reproduction.Crossover;
 import org.neoevolution.core.operator.reproduction.Parents;
-import org.neoevolution.core.operator.reproduction.Reproduction;
 import org.neoevolution.util.GenotypeUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
@@ -17,56 +16,33 @@ import java.util.Set;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 18/10/14.
  */
-public class NaturalSelection implements Selection {
-
-    private int populationSize;
-
-    private int maxSpeciesSize;
+public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutation> {
 
     private double survivalRate;
 
     private double elitismRate;
 
-    private Reproduction reproduction;
-
-    private Mutation mutation;
-
 
     @Override
-    public Set<Genotype> select(Population population)
+    protected Species selection(Species specie, Long generation, Double totalFitness, Set<Genotype> offsprings)
     {
-        int generation = population.nextGeneration();
-        double totalFitness = population.getFitness();
-        Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
-        Set<Species> species = population.getSpecies();
-        removeSpecies(population);
+        Species species = null;
+        int newSize = calculateSize(specie, totalFitness);
+        int actualSize = specie.getGenotypes().size();
+        int births = calculateBirths(actualSize, newSize);
+        int survivals = newSize - births;
 
-        for (Species specie : species)
-        {
-            int newSize = calculateSize(specie, totalFitness);
-            int actualSize = specie.getGenotypes().size();
-            int births = calculateBirths(actualSize, newSize);
-            int survivals = newSize - births;
+        List<Genotype> bestFirst = GenotypeUtils.sortByFitness(specie.getGenotypes(), true);
+        reproduce(generation, births, bestFirst, offsprings);
 
-            List<Genotype> bestFirst = GenotypeUtils.sortByFitness(specie.getGenotypes(), true);
-            reproduce(generation, births, bestFirst, offsprings);
-
-            if (survivals > 0) {
-                kill(survivals, actualSize, bestFirst, specie);
-                population.addSpecie(specie);
-            }
+        if (survivals > 0) {
+            kill(survivals, actualSize, bestFirst, specie);
+            species = specie;
         }
-        return offsprings;
+        return species;
     }
 
-    private void removeSpecies(Population population) {
-        int size = maxSpeciesSize * 2;
-        population.setSpecies(MapUtils.<Species>createLinkedHashSet(size));
-        population.setBestSpecies(null);
-        population.setBestGenotype(null);
-    }
-
-    private void reproduce(int generation, int births, List<Genotype> bestFirst, Set<Genotype> offsprings)
+    private void reproduce(Long generation, int births, List<Genotype> bestFirst, Set<Genotype> offsprings)
     {
         for (int i = 0; i < births; i++) {
             Parents parents = selectParents(bestFirst);
@@ -135,6 +111,7 @@ public class NaturalSelection implements Selection {
         return Math.max(1, (int) Math.round(size * elitismRate));
     }
 
+
     public double getSurvivalRate() {
         return survivalRate;
     }
@@ -142,39 +119,11 @@ public class NaturalSelection implements Selection {
         this.survivalRate = survivalRate;
     }
 
-    public int getPopulationSize() {
-        return populationSize;
-    }
-    public void setPopulationSize(int populationSize) {
-        this.populationSize = populationSize;
-    }
-
-    public int getMaxSpeciesSize() {
-        return maxSpeciesSize;
-    }
-    public void setMaxSpeciesSize(int maxSpeciesSize) {
-        this.maxSpeciesSize = maxSpeciesSize;
-    }
-
     public double getElitismRate() {
         return elitismRate;
     }
     public void setElitismRate(double elitismRate) {
         this.elitismRate = elitismRate;
-    }
-
-    public Reproduction getReproduction() {
-        return reproduction;
-    }
-    public void setReproduction(Reproduction reproduction) {
-        this.reproduction = reproduction;
-    }
-
-    public Mutation getMutation() {
-        return mutation;
-    }
-    public void setMutation(Mutation mutation) {
-        this.mutation = mutation;
     }
 
 }

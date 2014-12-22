@@ -1,22 +1,27 @@
 package org.neoevolution.factory;
 
-import org.neoevolution.core.GAConfiguration;
+import org.neoevolution.core.configuration.NEConfiguration;
 import org.neoevolution.core.operator.reproduction.Crossover;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Nov 30 2014
  */
-public class CrossoverFactory
-        extends AbstractConfigurableFactory<Crossover, GAConfiguration>
-        implements ReproductionFactory<Crossover, GAConfiguration> {
+public class CrossoverFactory<C extends NEConfiguration>
+        extends AbstractConfigurableFactory<Crossover, C>
+        implements ReproductionFactory<Crossover, C> {
 
-    private GenotypeFactory<GAConfiguration> genotypeFactory;
+    private GenotypeFactory<C> genotypeFactory;
+
+
+    public CrossoverFactory() {
+        genotypeFactory = new GenotypeFactory<>();
+    }
+
 
     @Override
-    public void configure(GAConfiguration configuration) {
+    public void configure(C configuration) {
         super.configure(configuration);
-        genotypeFactory = new GenotypeFactory<>();
         genotypeFactory.configure(configuration);
     }
 

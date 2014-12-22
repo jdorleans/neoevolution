@@ -17,7 +17,7 @@ public class FitnessStop implements StopCondition {
         this(DEFAULT);
     }
 
-    public FitnessStop(double goal) {
+    public FitnessStop(Double goal) {
         this.goal = goal;
     }
 

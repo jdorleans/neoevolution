@@ -11,8 +11,6 @@ public class Population extends AbstractFitnessEntity {
 
     private static final long serialVersionUID = 6557027803394718011L;
 
-    private transient static long count;
-
     @RelatedTo(type="BEST_GENOTYPE")
     private Genotype bestGenotype;
 
@@ -24,16 +22,16 @@ public class Population extends AbstractFitnessEntity {
 
 
     public Population() {
-        this(0);
+        this(10);
     }
 
-    public Population(int maxSpecies) {
-        super(count++);
+    public Population(Integer maxSpecies) {
+        super();
         this.species = MapUtils.createLinkedHashSet(maxSpecies*2);
     }
 
 
-    public int nextGeneration() {
+    public Long nextGeneration() {
         return ++generation;
     }
 

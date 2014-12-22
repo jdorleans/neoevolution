@@ -1,4 +1,4 @@
-package org.neoevolution.core;
+package org.neoevolution.core.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

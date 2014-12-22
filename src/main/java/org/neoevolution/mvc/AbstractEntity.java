@@ -4,7 +4,7 @@ import org.springframework.data.neo4j.annotation.GraphId;
 
 import java.io.Serializable;
 
-public abstract class AbstractEntity implements Serializable, Comparable<AbstractEntity> {
+public abstract class AbstractEntity implements Entity, Serializable, Comparable<AbstractEntity> {
 
     private static final long serialVersionUID = -5716985183796677682L;
 
@@ -50,6 +50,7 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
         return id.compareTo(entity.getId());
     }
 
+    @Override
     public Long getId() {
         return id;
     }

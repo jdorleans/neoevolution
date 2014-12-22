@@ -9,6 +9,10 @@ public abstract class AbstractInnovationEntity extends AbstractEntity {
     protected Long innovation;
 
 
+    protected AbstractInnovationEntity() {
+        this(1l);
+    }
+
     protected AbstractInnovationEntity(Long innovation) {
         super();
         this.innovation = innovation;

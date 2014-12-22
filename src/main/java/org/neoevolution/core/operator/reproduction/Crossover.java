@@ -25,7 +25,7 @@ public class Crossover implements Reproduction {
 
 
     @Override
-    public Genotype reproduce(Parents parents, int generation)
+    public Genotype reproduce(Parents parents, Long generation)
     {
         Genotype dominant = parents.getDominant();
         Genotype offspring = genotypeFactory.createEmpty(generation);

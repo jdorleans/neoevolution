@@ -1,12 +1,11 @@
 package org.neoevolution.factory;
 
-import org.neoevolution.core.GAConfiguration;
+import org.neoevolution.core.configuration.NNConfiguration;
 import org.neoevolution.core.innovation.SynapseInnovation;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.Synapse;
 import org.neoevolution.core.operator.mutation.WeightSynapseMutation;
 import org.neoevolution.mvc.service.SynapseInnovationService;
-import org.neoevolution.util.ClassUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -15,14 +14,21 @@ import org.springframework.beans.factory.annotation.Configurable;
  * @since Oct 22 2014
  */
 @Configurable(preConstruction = true)
-public class SynapseFactory<C extends GAConfiguration> implements ConfigurableFactory<Synapse, C> {
+public class SynapseFactory<C extends NNConfiguration> implements ConfigurableFactory<Synapse, C> {
 
     private SynapseInnovation innovation;
 
     @Autowired
     private SynapseInnovationService innovationService;
 
+    private WeightSynapseMutationFactory<C> weightSynapseMutationFactory;
+
     private WeightSynapseMutation weightSynapseMutation;
+
+
+    public SynapseFactory() {
+        this.weightSynapseMutationFactory = new WeightSynapseMutationFactory<>();
+    }
 
 
     @Override
@@ -32,9 +38,8 @@ public class SynapseFactory<C extends GAConfiguration> implements ConfigurableFa
     }
 
     private void initWeightSynapseMutation(C configuration) {
-        WeightSynapseMutationFactory<C> factory = ClassUtils.create(configuration.getWeightSynapseMutationFactory());
-        factory.configure(configuration);
-        weightSynapseMutation = factory.create();
+        weightSynapseMutationFactory.configure(configuration);
+        weightSynapseMutation = weightSynapseMutationFactory.create();
         weightSynapseMutation.setRate(1d);
     }
 
@@ -57,6 +62,14 @@ public class SynapseFactory<C extends GAConfiguration> implements ConfigurableFa
         start.addOutput(synapse);
         end.addInput(synapse);
         return synapse;
+    }
+
+
+    public WeightSynapseMutationFactory<C> getWeightSynapseMutationFactory() {
+        return weightSynapseMutationFactory;
+    }
+    public void setWeightSynapseMutationFactory(WeightSynapseMutationFactory<C> weightSynapseMutationFactory) {
+        this.weightSynapseMutationFactory = weightSynapseMutationFactory;
     }
 
 }

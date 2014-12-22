@@ -24,10 +24,13 @@ public class NeuronInnovation extends AbstractInnovation {
         return (code + neuron.getInnovation());
     }
 
-    public synchronized Long innovate(Neuron neuron) {
-        Long innovation = neuron.getInnovation();
-        put(key(neuron), innovation);
-        return innovation;
+    public synchronized void innovate(Neuron neuron)
+    {
+        String key = key(neuron);
+
+        if (!innovations.hasProperty(key)) {
+            put(key, neuron.getInnovation());
+        }
     }
 
 }

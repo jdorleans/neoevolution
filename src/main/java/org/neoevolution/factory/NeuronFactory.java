@@ -1,7 +1,7 @@
 package org.neoevolution.factory;
 
-import org.neoevolution.core.GAConfiguration;
 import org.neoevolution.core.activation.ActivationFunctionManager;
+import org.neoevolution.core.configuration.NNConfiguration;
 import org.neoevolution.core.innovation.NeuronInnovation;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.NeuronType;
@@ -19,7 +19,7 @@ import java.util.Set;
  * @since Oct 22 2014
  */
 @Configurable(preConstruction = true)
-public class NeuronFactory<C extends GAConfiguration> implements ConfigurableFactory<Neuron, C> {
+public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFactory<Neuron, C> {
 
     private List<Neuron> inputs;
 
@@ -33,10 +33,15 @@ public class NeuronFactory<C extends GAConfiguration> implements ConfigurableFac
     private ActivationFunctionManager functionManager;
 
 
+    public NeuronFactory() {
+        this.functionManager = new ActivationFunctionManager();
+    }
+
+
     @Override
     public void configure(C configuration) {
-        this.innovation = innovationService.findOrCreate(configuration.getId());
-        this.functionManager = new ActivationFunctionManager(configuration);
+        innovation = innovationService.findOrCreate(configuration.getId());
+        functionManager.configure(configuration);
         initNeurons(configuration.getInputSize(), configuration.getOutputSize());
     }
 

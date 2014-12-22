@@ -56,7 +56,7 @@ public class Parents {
     public boolean getHasDominant() {
         return hasDominant;
     }
-    public void setHashDominant(boolean hasDominant) {
+    public void setHasDominant(boolean hasDominant) {
         this.hasDominant = hasDominant;
     }
 }

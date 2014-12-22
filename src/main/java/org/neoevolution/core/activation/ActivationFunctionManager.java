@@ -1,33 +1,36 @@
 package org.neoevolution.core.activation;
 
-import org.neoevolution.core.GAConfiguration;
+import org.neoevolution.core.configuration.Configurable;
+import org.neoevolution.core.configuration.NNConfiguration;
 import org.neoevolution.core.model.NeuronType;
-import org.neoevolution.util.ClassUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 
 import java.util.Map;
 
-public class ActivationFunctionManager {
+public class ActivationFunctionManager implements Configurable<NNConfiguration> {
 
     private Map<NeuronType, ActivationFunction> functions;
 
-
-    public ActivationFunctionManager(GAConfiguration configuration) {
-        configure(configuration);
-    }
-
-    public void configure(GAConfiguration configuration)
+    @Override
+    public void configure(NNConfiguration configuration)
     {
         functions = MapUtils.createHashMap(4);
-        configure(NeuronType.BIAS, configuration.getActivationBias());
-        configure(NeuronType.INPUT, configuration.getActivationInput());
-        configure(NeuronType.HIDDEN, configuration.getActivationHidden());
-        configure(NeuronType.OUTPUT, configuration.getActivationOutput());
+        functions.put(NeuronType.BIAS, create(configuration.getActivationBias()));
+        functions.put(NeuronType.INPUT, create(configuration.getActivationInput()));
+        functions.put(NeuronType.HIDDEN, create(configuration.getActivationHidden()));
+        functions.put(NeuronType.OUTPUT, create(configuration.getActivationOutput()));
     }
 
-    public void configure(NeuronType type, String name) {
-        functions.put(type, ClassUtils.<ActivationFunction>create(name));
+    private ActivationFunction create(ActivationFunctionType type)
+    {
+        if (ActivationFunctionType.isLINEAR(type)) {
+            return new LinearFunction();
+        }
+        else if (ActivationFunctionType.isTANH(type)) {
+            return new TanhFunction();
+        }
+        return new SigmoidFunction();
     }
 
     public ActivationFunction get(NeuronType type) {

@@ -22,7 +22,7 @@ public class EvolutionLog {
 
     private static final Logger LOG = Logger.getLogger(EvolutionLog.class);
 
-    @Around("execution(public * org.neoevolution.mvc.EvolutionService.* (..))")
+    @Around("execution(public * org.neoevolution.mvc.XOREvolutionService.* (..))")
     public Object logAround(ProceedingJoinPoint point) throws Throwable {
         StopWatch watch = logBefore(point);
         Object result = point.proceed();

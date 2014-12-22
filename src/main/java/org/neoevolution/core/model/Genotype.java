@@ -13,8 +13,6 @@ public class Genotype extends AbstractFitnessEntity {
 
     private static final long serialVersionUID = -849596329356657600L;
 
-    private transient static long count;
-
     private Boolean evaluated;
 
     private Double adjustedFitness;
@@ -33,12 +31,12 @@ public class Genotype extends AbstractFitnessEntity {
 
 
     public Genotype() {
-        this(0, new LinkedHashSet<Neuron>(0), new LinkedHashSet<Neuron>(0));
+        this(1l, 1l, new LinkedHashSet<Neuron>(), new LinkedHashSet<Neuron>());
     }
 
-    public Genotype(int generation, Set<Neuron> inputs, Set<Neuron> outputs)
+    public Genotype(Long innovation, Long generation, Set<Neuron> inputs, Set<Neuron> outputs)
     {
-        super(count++, generation);
+        super(innovation, generation);
         this.evaluated = false;
         this.adjustedFitness = 0d;
         this.inputs = inputs;

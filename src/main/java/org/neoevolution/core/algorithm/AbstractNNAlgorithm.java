@@ -1,4 +1,4 @@
-package org.neoevolution.core;
+package org.neoevolution.core.algorithm;
 
 import org.neoevolution.core.model.Genotype;
 import org.neoevolution.core.model.Population;
@@ -9,17 +9,19 @@ import org.neoevolution.core.stop.StopCondition;
 
 import java.util.Set;
 
-public class GeneticAlgorithm {
+public abstract class AbstractNNAlgorithm
+        <Eva extends Evaluation, Sel extends Selection, Spe extends Speciation, Sto extends StopCondition>
+        implements NNAlgorithm {
 
-    private Population population;
+    protected Population population;
 
-    private Evaluation evaluation;
+    protected Eva evaluation;
 
-    private Selection selection;
+    protected Sel selection;
 
-    private Speciation speciation;
+    protected Spe speciation;
 
-    private StopCondition stopCondition;
+    protected Sto stopCondition;
 
 
     // 1. Evaluation
@@ -27,6 +29,7 @@ public class GeneticAlgorithm {
     // 3. Reproduction
     // 4. Mutation
     // 5. Speciation
+    @Override
     public void evolve()
     {
         while (!stopCondition.isStop(population)) {
@@ -35,8 +38,9 @@ public class GeneticAlgorithm {
         evaluation.evaluate(population);
     }
     
-    private void evolution() {
+    protected void evolution() {
         evaluation.evaluate(population);
+        population.nextGeneration();
         Set<Genotype> offsprings = selection.select(population);
         speciation.speciate(population, offsprings);
     }
@@ -49,31 +53,31 @@ public class GeneticAlgorithm {
         this.population = population;
     }
 
-    public Evaluation getEvaluation() {
+    public Eva getEvaluation() {
         return evaluation;
     }
-    public void setEvaluation(Evaluation evaluation) {
+    public void setEvaluation(Eva evaluation) {
         this.evaluation = evaluation;
     }
 
-    public Selection getSelection() {
+    public Sel getSelection() {
         return selection;
     }
-    public void setSelection(Selection selection) {
+    public void setSelection(Sel selection) {
         this.selection = selection;
     }
 
-    public Speciation getSpeciation() {
+    public Spe getSpeciation() {
         return speciation;
     }
-    public void setSpeciation(Speciation speciation) {
+    public void setSpeciation(Spe speciation) {
         this.speciation = speciation;
     }
 
-    public StopCondition getStopCondition() {
+    public Sto getStopCondition() {
         return stopCondition;
     }
-    public void setStopCondition(StopCondition stopCondition) {
+    public void setStopCondition(Sto stopCondition) {
         this.stopCondition = stopCondition;
     }
 
