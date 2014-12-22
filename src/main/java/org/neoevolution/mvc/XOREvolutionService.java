@@ -4,6 +4,7 @@ import org.neoevolution.core.algorithm.XORAlgorithm;
 import org.neoevolution.core.configuration.XORConfiguration;
 import org.neoevolution.factory.XORAlgorithmFactory;
 import org.neoevolution.mvc.repository.XORConfigurationRepository;
+import org.neoevolution.mvc.service.PopulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class XOREvolutionService {
+
+    @Autowired
+    private PopulationService populationService;
 
     @Autowired
     private XORConfigurationRepository configurationRepository;
@@ -25,6 +29,7 @@ public class XOREvolutionService {
         factory.configure(configuration);
         XORAlgorithm algorithm = factory.create();
         algorithm.evolve();
+//        populationService.save(algorithm.getPopulation());
     }
 
 }
