@@ -24,9 +24,6 @@ public class GenotypeFactory<C extends NNConfiguration>
 
     private AddSynapseMutation addSynapseMutation;
 
-    private Long lastGeneration;
-
-    private Long lastInnnovation;
 
     public GenotypeFactory() {
         this.neuronFactory = new NeuronFactory<>();
@@ -40,7 +37,6 @@ public class GenotypeFactory<C extends NNConfiguration>
         super.configure(configuration);
         neuronFactory.configure(configuration);
         synapseFactory.configure(configuration);
-        lastGeneration = configuration.getGeneration();
         initAddSynapseMutation(configuration);
     }
 
@@ -51,22 +47,10 @@ public class GenotypeFactory<C extends NNConfiguration>
     }
 
 
-    public Genotype createEmpty(Long generation)
-    {
-        updateInnovation(generation);
+    public Genotype createEmpty(Long generation) {
         Set<Neuron> inputs = neuronFactory.createInputs();
         Set<Neuron> outputs = neuronFactory.createOutputs();
-        return new Genotype(lastInnnovation, lastGeneration, inputs, outputs);
-    }
-
-    private void updateInnovation(Long generation)
-    {
-        if (lastGeneration < generation) {
-            lastGeneration = generation;
-            lastInnnovation = 1l;
-        } else {
-            lastInnnovation++;
-        }
+        return new Genotype(configuration.nextGenotypeInnovation(), generation, inputs, outputs);
     }
 
     @Override

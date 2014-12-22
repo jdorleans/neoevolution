@@ -22,11 +22,11 @@ public class Population extends AbstractFitnessEntity {
 
 
     public Population() {
-        this(10);
+        this(1l, 10);
     }
 
-    public Population(Integer maxSpecies) {
-        super();
+    public Population(Long innovation, Integer maxSpecies) {
+        super(innovation, 1l);
         this.species = MapUtils.createLinkedHashSet(maxSpecies*2);
     }
 

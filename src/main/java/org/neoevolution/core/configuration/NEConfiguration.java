@@ -11,6 +11,12 @@ public abstract class NEConfiguration extends AbstractEntity implements NNConfig
 
     private static final long serialVersionUID = 7311833932458102732L;
 
+    private Long populationInnovation;
+
+    private Long speciesInnovation;
+
+    private Long genotypeInnovation;
+
     private Integer populationSize;
 
     private Integer inputSize;
@@ -57,22 +63,55 @@ public abstract class NEConfiguration extends AbstractEntity implements NNConfig
 
     private ActivationFunctionType activationOutput;
 
-    private Long generation;
-
 
     protected NEConfiguration() {
         super();
-        generation = 0l;
+        populationInnovation = 0l;
+        speciesInnovation = 0l;
+        genotypeInnovation = 0l;
     }
 
 
     @Override
-    public Long getGeneration() {
-        return generation;
+    public Long nextPopulationInnovation() {
+        return ++populationInnovation;
     }
 
-    public void setGeneration(Long generation) {
-        this.generation = generation;
+    @Override
+    public Long nextSpeciesInnovation() {
+        return ++speciesInnovation;
+    }
+
+    @Override
+    public Long nextGenotypeInnovation() {
+        return ++genotypeInnovation;
+    }
+
+    @Override
+    public Long getPopulationInnovation() {
+        return populationInnovation;
+    }
+
+    public void setPopulationInnovation(Long populationInnovation) {
+        this.populationInnovation = populationInnovation;
+    }
+
+    @Override
+    public Long getSpeciesInnovation() {
+        return speciesInnovation;
+    }
+
+    public void setSpeciesInnovation(Long speciesInnovation) {
+        this.speciesInnovation = speciesInnovation;
+    }
+
+    @Override
+    public Long getGenotypeInnovation() {
+        return genotypeInnovation;
+    }
+
+    public void setGenotypeInnovation(Long genotypeInnovation) {
+        this.genotypeInnovation = genotypeInnovation;
     }
 
     @Override
@@ -202,6 +241,7 @@ public abstract class NEConfiguration extends AbstractEntity implements NNConfig
         this.weightSynapseReset = weightSynapseReset;
     }
 
+    @Override
     public Double getSpeciesSizeRate() {
         return speciesSizeRate;
     }

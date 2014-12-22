@@ -14,10 +14,6 @@ public class SpeciesFactory<C extends NNConfiguration>
 
     private GenotypeFactory<C> genotypeFactory;
 
-    private Long lastGeneration;
-
-    private Long lastInnnovation;
-
 
     public SpeciesFactory() {
         genotypeFactory = new GenotypeFactory<>();
@@ -28,7 +24,6 @@ public class SpeciesFactory<C extends NNConfiguration>
     public void configure(C configuration) {
         super.configure(configuration);
         genotypeFactory.configure(configuration);
-        lastGeneration = configuration.getGeneration();
     }
 
     @Override
@@ -42,8 +37,7 @@ public class SpeciesFactory<C extends NNConfiguration>
 
     public Species create(int size, Long generation)
     {
-        updateInnovation(generation);
-        Species species = new Species(lastInnnovation, generation, size);
+        Species species = new Species(configuration.nextSpeciesInnovation(), generation, size);
 
         for (int i = 0; i < size; i++) {
             species.addGenotype(genotypeFactory.create(generation));
@@ -53,21 +47,10 @@ public class SpeciesFactory<C extends NNConfiguration>
 
     public Species create(Genotype genotype, Long generation)
     {
-        updateInnovation(generation);
         int size = Math.max(1, configuration.getPopulationSize() / configuration.getMaxSpeciesSize());
-        Species species = new Species(lastInnnovation, generation, size);
+        Species species = new Species(configuration.nextSpeciesInnovation(), generation, size);
         species.addGenotype(genotype);
         return species;
-    }
-
-    private void updateInnovation(Long generation)
-    {
-        if (lastGeneration < generation) {
-            lastGeneration = generation;
-            lastInnnovation = 1l;
-        } else {
-            lastInnnovation++;
-        }
     }
 
 

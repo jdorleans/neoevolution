@@ -38,7 +38,7 @@ public class PopulationFactory<C extends NNConfiguration>
 
     @Override
     public Population create() {
-        Population population = new Population(configuration.getMaxSpeciesSize());
+        Population population = new Population(configuration.nextPopulationInnovation(), configuration.getMaxSpeciesSize());
         Set<Genotype> offsprings = genotypeFactory.createList(configuration.getPopulationSize());
         speciation.speciate(population, offsprings);
         return population;

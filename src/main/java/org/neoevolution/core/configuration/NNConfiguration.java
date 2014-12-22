@@ -9,7 +9,17 @@ import org.neoevolution.mvc.Entity;
  */
 public interface NNConfiguration extends Entity {
 
-    Long getGeneration();
+    Long nextPopulationInnovation();
+
+    Long nextSpeciesInnovation();
+
+    Long nextGenotypeInnovation();
+
+    Long getPopulationInnovation();
+
+    Long getSpeciesInnovation();
+
+    Long getGenotypeInnovation();
 
     Integer getPopulationSize();
 
@@ -32,6 +42,8 @@ public interface NNConfiguration extends Entity {
     Double getWeightRange();
 
     Boolean isWeightSynapseReset();
+
+    Double getSpeciesSizeRate();
 
     ActivationFunctionType getActivationBias();
 
