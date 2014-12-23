@@ -2,40 +2,20 @@ package org.neoevolution.mvc;
 
 import org.neoevolution.core.configuration.XORConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Nov 27 2014
  */
 @RestController
-@RequestMapping("/evolution")
-public class XOREvolutionController {
+@RequestMapping("/xor")
+public class XOREvolutionController extends EvolutionController<XOREvolutionService, XORConfiguration> {
 
     @Autowired
-    private XOREvolutionService service;
-
-    @RequestMapping(method = RequestMethod.POST)
-    public void evolve(@RequestBody XORConfiguration configuration) {
-        service.evolve(configuration);
-    }
-
-    @RequestMapping(value = "/test/{runs}", method = RequestMethod.POST)
-    public void test(@PathVariable int runs, @RequestBody XORConfiguration configuration)
-    {
-        long startTotal = System.currentTimeMillis();
-
-        for (int i = 0; i < runs; i++) {
-            long start = System.currentTimeMillis();
-            System.out.println("Running: "+ (i+1));
-            service.evolve(configuration);
-            configuration.setId(null);
-            System.out.println("Finished in: " + (System.currentTimeMillis() - start));
-        }
-        long total = System.currentTimeMillis() - startTotal;
-        System.out.println("TOTAL TIME: " + total);
-        System.out.println("AVERAGE TIME: " + total/runs);
-
+    public XOREvolutionController(XOREvolutionService service) {
+        super(service);
     }
 
 }

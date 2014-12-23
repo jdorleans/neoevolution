@@ -22,6 +22,7 @@ public class ActivationFunctionManager implements Configurable<NNConfiguration> 
         functions.put(NeuronType.OUTPUT, create(configuration.getActivationOutput()));
     }
 
+    // FIXME - SHOULD BECOME GENERIC
     private ActivationFunction create(ActivationFunctionType type)
     {
         if (ActivationFunctionType.isLINEAR(type)) {

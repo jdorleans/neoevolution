@@ -1,56 +1,226 @@
 package org.neoevolution.core.configuration;
 
 import org.neoevolution.core.activation.ActivationFunctionType;
-import org.neoevolution.mvc.Entity;
+import org.neoevolution.core.innovation.NeuronInnovation;
+import org.neoevolution.core.innovation.SynapseInnovation;
+import org.neoevolution.mvc.AbstractEntity;
+import org.springframework.data.neo4j.annotation.RelatedTo;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Oct 22 2014
  */
-public interface NNConfiguration extends Entity {
+public abstract class NNConfiguration extends AbstractEntity {
 
-    Long nextPopulationInnovation();
+    private static final long serialVersionUID = -2459309402975620977L;
 
-    Long nextSpeciesInnovation();
+    protected Long populationInnovation;
 
-    Long nextGenotypeInnovation();
+    protected Long speciesInnovation;
 
-    Long getPopulationInnovation();
+    protected Long genotypeInnovation;
 
-    Long getSpeciesInnovation();
+    @RelatedTo(type="NI")
+    protected NeuronInnovation neuronInnovation;
 
-    Long getGenotypeInnovation();
+    @RelatedTo(type="SI")
+    protected SynapseInnovation synapseInnovation;
 
-    Integer getPopulationSize();
+    protected Integer populationSize;
 
-    Integer getMaxSpeciesSize();
+    protected Integer inputSize;
 
-    Integer getInputSize();
+    protected Integer outputSize;
 
-    Integer getOutputSize();
+    protected Boolean fullyConnected;
 
-    Boolean isFullyConnected();
+    protected Double weightRange;
 
-    Double getAddNeuronRate();
+    protected Double addNeuronRate;
 
-    Integer getHiddenMaxSize();
+    protected Integer hiddenMaxSize;
 
-    Double getAddSynapseRate();
+    protected Double addSynapseRate;
 
-    Double getWeightSynapseRate();
+    protected Double weightSynapseRate;
 
-    Double getWeightRange();
+    protected Boolean weightSynapseReset;
 
-    Boolean isWeightSynapseReset();
+    protected Double speciesSizeRate;
 
-    Double getSpeciesSizeRate();
+    protected ActivationFunctionType activationBias;
 
-    ActivationFunctionType getActivationBias();
+    protected ActivationFunctionType activationInput;
 
-    ActivationFunctionType getActivationInput();
+    protected ActivationFunctionType activationHidden;
 
-    ActivationFunctionType getActivationHidden();
+    protected ActivationFunctionType activationOutput;
 
-    ActivationFunctionType getActivationOutput();
+
+    protected NNConfiguration() {
+        super();
+        populationInnovation = 0l;
+        speciesInnovation = 0l;
+        genotypeInnovation = 0l;
+        neuronInnovation = new NeuronInnovation();
+        synapseInnovation = new SynapseInnovation();
+    }
+
+
+    public Long nextPopulationInnovation() {
+        return ++populationInnovation;
+    }
+
+    public Long nextSpeciesInnovation() {
+        return ++speciesInnovation;
+    }
+
+    public Long nextGenotypeInnovation() {
+        return ++genotypeInnovation;
+    }
+
+    public Long getPopulationInnovation() {
+        return populationInnovation;
+    }
+    public void setPopulationInnovation(Long populationInnovation) {
+        this.populationInnovation = populationInnovation;
+    }
+
+    public Long getSpeciesInnovation() {
+        return speciesInnovation;
+    }
+    public void setSpeciesInnovation(Long speciesInnovation) {
+        this.speciesInnovation = speciesInnovation;
+    }
+
+    public Long getGenotypeInnovation() {
+        return genotypeInnovation;
+    }
+    public void setGenotypeInnovation(Long genotypeInnovation) {
+        this.genotypeInnovation = genotypeInnovation;
+    }
+
+    public NeuronInnovation getNeuronInnovation() {
+        return neuronInnovation;
+    }
+    public void setNeuronInnovation(NeuronInnovation neuronInnovation) {
+        this.neuronInnovation = neuronInnovation;
+    }
+
+    public SynapseInnovation getSynapseInnovation() {
+        return synapseInnovation;
+    }
+    public void setSynapseInnovation(SynapseInnovation synapseInnovation) {
+        this.synapseInnovation = synapseInnovation;
+    }
+
+    public Integer getPopulationSize() {
+        return populationSize;
+    }
+    public void setPopulationSize(Integer populationSize) {
+        this.populationSize = populationSize;
+    }
+
+    public Integer getMaxSpeciesSize() {
+        return Math.max(1, (int) (populationSize * speciesSizeRate));
+    }
+
+    public Integer getInputSize() {
+        return inputSize;
+    }
+    public void setInputSize(Integer inputSize) {
+        this.inputSize = inputSize;
+    }
+
+    public Integer getOutputSize() {
+        return outputSize;
+    }
+    public void setOutputSize(Integer outputSize) {
+        this.outputSize = outputSize;
+    }
+
+    public Boolean isFullyConnected() {
+        return fullyConnected;
+    }
+    public void setFullyConnected(Boolean fullyConnected) {
+        this.fullyConnected = fullyConnected;
+    }
+
+    public Double getAddNeuronRate() {
+        return addNeuronRate;
+    }
+    public void setAddNeuronRate(Double addNeuronRate) {
+        this.addNeuronRate = addNeuronRate;
+    }
+
+    public Integer getHiddenMaxSize() {
+        return hiddenMaxSize;
+    }
+    public void setHiddenMaxSize(Integer hiddenMaxSize) {
+        this.hiddenMaxSize = hiddenMaxSize;
+    }
+
+    public Double getAddSynapseRate() {
+        return addSynapseRate;
+    }
+    public void setAddSynapseRate(Double addSynapseRate) {
+        this.addSynapseRate = addSynapseRate;
+    }
+
+    public Double getWeightSynapseRate() {
+        return weightSynapseRate;
+    }
+    public void setWeightSynapseRate(Double weightSynapseRate) {
+        this.weightSynapseRate = weightSynapseRate;
+    }
+
+    public Double getWeightRange() {
+        return weightRange;
+    }
+    public void setWeightRange(Double weightRange) {
+        this.weightRange = weightRange;
+    }
+
+    public Boolean isWeightSynapseReset() {
+        return weightSynapseReset;
+    }
+    public void setWeightSynapseReset(Boolean weightSynapseReset) {
+        this.weightSynapseReset = weightSynapseReset;
+    }
+
+    public Double getSpeciesSizeRate() {
+        return speciesSizeRate;
+    }
+    public void setSpeciesSizeRate(Double speciesSizeRate) {
+        this.speciesSizeRate = speciesSizeRate;
+    }
+
+    public ActivationFunctionType getActivationBias() {
+        return activationBias;
+    }
+    public void setActivationBias(ActivationFunctionType activationBias) {
+        this.activationBias = activationBias;
+    }
+
+    public ActivationFunctionType getActivationInput() {
+        return activationInput;
+    }
+    public void setActivationInput(ActivationFunctionType activationInput) {
+        this.activationInput = activationInput;
+    }
+
+    public ActivationFunctionType getActivationHidden() {
+        return activationHidden;
+    }
+    public void setActivationHidden(ActivationFunctionType activationHidden) {
+        this.activationHidden = activationHidden;
+    }
+
+    public ActivationFunctionType getActivationOutput() {
+        return activationOutput;
+    }
+    public void setActivationOutput(ActivationFunctionType activationOutput) {
+        this.activationOutput = activationOutput;
+    }
 
 }

@@ -2,8 +2,6 @@ package org.neoevolution.mvc;
 
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.core.configuration.NNConfiguration;
-import org.neoevolution.core.innovation.NeuronInnovation;
-import org.neoevolution.core.innovation.SynapseInnovation;
 import org.neoevolution.core.model.Population;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -20,12 +18,6 @@ public abstract class Evolution<C extends NNConfiguration> extends AbstractEntit
 
     @RelatedTo(type="CONFIGURES", direction = Direction.INCOMING)
     private C configuration;
-
-    @RelatedTo(type="HAS")
-    private NeuronInnovation neuronInnovation;
-
-    @RelatedTo(type="HAS")
-    private SynapseInnovation synapseInnovation;
 
     private Boolean finished;
 
@@ -49,22 +41,6 @@ public abstract class Evolution<C extends NNConfiguration> extends AbstractEntit
 
     public void setConfiguration(C configuration) {
         this.configuration = configuration;
-    }
-
-    public NeuronInnovation getNeuronInnovation() {
-        return neuronInnovation;
-    }
-
-    public void setNeuronInnovation(NeuronInnovation neuronInnovation) {
-        this.neuronInnovation = neuronInnovation;
-    }
-
-    public SynapseInnovation getSynapseInnovation() {
-        return synapseInnovation;
-    }
-
-    public void setSynapseInnovation(SynapseInnovation synapseInnovation) {
-        this.synapseInnovation = synapseInnovation;
     }
 
     public Boolean isFinished() {

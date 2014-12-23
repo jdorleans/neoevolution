@@ -5,10 +5,7 @@ import org.neoevolution.core.configuration.NNConfiguration;
 import org.neoevolution.core.innovation.NeuronInnovation;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.NeuronType;
-import org.neoevolution.mvc.service.NeuronInnovationService;
 import org.neoevolution.util.MapUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +15,6 @@ import java.util.Set;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Oct 22 2014
  */
-@Configurable(preConstruction = true)
 public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFactory<Neuron, C> {
 
     private List<Neuron> inputs;
@@ -26,9 +22,6 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
     private List<Neuron> outputs;
 
     private NeuronInnovation innovation;
-
-    @Autowired
-    private NeuronInnovationService innovationService;
 
     private ActivationFunctionManager functionManager;
 
@@ -40,7 +33,7 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
 
     @Override
     public void configure(C configuration) {
-        innovation = innovationService.findOrCreate(configuration.getId());
+        innovation = configuration.getNeuronInnovation();
         functionManager.configure(configuration);
         initNeurons(configuration.getInputSize(), configuration.getOutputSize());
     }

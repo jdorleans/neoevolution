@@ -5,21 +5,14 @@ import org.neoevolution.core.innovation.SynapseInnovation;
 import org.neoevolution.core.model.Neuron;
 import org.neoevolution.core.model.Synapse;
 import org.neoevolution.core.operator.mutation.WeightSynapseMutation;
-import org.neoevolution.mvc.service.SynapseInnovationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Oct 22 2014
  */
-@Configurable(preConstruction = true)
 public class SynapseFactory<C extends NNConfiguration> implements ConfigurableFactory<Synapse, C> {
 
     private SynapseInnovation innovation;
-
-    @Autowired
-    private SynapseInnovationService innovationService;
 
     private WeightSynapseMutationFactory<C> weightSynapseMutationFactory;
 
@@ -33,7 +26,7 @@ public class SynapseFactory<C extends NNConfiguration> implements ConfigurableFa
 
     @Override
     public void configure(C configuration) {
-        this.innovation = innovationService.findOrCreate(configuration.getId());
+        this.innovation = configuration.getSynapseInnovation();
         initWeightSynapseMutation(configuration);
     }
 
