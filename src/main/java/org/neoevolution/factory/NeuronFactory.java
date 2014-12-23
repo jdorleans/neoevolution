@@ -61,9 +61,9 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
     }
 
     private Neuron create(NeuronType type) {
-        long innov = inputs.size() + outputs.size() + 1;
-        Neuron neuron = new Neuron(innov, type, functionManager.get(type));
-        innovation.innovate(neuron);
+        int idx = inputs.size() + outputs.size() + 1;
+        Neuron neuron = new Neuron(type, functionManager.get(type));
+        innovation.innovate(idx, neuron);
         return neuron;
     }
 

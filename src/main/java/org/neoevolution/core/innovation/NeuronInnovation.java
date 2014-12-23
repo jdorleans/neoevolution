@@ -20,17 +20,12 @@ public class NeuronInnovation extends AbstractInnovation {
     }
 
 
-    private String key(Neuron neuron) {
-        return (code + neuron.getInnovation());
+    private String key(int idx) {
+        return (code + idx);
     }
 
-    public synchronized void innovate(Neuron neuron)
-    {
-        String key = key(neuron);
-
-        if (!innovations.hasProperty(key)) {
-            put(key, neuron.getInnovation());
-        }
+    public void innovate(int idx, Neuron neuron) {
+        neuron.setInnovation(next(key(idx)));
     }
 
 }
