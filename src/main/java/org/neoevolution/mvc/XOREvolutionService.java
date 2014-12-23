@@ -1,10 +1,8 @@
 package org.neoevolution.mvc;
 
-import org.neoevolution.core.algorithm.XORAlgorithm;
 import org.neoevolution.core.configuration.XORConfiguration;
 import org.neoevolution.factory.XORAlgorithmFactory;
-import org.neoevolution.mvc.repository.XORConfigurationRepository;
-import org.neoevolution.mvc.service.PopulationService;
+import org.neoevolution.mvc.repository.XOREvolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,23 +11,22 @@ import org.springframework.stereotype.Service;
  * @since Nov 27 2014
  */
 @Service
-public class XOREvolutionService {
+public class XOREvolutionService extends EvolutionService
+        <XOREvolution, XORConfiguration, XOREvolutionRepository> {
 
     @Autowired
-    private PopulationService populationService;
+    protected XOREvolutionService(XOREvolutionRepository repository) {
+        super(repository);
+    }
 
-    @Autowired
-    private XORConfigurationRepository configurationRepository;
+    @Override
+    protected XOREvolution create() {
+        return new XOREvolution();
+    }
 
-    public void evolve(XORConfiguration configuration) {
-//        Evolution evolution = new Evolution();
-//        evolutionRepository.save(evolution);
-        configurationRepository.save(configuration);
-        XORAlgorithmFactory factory = new XORAlgorithmFactory();
-        factory.configure(configuration);
-        XORAlgorithm algorithm = factory.create();
-        algorithm.evolve();
-//        populationService.save(algorithm.getPopulation());
+    @Override
+    protected XORAlgorithmFactory createFactory() {
+        return new XORAlgorithmFactory();
     }
 
 }
