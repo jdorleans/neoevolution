@@ -36,9 +36,9 @@ public class NEMutationFactory<C extends NEConfiguration>
     @Override
     public ComposedMutation create() {
         ComposedMutation mutation = new ComposedMutation();
-        mutation.addMutation(addNeuronMutationFactory.create());
-        mutation.addMutation(addSynapseMutationFactory.create());
-        mutation.addMutation(weightSynapseMutationFactory.create());
+        mutation.add(addNeuronMutationFactory.create());
+        mutation.add(addSynapseMutationFactory.create());
+        mutation.add(weightSynapseMutationFactory.create());
         return mutation;
     }
 

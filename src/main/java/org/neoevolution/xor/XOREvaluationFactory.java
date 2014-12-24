@@ -1,8 +1,7 @@
-package org.neoevolution.factory;
+package org.neoevolution.xor;
 
-import org.neoevolution.core.configuration.XORConfiguration;
 import org.neoevolution.core.error.ErrorFunctionType;
-import org.neoevolution.core.operator.evaluation.XOREvaluation;
+import org.neoevolution.factory.TrainingEvaluationFactory;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

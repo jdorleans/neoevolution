@@ -28,11 +28,11 @@ public class Synapse extends Gene {
     }
 
     public Synapse(Neuron start, Neuron end) {
-        this(null, start, end, 0d, true);
+        this(start, end, 0d);
     }
 
-    public Synapse(Neuron start, Neuron end, Double weight, Boolean enabled) {
-        this(null, start, end, weight, enabled);
+    public Synapse(Neuron start, Neuron end, Double weight) {
+        this(null, start, end, weight, true);
     }
 
     public Synapse(Long innovation, Neuron start, Neuron end, Double weight, Boolean enabled) {

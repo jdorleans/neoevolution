@@ -1,16 +1,14 @@
-package org.neoevolution.factory;
+package org.neoevolution.xor;
 
-import org.neoevolution.core.algorithm.XORAlgorithm;
-import org.neoevolution.core.configuration.XORConfiguration;
-import org.neoevolution.core.operator.evaluation.XOREvaluation;
-import org.neoevolution.core.stop.FitnessStop;
+import org.neoevolution.core.stop.ComposedStop;
+import org.neoevolution.factory.AbstractNEAlgorithmFactory;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Dec 20 2014
  */
 public class XORAlgorithmFactory
-        extends AbstractNEAlgorithmFactory<XORAlgorithm, XOREvaluation, FitnessStop, XORConfiguration> {
+        extends AbstractNEAlgorithmFactory<XORAlgorithm, XOREvaluation, ComposedStop, XORConfiguration> {
 
     public XORAlgorithmFactory() {
         super();

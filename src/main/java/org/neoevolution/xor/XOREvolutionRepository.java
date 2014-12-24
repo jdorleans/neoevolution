@@ -1,6 +1,6 @@
-package org.neoevolution.mvc.repository;
+package org.neoevolution.xor;
 
-import org.neoevolution.mvc.XOREvolution;
+import org.neoevolution.mvc.repository.EvolutionRepository;
 
 /**
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>

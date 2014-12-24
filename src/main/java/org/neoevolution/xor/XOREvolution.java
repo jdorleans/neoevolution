@@ -1,6 +1,6 @@
-package org.neoevolution.mvc;
+package org.neoevolution.xor;
 
-import org.neoevolution.core.configuration.XORConfiguration;
+import org.neoevolution.mvc.Evolution;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**

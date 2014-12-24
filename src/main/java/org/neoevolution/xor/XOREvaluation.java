@@ -1,4 +1,6 @@
-package org.neoevolution.core.operator.evaluation;
+package org.neoevolution.xor;
+
+import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,8 @@
-package org.neoevolution.mvc;
+package org.neoevolution.mvc.service;
 
 import org.neoevolution.core.configuration.NEConfiguration;
+import org.neoevolution.mvc.Evolution;
 import org.neoevolution.mvc.repository.EvolutionRepository;
-import org.neoevolution.mvc.service.NEConfigurationService;
 
 /**
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
@@ -10,7 +10,7 @@ import org.neoevolution.mvc.service.NEConfigurationService;
  */
 public abstract class NEEvolutionService
         <T extends Evolution<C>, C extends NEConfiguration, R extends EvolutionRepository<T>>
-        extends NNEvolutionService<T, C, R> {
+        extends EvolutionService<T, C, R> {
 
     protected NEEvolutionService(R repository, NEConfigurationService<C, ?> configurationService) {
         super(repository, configurationService);

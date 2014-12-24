@@ -19,7 +19,7 @@ import java.io.File;
 @ComponentScan(basePackages = "org.neoevolution")
 @EnableSpringConfigured
 @EnableAutoConfiguration
-@EnableNeo4jRepositories(basePackages = "org.neoevolution.mvc.repository")
+@EnableNeo4jRepositories(basePackages = "org.neoevolution")
 @EnableTransactionManagement
 public class Application extends Neo4jConfiguration {
 

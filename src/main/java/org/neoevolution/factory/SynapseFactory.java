@@ -50,7 +50,7 @@ public class SynapseFactory<C extends NNConfiguration> implements ConfigurableFa
 
     public Synapse create(Neuron start, Neuron end, Double weight)
     {
-        Synapse synapse = new Synapse(start, end, weight, true);
+        Synapse synapse = new Synapse(start, end, weight);
         innovation.innovate(synapse, start, end);
         start.addOutput(synapse);
         end.addInput(synapse);

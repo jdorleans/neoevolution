@@ -1,6 +1,6 @@
-package org.neoevolution.mvc.repository;
+package org.neoevolution.xor;
 
-import org.neoevolution.core.configuration.XORConfiguration;
+import org.neoevolution.mvc.repository.NEConfigurationRepository;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

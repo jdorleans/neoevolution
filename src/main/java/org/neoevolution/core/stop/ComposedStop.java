@@ -11,14 +11,17 @@ import java.util.List;
  */
 public class ComposedStop implements StopCondition {
 
+    private Boolean assertAll;
+
     private List<StopCondition> conditions;
 
 
     public ComposedStop() {
-        this(new ArrayList<StopCondition>());
+        this(true, new ArrayList<StopCondition>());
     }
 
-    public ComposedStop(List<StopCondition> conditions) {
+    public ComposedStop(Boolean assertAll, List<StopCondition> conditions) {
+        this.assertAll = assertAll;
         this.conditions = conditions;
     }
 
@@ -26,21 +29,41 @@ public class ComposedStop implements StopCondition {
     @Override
     public boolean isStop(Population population)
     {
-        for (StopCondition condition : conditions) {
-            if (!condition.isStop(population)) {
-                return false;
+        boolean isStop = true;
+
+        for (StopCondition condition : conditions)
+        {
+            boolean stop = condition.isStop(population);
+
+            if (assertAll) {
+                if (!stop) {
+                    return false;
+                }
+            } else {
+                if (stop) {
+                    return true;
+                } else {
+                    isStop = false;
+                }
             }
         }
-        return true;
+        return isStop;
     }
 
 
-    public void addStopCondition(StopCondition condition) {
+    public void add(StopCondition condition) {
         if (conditions != null) {
             conditions.add(condition);
         }
     }
 
+
+    public Boolean isAssertAll() {
+        return assertAll;
+    }
+    public void setAssertAll(Boolean assertAll) {
+        this.assertAll = assertAll;
+    }
 
     public List<StopCondition> getConditions() {
         return conditions;

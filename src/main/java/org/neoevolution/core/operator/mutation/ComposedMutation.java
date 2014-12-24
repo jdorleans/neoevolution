@@ -30,7 +30,7 @@ public class ComposedMutation implements Mutation {
     }
 
 
-    public void addMutation(Mutation mutation) {
+    public void add(Mutation mutation) {
         if (mutations != null) {
             mutations.add(mutation);
         }

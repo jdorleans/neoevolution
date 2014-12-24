@@ -1,20 +1,18 @@
-package org.neoevolution.mvc;
+package org.neoevolution.mvc.service;
 
 import org.neoevolution.core.algorithm.NNAlgorithm;
 import org.neoevolution.core.configuration.NNConfiguration;
 import org.neoevolution.core.model.Population;
 import org.neoevolution.factory.NNAlgorithmFactory;
+import org.neoevolution.mvc.Evolution;
 import org.neoevolution.mvc.repository.EvolutionRepository;
-import org.neoevolution.mvc.service.AbstractService;
-import org.neoevolution.mvc.service.NNConfigurationService;
-import org.neoevolution.mvc.service.PopulationService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
  * @since Dec 23 2014
  */
-public abstract class NNEvolutionService
+public abstract class EvolutionService
         <T extends Evolution<C>, C extends NNConfiguration, R extends EvolutionRepository<T>>
         extends AbstractService<T, R> {
 
@@ -24,7 +22,7 @@ public abstract class NNEvolutionService
     protected NNConfigurationService<C, ?> configurationService;
 
 
-    protected NNEvolutionService(R repository, NNConfigurationService<C, ?> configurationService) {
+    protected EvolutionService(R repository, NNConfigurationService<C, ?> configurationService) {
         super(repository);
         this.configurationService = configurationService;
     }
@@ -32,14 +30,15 @@ public abstract class NNEvolutionService
 
     public T evolve(C configuration)
     {
-        NNAlgorithm algorithm = createAlgorithm(configuration);
         T evolution = createEvolution(configuration);
-        save(evolution);
+//        save(evolution);
 
+        NNAlgorithm algorithm = createAlgorithm(configuration);
         algorithm.evolve();
+
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
-        save(evolution);
+//        save(evolution);
         return evolution;
     }
 
