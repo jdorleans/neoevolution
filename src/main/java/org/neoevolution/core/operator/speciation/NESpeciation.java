@@ -4,8 +4,7 @@ import org.neoevolution.core.model.*;
 import org.neoevolution.factory.SpeciesFactory;
 import org.neoevolution.util.MapUtils;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class NESpeciation implements Speciation {
 
@@ -42,10 +41,13 @@ public class NESpeciation implements Speciation {
 
     private boolean speciate(Genotype genotype, Population population)
     {
-        for (Species species : population.getSpecies())
+        List<Species> species = new ArrayList<>(population.getSpecies());
+        Collections.shuffle(species);
+
+        for (Species specie : species)
         {
-            if (isCompatible(species.getBestGenotype(), genotype)) {
-                species.addGenotype(genotype);
+            if (isCompatible(specie.getBestGenotype(), genotype)) {
+                specie.addGenotype(genotype);
                 return true;
             }
         }
