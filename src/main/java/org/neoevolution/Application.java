@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.File;
 
@@ -19,6 +20,7 @@ import java.io.File;
 @EnableSpringConfigured
 @EnableAutoConfiguration
 @EnableNeo4jRepositories(basePackages = "org.neoevolution.mvc.repository")
+@EnableTransactionManagement
 public class Application extends Neo4jConfiguration {
 
     public Application() {

@@ -1,5 +1,7 @@
 package org.neoevolution.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.core.activation.ActivationFunction;
 import org.springframework.data.neo4j.annotation.Fetch;
@@ -20,14 +22,17 @@ public class Neuron extends Gene {
 
     private transient Double activation;
 
+    @JsonIgnore
     private ActivationFunction function;
 
     @Fetch
     @RelatedToVia(direction = Direction.INCOMING)
+    @JsonManagedReference
     private Set<Synapse> inputs;
 
     @Fetch
     @RelatedToVia(direction = Direction.OUTGOING)
+    @JsonManagedReference
     private Set<Synapse> outputs;
 
 

@@ -1,5 +1,6 @@
 package org.neoevolution.core.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.neo4j.annotation.EndNode;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
@@ -10,9 +11,11 @@ public class Synapse extends Gene {
     private static final long serialVersionUID = -9200265923058182225L;
 
     @StartNode
+    @JsonBackReference
     private Neuron start;
 
     @EndNode
+    @JsonBackReference
     private Neuron end;
 
     private Double weight;
