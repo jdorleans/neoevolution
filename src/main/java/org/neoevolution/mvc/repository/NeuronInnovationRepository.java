@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.repository;
 
-import org.neoevolution.core.innovation.NeuronInnovation;
+import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

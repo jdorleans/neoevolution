@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.model.Genotype;
+import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.repository.GenotypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

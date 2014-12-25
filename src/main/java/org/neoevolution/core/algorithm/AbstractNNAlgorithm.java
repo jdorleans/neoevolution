@@ -1,7 +1,7 @@
 package org.neoevolution.core.algorithm;
 
-import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Population;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Population;
 import org.neoevolution.core.operator.evaluation.Evaluation;
 import org.neoevolution.core.operator.selection.Selection;
 import org.neoevolution.core.operator.speciation.Speciation;

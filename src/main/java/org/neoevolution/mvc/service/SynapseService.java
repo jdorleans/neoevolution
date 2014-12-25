@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.model.Synapse;
+import org.neoevolution.mvc.model.Synapse;
 import org.neoevolution.mvc.repository.SynapseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

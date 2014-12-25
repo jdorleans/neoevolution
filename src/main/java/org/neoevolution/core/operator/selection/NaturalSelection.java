@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.selection;
 
-import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Species;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Species;
 import org.neoevolution.core.operator.mutation.ComposedMutation;
 import org.neoevolution.core.operator.reproduction.Crossover;
 import org.neoevolution.core.operator.reproduction.Parents;

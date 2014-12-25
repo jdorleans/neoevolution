@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.innovation.AbstractInnovation;
+import org.neoevolution.mvc.model.innovation.AbstractInnovation;
 import org.neoevolution.mvc.repository.InnovationRepository;
 
 import java.util.HashMap;

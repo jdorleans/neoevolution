@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.evaluation;
 
 import org.neoevolution.core.error.ErrorFunction;
-import org.neoevolution.core.model.*;
+import org.neoevolution.mvc.model.*;
 import org.neoevolution.util.MapUtils;
 
 import java.util.List;

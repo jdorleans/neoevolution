@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Synapse;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Synapse;
 import org.neoevolution.util.Randomizer;
 
 import java.util.ArrayList;

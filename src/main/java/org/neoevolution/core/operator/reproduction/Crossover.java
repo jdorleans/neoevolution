@@ -1,10 +1,10 @@
 package org.neoevolution.core.operator.reproduction;
 
-import org.neoevolution.core.model.Gene;
-import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Neuron;
-import org.neoevolution.core.model.Synapse;
-import org.neoevolution.factory.GenotypeFactory;
+import org.neoevolution.mvc.model.Gene;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.Synapse;
+import org.neoevolution.factory.model.GenotypeFactory;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 

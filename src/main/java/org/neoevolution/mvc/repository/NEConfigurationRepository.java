@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.repository;
 
-import org.neoevolution.core.configuration.NEConfiguration;
+import org.neoevolution.mvc.model.configuration.NEConfiguration;
 import org.springframework.data.repository.NoRepositoryBean;
 
 /**

@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.speciation;
 
-import org.neoevolution.core.model.*;
-import org.neoevolution.factory.SpeciesFactory;
+import org.neoevolution.mvc.model.*;
+import org.neoevolution.factory.model.SpeciesFactory;
 import org.neoevolution.util.MapUtils;
 
 import java.util.*;

@@ -1,6 +1,6 @@
 package org.neoevolution.xor;
 
-import org.neoevolution.mvc.Evolution;
+import org.neoevolution.mvc.model.Evolution;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**

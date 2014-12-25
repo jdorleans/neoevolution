@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.selection;
 
-import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Population;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Population;
 
 import java.util.Set;
 

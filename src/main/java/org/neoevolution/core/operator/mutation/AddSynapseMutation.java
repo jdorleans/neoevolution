@@ -1,10 +1,10 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Neuron;
-import org.neoevolution.core.model.NeuronType;
-import org.neoevolution.core.model.Synapse;
-import org.neoevolution.factory.SynapseFactory;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.NeuronType;
+import org.neoevolution.mvc.model.Synapse;
+import org.neoevolution.factory.model.SynapseFactory;
 import org.neoevolution.util.Randomizer;
 
 import java.util.ArrayList;

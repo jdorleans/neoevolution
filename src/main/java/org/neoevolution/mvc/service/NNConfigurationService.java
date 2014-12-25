@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.configuration.NNConfiguration;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.repository.NNConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

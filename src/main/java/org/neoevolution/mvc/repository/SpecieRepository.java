@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.repository;
 
-import org.neoevolution.core.model.Species;
+import org.neoevolution.mvc.model.Species;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 /**

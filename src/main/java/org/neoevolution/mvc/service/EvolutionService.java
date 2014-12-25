@@ -1,10 +1,10 @@
 package org.neoevolution.mvc.service;
 
 import org.neoevolution.core.algorithm.NNAlgorithm;
-import org.neoevolution.core.configuration.NNConfiguration;
-import org.neoevolution.core.model.Population;
-import org.neoevolution.factory.NNAlgorithmFactory;
-import org.neoevolution.mvc.Evolution;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
+import org.neoevolution.mvc.model.Evolution;
+import org.neoevolution.mvc.model.Population;
+import org.neoevolution.factory.algorithm.NNAlgorithmFactory;
 import org.neoevolution.mvc.repository.EvolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 

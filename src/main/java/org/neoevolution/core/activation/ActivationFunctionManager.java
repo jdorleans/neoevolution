@@ -1,8 +1,8 @@
 package org.neoevolution.core.activation;
 
-import org.neoevolution.core.configuration.Configurable;
-import org.neoevolution.core.configuration.NNConfiguration;
-import org.neoevolution.core.model.NeuronType;
+import org.neoevolution.mvc.model.configuration.Configurable;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
+import org.neoevolution.mvc.model.NeuronType;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 

@@ -1,7 +1,7 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.model.Neuron;
-import org.neoevolution.core.model.Synapse;
+import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.Synapse;
 import org.neoevolution.mvc.repository.NeuronRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

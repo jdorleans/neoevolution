@@ -1,8 +1,8 @@
 package org.neoevolution.core.operator.selection;
 
-import org.neoevolution.core.model.Genotype;
-import org.neoevolution.core.model.Population;
-import org.neoevolution.core.model.Species;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Population;
+import org.neoevolution.mvc.model.Species;
 import org.neoevolution.core.operator.mutation.Mutation;
 import org.neoevolution.core.operator.reproduction.Reproduction;
 import org.neoevolution.util.MapUtils;

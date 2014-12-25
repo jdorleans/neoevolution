@@ -1,6 +1,6 @@
 package org.neoevolution.core.operator.mutation;
 
-import org.neoevolution.core.model.Genotype;
+import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.util.Randomizer;
 
 public abstract class AbstractMutation implements Mutation {

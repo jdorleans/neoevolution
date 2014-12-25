@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.repository;
 
-import org.neoevolution.core.innovation.SynapseInnovation;
+import org.neoevolution.mvc.model.innovation.SynapseInnovation;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

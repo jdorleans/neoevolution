@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.mvc.AbstractEntity;
+import org.neoevolution.mvc.model.AbstractEntity;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.transaction.annotation.Transactional;
 

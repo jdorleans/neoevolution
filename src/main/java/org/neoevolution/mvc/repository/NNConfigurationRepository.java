@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.repository;
 
-import org.neoevolution.core.configuration.NNConfiguration;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
