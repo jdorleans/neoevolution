@@ -18,12 +18,14 @@ public class Neuron extends Gene {
 
     private NeuronType type;
 
+    @JsonIgnore
     private transient Double impulses;
 
+    @JsonIgnore
     private transient Double activation;
 
     @JsonIgnore
-    private ActivationFunction function;
+    private transient ActivationFunction function;
 
     @Fetch
     @RelatedToVia(direction = Direction.INCOMING)

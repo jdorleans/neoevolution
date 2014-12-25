@@ -35,17 +35,21 @@ public class Population extends AbstractFitnessEntity {
         return ++generation;
     }
 
-    public void addSpecie(Species specie)
-    {
-        Genotype specieBestGenotype = specie.getBestGenotype();
-
-        if (bestGenotype == null || specieBestGenotype.getFitness() > bestGenotype.getFitness()) {
-            bestGenotype = specieBestGenotype;
-        }
-        if (bestSpecies == null || specie.getFitness() > bestSpecies.getFitness()) {
-            bestSpecies = specie;
-        }
+    public void addSpecies(Species specie) {
+        updateBestSpecies(specie);
         species.add(specie);
+    }
+
+    public void updateBestSpecies(Species species)
+    {
+        Genotype speciesGenotype = species.getBestGenotype();
+
+        if (bestGenotype == null || speciesGenotype.getFitness() > bestGenotype.getFitness()) {
+            bestGenotype = speciesGenotype;
+        }
+        if (bestSpecies == null || species.getFitness() > bestSpecies.getFitness()) {
+            bestSpecies = species;
+        }
     }
 
 

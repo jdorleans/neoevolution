@@ -38,7 +38,7 @@ public abstract class AbstractSelection<R extends Reproduction, M extends Mutati
             Species s = selection(specie, generation, totalFitness, offsprings);
 
             if (s != null) {
-                population.addSpecie(s);
+                population.addSpecies(s);
             }
         }
         return offsprings;

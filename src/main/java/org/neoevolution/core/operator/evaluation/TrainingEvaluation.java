@@ -11,11 +11,22 @@ public abstract class TrainingEvaluation implements Evaluation {
 
     public static final double MAX_FITNESS = 1d;
 
+    protected Double maxFitness;
+
     protected List<List<Double>> inputSet;
 
     protected List<List<Double>> outputSet;
 
     protected ErrorFunction errorFunction;
+
+
+    protected TrainingEvaluation() {
+        this(MAX_FITNESS);
+    }
+
+    protected TrainingEvaluation(Double maxFitness) {
+        this.maxFitness = maxFitness;
+    }
 
 
     @Override
@@ -25,7 +36,7 @@ public abstract class TrainingEvaluation implements Evaluation {
 
         for (Species species : population.getSpecies()) {
             fitness += evaluate(species);
-            updateBestSpecies(population, species);
+            population.updateBestSpecies(species);
         }
         population.setFitness(fitness);
     }
@@ -41,7 +52,7 @@ public abstract class TrainingEvaluation implements Evaluation {
             if (!genotype.isEvaluated()) {
                 evaluate(genotype);
             }
-            updateBestGenotype(species, genotype);
+            species.updateBestGenotype(genotype);
             fitness += adjustFitness(genotype, size);
         }
         species.setFitness(fitness);
@@ -71,7 +82,11 @@ public abstract class TrainingEvaluation implements Evaluation {
             errorFunction.add(outputs.get(idx), activation);
             idx++;
         }
-        return (MAX_FITNESS - errorFunction.calculate());
+        return calculateError();
+    }
+
+    protected double calculateError() {
+        return (maxFitness - errorFunction.calculate());
     }
 
     private Set<Long> stimuliInputs(Genotype genotype, List<Double> inputs)
@@ -117,24 +132,6 @@ public abstract class TrainingEvaluation implements Evaluation {
         double adjustedFitness = genotype.getFitness() / size;
         genotype.setAdjustedFitness(adjustedFitness);
         return adjustedFitness;
-    }
-
-    private void updateBestGenotype(Species species, Genotype genotype) {
-        if (genotype.getFitness() > species.getBestGenotype().getFitness()) {
-            species.setBestGenotype(genotype);
-        }
-    }
-
-    private void updateBestSpecies(Population population, Species species)
-    {
-        Genotype bestGenotype = species.getBestGenotype();
-
-        if (bestGenotype.getFitness() > population.getBestGenotype().getFitness()) {
-            population.setBestGenotype(bestGenotype);
-        }
-        if (species.getFitness() > population.getBestSpecies().getFitness()) {
-            population.setBestSpecies(species);
-        }
     }
 
 

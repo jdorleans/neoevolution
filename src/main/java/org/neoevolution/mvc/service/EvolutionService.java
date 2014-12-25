@@ -31,14 +31,14 @@ public abstract class EvolutionService
     public T evolve(C configuration)
     {
         T evolution = createEvolution(configuration);
-//        save(evolution);
+        save(evolution);
 
         NNAlgorithm algorithm = createAlgorithm(configuration);
         algorithm.evolve();
 
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
-//        save(evolution);
+        save(evolution);
         return evolution;
     }
 

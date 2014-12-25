@@ -28,12 +28,15 @@ public class Species extends AbstractFitnessEntity {
     }
 
 
-    public void addGenotype(Genotype genotype)
-    {
+    public void addGenotype(Genotype genotype) {
+        updateBestGenotype(genotype);
+        genotypes.add(genotype);
+    }
+
+    public void updateBestGenotype(Genotype genotype) {
         if (bestGenotype == null || genotype.getFitness() > bestGenotype.getFitness()) {
             bestGenotype = genotype;
         }
-        genotypes.add(genotype);
     }
 
 
