@@ -3,7 +3,6 @@ package org.neoevolution.core.activation;
 import org.fest.assertions.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
-import org.neoevolution.util.Randomizer;
 
 import java.util.List;
 
@@ -53,14 +52,14 @@ public abstract class AbstractActivationFunctionTest {
     @Test
     public void testCalculateWithMinimum() throws Exception {
         for (Double value : getMinimumValues()) {
-            Assertions.assertThat(function.calculate(value)).isEqualTo(Randomizer.round6(getMinimum()));
+            Assertions.assertThat(function.calculate(value)).isEqualTo(getMinimum());
         }
     }
 
     @Test
     public void testCalculateWithMaximum() throws Exception {
         for (Double value : getMaximumValues()) {
-            Assertions.assertThat(function.calculate(value)).isEqualTo(Randomizer.round6(getMaximum()));
+            Assertions.assertThat(function.calculate(value)).isEqualTo(getMaximum());
         }
     }
 

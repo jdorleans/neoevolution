@@ -47,7 +47,7 @@ public final class Randomizer {
 
 
     public static boolean randomBoolean() {
-        return (randomBoolean(0.5));
+        return randomBoolean(0.5);
     }
 
     public static boolean randomBoolean(double value) {
@@ -56,47 +56,33 @@ public final class Randomizer {
 
 
     public static double random() {
-        return round6(current().nextDouble());
+        return current().nextDouble();
     }
 
     public static double randomInclusive() {
         double value = random();
-        return round6((randomBoolean() ? 1-value : value));
+        return (randomBoolean() ? 1-value : value);
     }
 
     public static double random(double value) {
-        return round6(current().nextDouble(value));
+        return current().nextDouble(value);
     }
 
     public static double randomInclusive(double value) {
-        return round6((value * randomInclusive()));
+        return (value * randomInclusive());
     }
 
     public static double random(double min, double max) {
-        return round6(current().nextDouble(min, max));
+        return current().nextDouble(min, max);
     }
 
     public static double randomInclusive(double min, double max) {
-        return round6(min + randomInclusive(max-min));
+        return (min + randomInclusive(max-min));
     }
 
 
     public static <T> T random(T a, T b) {
         return (randomBoolean() ? a : b);
-    }
-
-    public static double round6(double value) {
-        return round(value, 6);
-    }
-
-    public static double round(double value, int places)
-    {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        long factor = (long) Math.pow(10, places);
-        long v = (long) (value * factor);
-        return ((double) v / factor);
     }
 
 }
