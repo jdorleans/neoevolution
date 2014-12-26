@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.core.activation.ActivationFunction;
@@ -12,29 +12,27 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
+@JsonIgnoreProperties(value = {"impulses", "activation", "function"})
 public class Neuron extends Gene {
 
     private static final long serialVersionUID = 3943751427193605529L;
 
     private NeuronType type;
 
-    @JsonIgnore
     private transient Double impulses;
 
-    @JsonIgnore
     private transient Double activation;
 
-    @JsonIgnore
     private transient ActivationFunction function;
 
     @Fetch
     @RelatedToVia(direction = Direction.INCOMING)
-    @JsonManagedReference
+    @JsonManagedReference("neuron-inputs")
     private Set<Synapse> inputs;
 
     @Fetch
     @RelatedToVia(direction = Direction.OUTGOING)
-    @JsonManagedReference
+    @JsonManagedReference("neuron-outputs")
     private Set<Synapse> outputs;
 
 

@@ -1,5 +1,7 @@
 package org.neoevolution.mvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public abstract class AbstractFitnessEntity extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = 3287349315995923916L;
@@ -86,6 +88,7 @@ public abstract class AbstractFitnessEntity extends AbstractInnovationEntity {
         this.fitness = fitness;
     }
 
+    @JsonIgnore
     public String getKey() {
         return generation + ";" + innovation;
     }

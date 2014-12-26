@@ -28,17 +28,21 @@ public abstract class EvolutionService
     }
 
 
-    public T evolve(C configuration)
+    public T evolve(C configuration) {
+        return evolve(configuration, true);
+    }
+
+    public T evolve(C configuration, Boolean save)
     {
         T evolution = createEvolution(configuration);
-        save(evolution);
+        save(evolution, save);
 
         NNAlgorithm algorithm = createAlgorithm(configuration);
         algorithm.evolve();
 
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
-        save(evolution);
+        save(evolution, save);
         return evolution;
     }
 
@@ -52,6 +56,13 @@ public abstract class EvolutionService
         T evolution = create();
         evolution.setConfiguration(configuration);
         return evolution;
+    }
+
+
+    protected void save(T evolution, Boolean save) {
+        if (save == null || save) {
+            super.save(evolution);
+        }
     }
 
     @Override

@@ -13,12 +13,12 @@ public class Synapse extends Gene {
 
     @Fetch
     @StartNode
-    @JsonBackReference
+    @JsonBackReference("neuron-outputs")
     private Neuron start;
 
     @Fetch
     @EndNode
-    @JsonBackReference
+    @JsonBackReference("neuron-inputs")
     private Neuron end;
 
     private Double weight;

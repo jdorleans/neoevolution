@@ -8,7 +8,7 @@ public class NeuronInnovation extends AbstractInnovation {
 
     private static final long serialVersionUID = -366999622471119752L;
 
-    public static final String SEPARATOR = ":";
+    public static final String SEPARATOR = "*";
 
 
     public NeuronInnovation() {
@@ -21,7 +21,7 @@ public class NeuronInnovation extends AbstractInnovation {
 
 
     private String key(int idx) {
-        return (code + idx);
+        return idx+"";
     }
 
     public void innovate(int idx, Neuron neuron) {

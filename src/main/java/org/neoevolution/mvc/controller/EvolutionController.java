@@ -6,10 +6,7 @@ import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
 import org.neoevolution.mvc.service.EvolutionService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,23 +26,23 @@ public abstract class EvolutionController
 
 
     @RequestMapping(value = "/evolve", method = RequestMethod.POST)
-    public T evolve(@RequestBody C configuration) {
-        return service.evolve(configuration);
+    public T evolve(@RequestBody C configuration, @RequestParam(required = false) Boolean save) {
+        return service.evolve(configuration, save);
     }
 
     @RequestMapping(value = "/evolve/list", method = RequestMethod.POST)
-    public List<T> evolve(@RequestBody List<C> configurations)
+    public List<T> evolve(@RequestBody List<C> configurations, @RequestParam(required = false) Boolean save)
     {
         List<T> evolutions = new ArrayList<>(configurations.size());
 
         for (C configuration : configurations) {
-            evolutions.add(service.evolve(configuration));
+            evolutions.add(service.evolve(configuration, save));
         }
         return evolutions;
     }
 
     @RequestMapping(value = "/evolve/{runs}", method = RequestMethod.POST)
-    public void evolve(@RequestBody C configuration, @PathVariable int runs)
+    public void evolve(@RequestBody C configuration, @PathVariable int runs, @RequestParam(required = false) Boolean save)
     {
         long total = 0;
         configuration.setNeuronInnovation(null);
@@ -58,7 +55,7 @@ public abstract class EvolutionController
             config.setSynapseInnovation(new SynapseInnovation());
             long start = System.currentTimeMillis();
             System.out.println("Running: " + (i + 1));
-            service.evolve(config);
+            service.evolve(config, save);
             long end = System.currentTimeMillis() - start;
             total += end;
             System.out.println("Finished in: " + end);

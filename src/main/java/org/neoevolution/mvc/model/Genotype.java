@@ -1,5 +1,6 @@
 package org.neoevolution.mvc.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -82,26 +83,32 @@ public class Genotype extends AbstractFitnessEntity {
         synapses.add(synapse);
     }
 
+    @JsonIgnore
     public int getInputsSize() {
         return inputs.size();
     }
 
+    @JsonIgnore
     public int getOutputsSize() {
         return outputs.size();
     }
 
+    @JsonIgnore
     public int getHiddenSize() {
         return getNeuronsSize() - getInputsSize() - getOutputsSize();
     }
 
+    @JsonIgnore
     public int getNeuronsSize() {
         return neurons.size();
     }
 
+    @JsonIgnore
     public int getSynapsesSize() {
         return synapses.size();
     }
 
+    @JsonIgnore
     public int getGenesSize() {
         return getNeuronsSize() + getSynapsesSize();
     }

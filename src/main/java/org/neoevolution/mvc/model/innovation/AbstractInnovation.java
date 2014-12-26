@@ -1,5 +1,9 @@
 package org.neoevolution.mvc.model.innovation;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.neoevolution.mvc.DynamicPropertiesDeserializer;
+import org.neoevolution.mvc.DynamicPropertiesSerializer;
 import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.model.Gene;
 import org.neoevolution.mvc.model.Neuron;
@@ -16,6 +20,8 @@ public abstract class AbstractInnovation extends AbstractEntity {
 
     protected Long configId;
 
+    @JsonSerialize(using = DynamicPropertiesSerializer.class)
+    @JsonDeserialize(using = DynamicPropertiesDeserializer.class)
     protected DynamicProperties innovations;
 
 
