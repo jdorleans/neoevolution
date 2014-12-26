@@ -1,6 +1,7 @@
 package org.neoevolution.mvc.model;
 
 import org.neoevolution.util.MapUtils;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
@@ -11,9 +12,11 @@ public class Species extends AbstractFitnessEntity {
 
     private static final long serialVersionUID = -2774570149581847246L;
 
+    @Fetch
     @RelatedTo(type="BEST")
     private Genotype bestGenotype;
 
+    @Fetch
     @RelatedTo(type="GENOTYPE")
     private Set<Genotype> genotypes;
 

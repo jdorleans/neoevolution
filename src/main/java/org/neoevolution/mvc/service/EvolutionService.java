@@ -1,10 +1,10 @@
 package org.neoevolution.mvc.service;
 
 import org.neoevolution.core.algorithm.NNAlgorithm;
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
+import org.neoevolution.factory.algorithm.NNAlgorithmFactory;
 import org.neoevolution.mvc.model.Evolution;
 import org.neoevolution.mvc.model.Population;
-import org.neoevolution.factory.algorithm.NNAlgorithmFactory;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.repository.EvolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -68,6 +68,5 @@ public abstract class EvolutionService
     protected abstract T create();
 
     protected abstract <F extends NNAlgorithmFactory> F createFactory();
-
 
 }

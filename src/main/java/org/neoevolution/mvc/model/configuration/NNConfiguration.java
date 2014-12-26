@@ -1,9 +1,10 @@
 package org.neoevolution.mvc.model.configuration;
 
 import org.neoevolution.core.activation.ActivationFunctionType;
+import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
-import org.neoevolution.mvc.model.AbstractEntity;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 /**
@@ -20,9 +21,11 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected Long genotypeInnovation;
 
+    @Fetch
     @RelatedTo(type="NI")
     protected NeuronInnovation neuronInnovation;
 
+    @Fetch
     @RelatedTo(type="SI")
     protected SynapseInnovation synapseInnovation;
 
@@ -66,6 +69,12 @@ public abstract class NNConfiguration extends AbstractEntity {
         synapseInnovation = new SynapseInnovation();
     }
 
+    public Integer getMaxSpeciesSize() {
+        if (populationSize != null && speciesSizeRate != null) {
+            return Math.max(1, (int) (populationSize * speciesSizeRate));
+        }
+        return null;
+    }
 
     public Long nextPopulationInnovation() {
         return ++populationInnovation;
@@ -119,10 +128,6 @@ public abstract class NNConfiguration extends AbstractEntity {
     }
     public void setPopulationSize(Integer populationSize) {
         this.populationSize = populationSize;
-    }
-
-    public Integer getMaxSpeciesSize() {
-        return Math.max(1, (int) (populationSize * speciesSizeRate));
     }
 
     public Integer getInputSize() {

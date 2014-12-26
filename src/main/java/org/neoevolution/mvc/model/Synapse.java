@@ -2,6 +2,7 @@ package org.neoevolution.mvc.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.data.neo4j.annotation.EndNode;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;
 import org.springframework.data.neo4j.annotation.StartNode;
 
@@ -10,10 +11,12 @@ public class Synapse extends Gene {
 
     private static final long serialVersionUID = -9200265923058182225L;
 
+    @Fetch
     @StartNode
     @JsonBackReference
     private Neuron start;
 
+    @Fetch
     @EndNode
     @JsonBackReference
     private Neuron end;

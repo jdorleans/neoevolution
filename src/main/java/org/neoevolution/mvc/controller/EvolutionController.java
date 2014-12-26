@@ -1,31 +1,47 @@
 package org.neoevolution.mvc.controller;
 
 import org.apache.commons.lang3.SerializationUtils;
+import org.neoevolution.mvc.model.Evolution;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
-import org.neoevolution.mvc.model.Evolution;
 import org.neoevolution.mvc.service.EvolutionService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Nov 27 2014
  */
-public abstract class EvolutionController<S extends EvolutionService<?, C, ?>, C extends NNConfiguration> {
+public abstract class EvolutionController
+        <T extends Evolution<C>, S extends EvolutionService<T, C, ?>, C extends NNConfiguration>
+        extends AbstractController<T, S> {
 
-    private S service;
 
-    public EvolutionController(S service) {
-        this.service = service;
+    protected EvolutionController(S service) {
+        super(service);
     }
 
+
     @RequestMapping(value = "/evolve", method = RequestMethod.POST)
-    public Evolution<C> evolve(@RequestBody C configuration) {
+    public T evolve(@RequestBody C configuration) {
         return service.evolve(configuration);
+    }
+
+    @RequestMapping(value = "/evolve/list", method = RequestMethod.POST)
+    public List<T> evolve(@RequestBody List<C> configurations)
+    {
+        List<T> evolutions = new ArrayList<>(configurations.size());
+
+        for (C configuration : configurations) {
+            evolutions.add(service.evolve(configuration));
+        }
+        return evolutions;
     }
 
     @RequestMapping(value = "/evolve/{runs}", method = RequestMethod.POST)

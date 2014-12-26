@@ -1,6 +1,7 @@
 package org.neoevolution.mvc.model;
 
 import org.neoevolution.util.MapUtils;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 import org.springframework.data.neo4j.annotation.RelatedToVia;
@@ -17,15 +18,19 @@ public class Genotype extends AbstractFitnessEntity {
 
     private Double adjustedFitness;
 
+    @Fetch
     @RelatedTo(type="INPUT")
     private Set<Neuron> inputs;
 
+    @Fetch
     @RelatedTo(type="OUTPUT")
     private Set<Neuron> outputs;
 
+    @Fetch
     @RelatedTo(type="NEURON")
     private Set<Neuron> neurons;
 
+    @Fetch
     @RelatedToVia(type="SYNAPSE")
     private Set<Synapse> synapses;
 

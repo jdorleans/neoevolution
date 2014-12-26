@@ -2,6 +2,7 @@ package org.neoevolution.mvc.model;
 
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
+import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 /**
@@ -12,16 +13,18 @@ public abstract class Evolution<C extends NNConfiguration> extends AbstractEntit
 
     private static final long serialVersionUID = 3480233611246056557L;
 
+    @Fetch
     @RelatedTo(type="EVOLVES")
-    private Population population;
+    protected Population population;
 
+    @Fetch
     @RelatedTo(type="CONFIGURES", direction = Direction.INCOMING)
-    private C configuration;
+    protected C configuration;
 
-    private Boolean finished;
+    protected Boolean finished;
 
 
-    public Evolution() {
+    protected Evolution() {
         finished = false;
     }
 

@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/xor")
-public class XOREvolutionController extends EvolutionController<XOREvolutionService, XORConfiguration> {
+public class XOREvolutionController extends EvolutionController
+        <XOREvolution, XOREvolutionService, XORConfiguration> {
 
     @Autowired
     public XOREvolutionController(XOREvolutionService service) {
