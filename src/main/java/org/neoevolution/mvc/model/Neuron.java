@@ -1,9 +1,10 @@
 package org.neoevolution.mvc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.core.activation.ActivationFunction;
+import org.neoevolution.mvc.json.InnovationArraySerializer;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedToVia;
@@ -27,12 +28,12 @@ public class Neuron extends Gene {
 
     @Fetch
     @RelatedToVia(direction = Direction.INCOMING)
-    @JsonManagedReference("neuron-inputs")
+    @JsonSerialize(using = InnovationArraySerializer.class)
     private Set<Synapse> inputs;
 
     @Fetch
     @RelatedToVia(direction = Direction.OUTGOING)
-    @JsonManagedReference("neuron-outputs")
+    @JsonSerialize(using = InnovationArraySerializer.class)
     private Set<Synapse> outputs;
 
 

@@ -5,7 +5,7 @@ import org.neoevolution.mvc.model.Species;
 import org.neoevolution.core.operator.mutation.ComposedMutation;
 import org.neoevolution.core.operator.reproduction.Crossover;
 import org.neoevolution.core.operator.reproduction.Parents;
-import org.neoevolution.util.GenotypeUtils;
+import org.neoevolution.util.FitnessUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 
@@ -32,7 +32,7 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         int births = calculateBirths(actualSize, newSize);
         int survivals = newSize - births;
 
-        List<Genotype> bestFirst = GenotypeUtils.sortByFitness(specie.getGenotypes(), true);
+        List<Genotype> bestFirst = FitnessUtils.sortByFitness(specie.getGenotypes(), true);
         reproduce(generation, births, bestFirst, offsprings);
 
         if (survivals > 0) {

@@ -47,13 +47,13 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public T save(@RequestBody T entity) {
-        service.save(entity);
+        service.save(entity, true);
         return entity;
     }
 
     @RequestMapping(value = "/save/list", method = RequestMethod.POST)
     public List<T> save(@RequestBody List<T> entities) {
-        service.save(entities);
+        service.save(entities, true);
         return entities;
     }
 

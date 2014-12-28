@@ -78,6 +78,13 @@ public abstract class NNConfiguration extends AbstractEntity {
         return null;
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof NNConfiguration && super.equals(obj));
+    }
+
+
     public Long nextPopulationInnovation() {
         return ++populationInnovation;
     }

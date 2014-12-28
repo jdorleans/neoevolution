@@ -28,9 +28,9 @@ public abstract class NNConfigurationService<T extends NNConfiguration, R extend
 
 
     @Override
-    protected void beforeSave(T entity) {
-        neuronInnovationService.save(entity.getNeuronInnovation());
-        synapseInnovationService.save(entity.getSynapseInnovation());
+    protected void beforeSave(T entity, boolean updateReference) {
+        neuronInnovationService.save(entity.getNeuronInnovation(), updateReference);
+        synapseInnovationService.save(entity.getSynapseInnovation(), updateReference);
     }
 
 }

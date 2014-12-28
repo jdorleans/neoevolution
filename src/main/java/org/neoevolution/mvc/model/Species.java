@@ -1,5 +1,7 @@
 package org.neoevolution.mvc.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.neoevolution.mvc.json.InnovationSerializer;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -14,6 +16,7 @@ public class Species extends AbstractFitnessEntity {
 
     @Fetch
     @RelatedTo(type="BEST")
+    @JsonSerialize(using = InnovationSerializer.class)
     private Genotype bestGenotype;
 
     @Fetch

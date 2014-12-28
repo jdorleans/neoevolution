@@ -1,7 +1,5 @@
 package org.neoevolution.mvc.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public abstract class AbstractFitnessEntity extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = 3287349315995923916L;
@@ -29,29 +27,19 @@ public abstract class AbstractFitnessEntity extends AbstractInnovationEntity {
     @Override
     public boolean equals(Object obj)
     {
-        boolean equals = false;
-
-        if (this == obj) {
-            equals = true;
+        if (generation != null && obj instanceof AbstractFitnessEntity) {
+            AbstractFitnessEntity entity = (AbstractFitnessEntity) obj;
+            return super.equals(obj) && generation.equals(entity.getGeneration());
         }
-        else if (innovation != null && generation != null)
-        {
-            if (obj instanceof AbstractFitnessEntity) {
-                AbstractFitnessEntity entity = (AbstractFitnessEntity) obj;
-                equals = getKey().equals(entity.getKey());
-            }
-        }
-        return equals;
+        return false;
     }
 
     @Override
-    public int hashCode()
-    {
-        if (innovation == null || generation == null) {
-            return System.identityHashCode(this);
-        } else {
-            return getKey().hashCode();
-        }
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (generation != null ? generation.hashCode() : 0);
+        result = 31 * result + (fitness != null ? fitness.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -64,10 +52,15 @@ public abstract class AbstractFitnessEntity extends AbstractInnovationEntity {
         }
         else if (entity instanceof AbstractFitnessEntity)
         {
-            AbstractFitnessEntity gene = (AbstractFitnessEntity) entity;
+            AbstractFitnessEntity e = (AbstractFitnessEntity) entity;
 
-            if (gene.getKey() != null) {
-                compare = getKey().compareTo(gene.getKey());
+            if (e.getGeneration() != null)
+            {
+                compare = generation.compareTo(e.getGeneration());
+
+                if (compare == 0) {
+                    compare = super.compareTo(entity);
+                }
             }
         }
         return compare;
@@ -88,8 +81,4 @@ public abstract class AbstractFitnessEntity extends AbstractInnovationEntity {
         this.fitness = fitness;
     }
 
-    @JsonIgnore
-    public String getKey() {
-        return generation + ";" + innovation;
-    }
 }

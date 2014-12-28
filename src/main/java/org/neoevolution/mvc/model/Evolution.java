@@ -29,6 +29,12 @@ public abstract class Evolution<C extends NNConfiguration> extends AbstractEntit
     }
 
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Evolution && super.equals(obj));
+    }
+    
+
     public Population getPopulation() {
         return population;
     }

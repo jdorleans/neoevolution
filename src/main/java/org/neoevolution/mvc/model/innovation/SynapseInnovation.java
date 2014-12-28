@@ -18,4 +18,10 @@ public class SynapseInnovation extends AbstractInnovation {
         super(code);
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof SynapseInnovation && super.equals(obj));
+    }
+
 }

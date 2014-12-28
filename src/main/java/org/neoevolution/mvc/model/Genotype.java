@@ -1,6 +1,8 @@
 package org.neoevolution.mvc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.neoevolution.mvc.json.InnovationArraySerializer;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
@@ -21,10 +23,12 @@ public class Genotype extends AbstractFitnessEntity {
 
     @Fetch
     @RelatedTo(type="INPUT")
+    @JsonSerialize(using = InnovationArraySerializer.class)
     private Set<Neuron> inputs;
 
     @Fetch
     @RelatedTo(type="OUTPUT")
+    @JsonSerialize(using = InnovationArraySerializer.class)
     private Set<Neuron> outputs;
 
     @Fetch

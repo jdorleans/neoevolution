@@ -28,4 +28,10 @@ public class NeuronInnovation extends AbstractInnovation {
         neuron.setInnovation(next(key(idx)));
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof NeuronInnovation && super.equals(obj));
+    }
+
 }

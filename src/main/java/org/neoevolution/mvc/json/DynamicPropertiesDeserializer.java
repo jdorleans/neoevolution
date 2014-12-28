@@ -1,4 +1,4 @@
-package org.neoevolution.mvc;
+package org.neoevolution.mvc.json;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -10,6 +10,10 @@ import org.springframework.data.neo4j.fieldaccess.DynamicPropertiesContainer;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since Dec 26 2014
+ */
 public class DynamicPropertiesDeserializer extends JsonDeserializer<DynamicProperties> {
 
     @Override

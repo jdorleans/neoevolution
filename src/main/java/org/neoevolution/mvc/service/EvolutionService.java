@@ -66,14 +66,14 @@ public abstract class EvolutionService
     }
 
     @Override
-    protected void beforeSave(T entity)
+    protected void beforeSave(T entity, boolean updateReference)
     {
         Population population = entity.getPopulation();
 
         if (population != null) {
-            populationService.save(population);
+            populationService.save(population, updateReference);
         }
-        configurationService.save(entity.getConfiguration());
+        configurationService.save(entity.getConfiguration(), updateReference);
     }
 
     protected abstract T create();

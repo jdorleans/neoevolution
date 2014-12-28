@@ -25,16 +25,23 @@ public abstract class AbstractInnovationEntity extends AbstractEntity {
         if (this == obj) {
             equals = true;
         }
-        else if (innovation != null && obj instanceof AbstractInnovationEntity) {
+        else if (innovation != null && obj instanceof AbstractInnovationEntity)
+        {
             AbstractInnovationEntity entity = (AbstractInnovationEntity) obj;
             equals = innovation.equals(entity.getInnovation());
+
+            if (id != null || entity.getId() != null) {
+                equals &= super.equals(obj);
+            }
         }
         return equals;
     }
 
     @Override
     public int hashCode() {
-        return (innovation == null ? System.identityHashCode(this) : innovation.hashCode());
+        int result = super.hashCode();
+        result = 31 * result + (innovation != null ? innovation.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -47,10 +54,10 @@ public abstract class AbstractInnovationEntity extends AbstractEntity {
         }
         else if (entity instanceof AbstractInnovationEntity)
         {
-            AbstractInnovationEntity gene = (AbstractInnovationEntity) entity;
+            AbstractInnovationEntity e = (AbstractInnovationEntity) entity;
 
-            if (gene.getInnovation() != null) {
-                compare = innovation.compareTo(gene.getInnovation());
+            if (e.getInnovation() != null) {
+                compare = innovation.compareTo(e.getInnovation());
             }
         }
         return compare;

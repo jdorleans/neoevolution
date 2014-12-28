@@ -2,8 +2,8 @@ package org.neoevolution.mvc.model.innovation;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.neoevolution.mvc.DynamicPropertiesDeserializer;
-import org.neoevolution.mvc.DynamicPropertiesSerializer;
+import org.neoevolution.mvc.json.DynamicPropertiesDeserializer;
+import org.neoevolution.mvc.json.DynamicPropertiesSerializer;
 import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.model.Gene;
 import org.neoevolution.mvc.model.Neuron;
@@ -75,6 +75,12 @@ public abstract class AbstractInnovation extends AbstractEntity {
 
     protected void put(String key, Long value) {
         innovations.setProperty(key, value);
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof AbstractInnovation && super.equals(obj));
     }
 
 

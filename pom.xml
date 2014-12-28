@@ -16,7 +16,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.1.8.RELEASE</version>
+        <version>1.2.0.RELEASE</version>
     </parent>
 
     <dependencies>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-neo4j</artifactId>
-            <version>3.2.0.RELEASE</version>
+            <version>3.2.1.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -52,7 +52,13 @@
             <version>2.0M10</version>
         </dependency>
 
-        <!-- Spring AspectJ has these as dependencies but fails to declare them -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <!-- Workaround - Spring AspectJ has these as dependencies but fails to declare them -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
@@ -64,10 +70,15 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Workaround - Importing dependencies for spring 1.2.0-RELEASE -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.cache</groupId>
+            <artifactId>cache-api</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

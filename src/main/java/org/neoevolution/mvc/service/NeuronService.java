@@ -23,7 +23,7 @@ public class NeuronService extends AbstractService<Neuron, NeuronRepository> {
 
     @Override
     @Transactional
-    public void save(Neuron entity) {
+    public void save(Neuron entity, boolean updateReference) {
         Set<Synapse> inputs = entity.getInputs();
         Set<Synapse> outputs = entity.getOutputs();
         entity.setInputs(null);

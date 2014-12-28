@@ -1,6 +1,7 @@
 package org.neoevolution.mvc.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.neoevolution.mvc.json.InnovationSerializer;
 import org.springframework.data.neo4j.annotation.EndNode;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.RelationshipEntity;
@@ -13,12 +14,12 @@ public class Synapse extends Gene {
 
     @Fetch
     @StartNode
-    @JsonBackReference("neuron-outputs")
+    @JsonSerialize(using = InnovationSerializer.class)
     private Neuron start;
 
     @Fetch
     @EndNode
-    @JsonBackReference("neuron-inputs")
+    @JsonSerialize(using = InnovationSerializer.class)
     private Neuron end;
 
     private Double weight;
