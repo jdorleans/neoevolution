@@ -2,7 +2,7 @@ package org.neoevolution.mvc.service;
 
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Species;
-import org.neoevolution.mvc.repository.SpecieRepository;
+import org.neoevolution.mvc.repository.SpeciesRepository;
 import org.neoevolution.util.InnovationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,14 @@ import java.util.Set;
  * @since 24/10/14.
  */
 @Service
-public class SpecieService extends AbstractService<Species, SpecieRepository> {
+public class SpeciesService extends AbstractFitnessEntityService<Species, SpeciesRepository> {
 
     @Autowired
     private GenotypeService genotypeService;
 
 
     @Autowired
-    public SpecieService(SpecieRepository repository) {
+    public SpeciesService(SpeciesRepository repository) {
         super(repository);
     }
 

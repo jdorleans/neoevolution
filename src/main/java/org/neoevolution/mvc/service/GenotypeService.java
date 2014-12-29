@@ -16,7 +16,7 @@ import java.util.Set;
  * @since 24/10/14.
  */
 @Service
-public class GenotypeService extends AbstractService<Genotype, GenotypeRepository> {
+public class GenotypeService extends AbstractFitnessEntityService<Genotype, GenotypeRepository> {
 
     @Autowired
     private NeuronService neuronService;

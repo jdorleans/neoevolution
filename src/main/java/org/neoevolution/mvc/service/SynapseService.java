@@ -13,7 +13,7 @@ import java.util.Set;
  * @since 24/10/14.
  */
 @Service
-public class SynapseService extends AbstractService<Synapse, SynapseRepository> {
+public class SynapseService extends AbstractInnovationEntityService<Synapse, SynapseRepository> {
 
     @Autowired
     private NeuronService neuronService;

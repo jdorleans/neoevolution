@@ -15,10 +15,10 @@ import java.util.Set;
  * @since 24/10/14.
  */
 @Service
-public class PopulationService extends AbstractService<Population, PopulationRepository> {
+public class PopulationService extends AbstractFitnessEntityService<Population, PopulationRepository> {
 
     @Autowired
-    private SpecieService specieService;
+    private SpeciesService speciesService;
 
 
     @Autowired
@@ -31,7 +31,7 @@ public class PopulationService extends AbstractService<Population, PopulationRep
     protected void beforeSave(Population entity, boolean updateReference)
     {
         Set<Species> species = entity.getSpecies();
-        specieService.save(species, updateReference);
+        speciesService.save(species, updateReference);
 
         if (updateReference) {
             updateBestSpecies(entity, species);

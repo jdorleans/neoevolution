@@ -14,7 +14,7 @@ import java.util.Set;
  * @since 24/10/14.
  */
 @Service
-public class NeuronService extends AbstractService<Neuron, NeuronRepository> {
+public class NeuronService extends AbstractInnovationEntityService<Neuron, NeuronRepository> {
 
     @Autowired
     public NeuronService(NeuronRepository repository) {
