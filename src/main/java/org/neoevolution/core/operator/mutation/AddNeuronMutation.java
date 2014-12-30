@@ -1,15 +1,14 @@
 package org.neoevolution.core.operator.mutation;
 
+import org.neoevolution.factory.model.NeuronFactory;
+import org.neoevolution.factory.model.SynapseFactory;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.Synapse;
-import org.neoevolution.factory.model.NeuronFactory;
-import org.neoevolution.factory.model.SynapseFactory;
 import org.neoevolution.util.Randomizer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class AddNeuronMutation extends AbstractMutation {
 
@@ -47,26 +46,31 @@ public class AddNeuronMutation extends AbstractMutation {
     @Override
     protected void mutation(Genotype genotype)
     {
-        Synapse synapse = selectSynapse(genotype.getSynapses());
-        synapse.setEnabled(false);
-        Double weight = synapse.getWeight();
+        Synapse synapse = selectSynapse(genotype);
 
-        Neuron start = synapse.getStart();
-        Neuron end = synapse.getEnd();
-        Neuron neuron = createNeuron(genotype, start, end);
-        createSynapse(start, neuron, 1d, genotype);
-        createSynapse(neuron, end, weight, genotype);
+        if (synapse != null)
+        {
+            synapse.setEnabled(false);
+            Double weight = synapse.getWeight();
+            Neuron start = synapse.getStart();
+            Neuron end = synapse.getEnd();
+            Neuron neuron = createNeuron(genotype, start, end);
+            createSynapse(start, neuron, 1d, genotype);
+            createSynapse(neuron, end, weight, genotype);
+        }
     }
 
-    private Synapse selectSynapse(Set<Synapse> synapses)
+    private Synapse selectSynapse(Genotype genotype)
     {
         Synapse synapse;
+        List<Synapse> synapses = new ArrayList<>(genotype.getSynapses());
         int size = synapses.size();
-        List<Synapse> synaps = new ArrayList<>(synapses);
+        int trails = Math.min(size, genotype.getNeuronsSize());
 
         do {
-            synapse = synaps.get(Randomizer.randomInt(size));
-        } while (!synapse.isEnabled());
+            trails--;
+            synapse = synapses.get(Randomizer.randomInt(size));
+        } while (!synapse.isEnabled() && trails > 0);
 
         return synapse;
     }
