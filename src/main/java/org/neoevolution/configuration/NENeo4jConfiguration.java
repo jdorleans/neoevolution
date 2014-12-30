@@ -2,33 +2,48 @@ package org.neoevolution.configuration;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.rest.SpringRestGraphDatabase;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.util.Arrays;
+import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Configuration
-@EnableNeo4jRepositories({"org.neoevolution.mvc.repository"})
+@PropertySource("classpath:neoevolution.properties")
+@EnableNeo4jRepositories("org.neoevolution.mvc.repository")
 @EnableTransactionManagement
-public abstract class NENeo4jConfiguration extends Neo4jConfiguration {
+public class NENeo4jConfiguration extends Neo4jConfiguration {
 
-    protected static final String MODEL_PACKAGE = "org.neoevolution.mvc.model";
+    private static final String MODEL_PACKAGE = "org.neoevolution.mvc.model";
 
-    protected void configurePackages(String... basePackages) {
-        String[] packages = Arrays.copyOf(basePackages, basePackages.length+1);
-        packages[packages.length-1] = MODEL_PACKAGE;
-        setBasePackage(packages);
+    @Value("${neoevolution.neo4j.rest}")
+    private Boolean isRest;
+
+    @Value("${neoevolution.neo4j.address}")
+    private String address;
+
+    @Value("#{'${neoevolution.neo4j.packages}'.replaceAll('\\s*', '').split(',')}")
+    private List<String> packages;
+
+
+    @PostConstruct
+    private void init() {
+        configurePackages();
+        configureDatabase();
     }
 
-    protected void configureDatabase(String address) {
-        configureDatabase(address, false);
+    private void configurePackages() {
+        packages.add(MODEL_PACKAGE);
+        setBasePackage(packages.toArray(new String[packages.size()]));
     }
 
-    protected void configureDatabase(String address, boolean isRest)
+    private void configureDatabase()
     {
         if (isRest) {
             setGraphDatabaseService(new SpringRestGraphDatabase(address));
