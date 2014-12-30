@@ -1,12 +1,15 @@
 package org.neoevolution.core.operator.selection;
 
+import org.neoevolution.core.operator.mutation.Mutation;
+import org.neoevolution.core.operator.reproduction.Parents;
+import org.neoevolution.core.operator.reproduction.Reproduction;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
 import org.neoevolution.mvc.model.Species;
-import org.neoevolution.core.operator.mutation.Mutation;
-import org.neoevolution.core.operator.reproduction.Reproduction;
 import org.neoevolution.util.MapUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,9 +32,12 @@ public abstract class AbstractSelection<R extends Reproduction, M extends Mutati
     {
         Long generation = population.getGeneration();
         Double totalFitness = population.getFitness();
-        Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
         Set<Species> species = population.getSpecies();
         reset(population);
+
+        int totalSize = 0;
+        List<Genotype> bestGenotypes = new ArrayList<>(species.size());
+        Set<Genotype> offsprings = MapUtils.createHashSet(populationSize);
 
         for (Species specie : species)
         {
@@ -39,19 +45,40 @@ public abstract class AbstractSelection<R extends Reproduction, M extends Mutati
 
             if (s != null) {
                 population.addSpecies(s);
+                bestGenotypes.add(s.getBestGenotype());
+                totalSize += specie.getGenotypes().size();
             }
         }
+        totalSize += offsprings.size();
+        createMissingOffsprings(generation, totalSize, bestGenotypes, offsprings);
         return offsprings;
     }
 
     protected void reset(Population population) {
         int size = maxSpeciesSize * 2;
-        population.setSpecies(MapUtils.<Species>createLinkedHashSet(size));
+        population.setSpecies(MapUtils.<Species>createHashSet(size));
         population.setBestSpecies(null);
         population.setBestGenotype(null);
     }
 
     protected abstract Species selection(Species specie, Long generation, Double totalFitness, Set<Genotype> offsprings);
+
+    protected void reproduce(Long generation, int births, List<Genotype> genotypes, Set<Genotype> offsprings)
+    {
+        for (int i = 0; i < births; i++) {
+            Parents parents = selectParents(genotypes);
+            Genotype offspring = reproduction.reproduce(parents, generation);
+            mutation.mutate(offspring);
+            offsprings.add(offspring);
+        }
+    }
+
+    private void createMissingOffsprings(long generation, int totalSize, List<Genotype> genotypes, Set<Genotype> offsprings) {
+        int births = populationSize - totalSize;
+        reproduce(generation, births, genotypes, offsprings);
+    }
+
+    protected abstract Parents selectParents(List<Genotype> genotypes);
 
 
     public int getPopulationSize() {

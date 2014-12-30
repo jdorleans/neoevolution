@@ -30,7 +30,7 @@ public class Species extends AbstractFitnessEntity {
 
     public Species(Long innovation, Long generation, Integer size) {
         super(innovation, generation);
-        this.genotypes = MapUtils.createLinkedHashSet(size);
+        this.genotypes = MapUtils.createHashSet(size);
     }
 
 

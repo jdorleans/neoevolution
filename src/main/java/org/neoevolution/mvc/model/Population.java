@@ -35,7 +35,7 @@ public class Population extends AbstractFitnessEntity {
 
     public Population(Long innovation, Integer maxSpecies) {
         super(innovation, 1l);
-        this.species = MapUtils.createLinkedHashSet(maxSpecies*2);
+        this.species = MapUtils.createHashSet(maxSpecies*2);
     }
 
 

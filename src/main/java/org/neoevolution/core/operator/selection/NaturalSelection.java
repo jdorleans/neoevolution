@@ -1,10 +1,10 @@
 package org.neoevolution.core.operator.selection;
 
-import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.mvc.model.Species;
 import org.neoevolution.core.operator.mutation.ComposedMutation;
 import org.neoevolution.core.operator.reproduction.Crossover;
 import org.neoevolution.core.operator.reproduction.Parents;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Species;
 import org.neoevolution.util.FitnessUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
@@ -42,22 +42,12 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         return species;
     }
 
-    private void reproduce(Long generation, int births, List<Genotype> bestFirst, Set<Genotype> offsprings)
-    {
-        for (int i = 0; i < births; i++) {
-            Parents parents = selectParents(bestFirst);
-            Genotype offspring = reproduction.reproduce(parents, generation);
-            mutation.mutate(offspring);
-            offsprings.add(offspring);
-        }
-    }
-
     private void kill(int survivals, int actualSize, List<Genotype> bestFirst, Species species)
     {
         if (survivals < actualSize)
         {
             species.setBestGenotype(null);
-            species.setGenotypes(MapUtils.<Genotype>createLinkedHashSet(survivals));
+            species.setGenotypes(MapUtils.<Genotype>createHashSet(survivals));
 
             for (int i = 0; i < survivals; i++) {
                 species.addGenotype(bestFirst.get(i));
@@ -65,28 +55,13 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         }
     }
 
-    private Parents selectParents(List<Genotype> genotypes)
+    protected Parents selectParents(List<Genotype> genotypes)
     {
-        int pos = 0;
         int size = calculateParents(genotypes.size());
         int pos1 = Randomizer.randomInt(size);
         int pos2 = Randomizer.randomInt(size);
-        Genotype g1 = null;
-        Genotype g2 = null;
-
-        for (Genotype genotype : genotypes)
-        {
-            if (pos == pos1) {
-                g1 = genotype;
-            }
-            if (pos == pos2) {
-                g2 = genotype;
-            }
-            if (g1 != null && g2 != null) {
-                break;
-            }
-            pos++;
-        }
+        Genotype g1 = genotypes.get(pos1);
+        Genotype g2 = genotypes.get(pos2);
         return new Parents(g1, g2);
     }
 
