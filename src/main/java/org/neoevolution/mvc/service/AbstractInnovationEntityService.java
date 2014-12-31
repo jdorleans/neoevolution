@@ -3,6 +3,8 @@ package org.neoevolution.mvc.service;
 import org.neoevolution.mvc.model.AbstractInnovationEntity;
 import org.neoevolution.mvc.repository.InnovationEntityRepository;
 
+import java.util.List;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Dez 28 2014
@@ -13,6 +15,10 @@ public abstract class AbstractInnovationEntityService
 
     protected AbstractInnovationEntityService(R repository) {
         super(repository);
+    }
+
+    public List<T> findByInnovation(Long innovation) {
+        return repository.findByInnovation(innovation);
     }
 
 }

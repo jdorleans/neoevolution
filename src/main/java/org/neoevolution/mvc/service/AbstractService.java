@@ -17,6 +17,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
     @Autowired
     protected Neo4jTemplate template;
 
+
     protected AbstractService(R repository) {
         this.repository = repository;
     }
@@ -37,6 +38,10 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
 
     public T find(T entity) {
         return (entity != null ? repository.findOne(entity.getId()) : null);
+    }
+
+    public T findByProperty(String property, Object value) {
+        return repository.findBySchemaPropertyValue(property, value);
     }
 
     // FIXME

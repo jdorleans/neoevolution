@@ -16,23 +16,10 @@ import java.util.Set;
 public class SynapseService extends AbstractInnovationEntityService<Synapse, SynapseRepository> {
 
     @Autowired
-    private NeuronService neuronService;
-
-
-    @Autowired
     public SynapseService(SynapseRepository repository) {
         super(repository);
     }
 
-
-    @Override
-    protected void beforeSave(Synapse entity, boolean updateReference) {
-//        if (updateReference) {
-//            FIXME - FIND IS CREATING A NEW INSTANCE
-//            entity.setStart(neuronService.find(entity.getStart()));
-//            entity.setEnd(neuronService.find(entity.getEnd()));
-//        }
-    }
 
     @Override
     protected void afterSave(Synapse entity, boolean updateReference) {
