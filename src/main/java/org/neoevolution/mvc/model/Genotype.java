@@ -6,8 +6,8 @@ import org.neoevolution.mvc.json.InnovationArraySerializer;
 import org.neoevolution.util.MapUtils;
 import org.springframework.data.neo4j.annotation.Fetch;
 import org.springframework.data.neo4j.annotation.NodeEntity;
+import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;
-import org.springframework.data.neo4j.annotation.RelatedToVia;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -35,8 +35,9 @@ public class Genotype extends AbstractFitnessEntity {
     @RelatedTo(type="NEURON")
     private Set<Neuron> neurons;
 
-    @Fetch
-    @RelatedToVia(type="SYNAPSE")
+    // FIXME - Ordering does not work!
+    @Query("MATCH (g:Genotype)-->(n1:Neuron)-[s]-(n2:Neuron) " +
+           "WHERE id(g)={self} RETURN DISTINCT s ORDER BY id(s)")
     private Set<Synapse> synapses;
 
 

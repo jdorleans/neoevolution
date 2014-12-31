@@ -59,7 +59,7 @@ public class Synapse extends Gene {
 
     @Override
     public String toString() {
-        return start.toString() +"-["+ enabled +", w:"+ weight +"]->"+ end.toString();
+        return start.toString() +"-[i:"+ innovation +", "+ enabled +", w:"+ weight +"]->"+ end.toString();
     }
 
 

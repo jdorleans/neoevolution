@@ -6,6 +6,9 @@ import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 24/10/14.
@@ -44,10 +47,15 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
         return repository.findBySchemaPropertyValue(property, value);
     }
 
-    // FIXME
-    @Transactional
-    public Iterable<T> findAll() {
-        return repository.findAll();
+    @Transactional(readOnly = true)
+    public List<T> findAll()
+    {
+        List<T> list = new ArrayList<>();
+
+        for (T t : repository.findAll()) {
+            list.add(t);
+        }
+        return list;
     }
 
 

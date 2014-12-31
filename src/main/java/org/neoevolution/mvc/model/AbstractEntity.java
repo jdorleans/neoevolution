@@ -1,6 +1,5 @@
 package org.neoevolution.mvc.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.neo4j.annotation.GraphId;
 
 import java.io.Serializable;
@@ -10,7 +9,6 @@ public abstract class AbstractEntity implements Serializable, Comparable<Abstrac
     private static final long serialVersionUID = -5716985183796677682L;
 
     @GraphId
-    @JsonIgnore
     protected Long id;
 
 

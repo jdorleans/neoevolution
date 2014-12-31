@@ -1,10 +1,10 @@
 package org.neoevolution.core.operator.mutation;
 
+import org.neoevolution.factory.model.SynapseFactory;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.NeuronType;
 import org.neoevolution.mvc.model.Synapse;
-import org.neoevolution.factory.model.SynapseFactory;
 import org.neoevolution.util.Randomizer;
 
 import java.util.ArrayList;
@@ -129,7 +129,7 @@ public class AddSynapseMutation extends AbstractMutation {
 
     private Synapse create(Neuron start, Neuron end, Genotype genotype) {
         Synapse synapse = synapseFactory.create(start, end);
-        genotype.getSynapses().add(synapse);
+        genotype.addSynapse(synapse);
         return synapse;
     }
 

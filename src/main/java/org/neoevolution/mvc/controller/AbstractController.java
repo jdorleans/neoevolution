@@ -34,46 +34,41 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
     }
 
 
-    @RequestMapping(value = "/find/{id}")
+    @RequestMapping(value = "/{id}")
     public T find(@PathVariable Long id) {
         return service.find(id);
     }
 
-    @RequestMapping(value = "/find/all")
+    @RequestMapping
     public Iterable<T> findAll() {
         return service.findAll();
     }
 
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public T save(@RequestBody T entity) {
         service.save(entity, true);
         return entity;
     }
 
-    @RequestMapping(value = "/save/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/batch", method = RequestMethod.POST)
     public List<T> save(@RequestBody List<T> entities) {
         service.save(entities, true);
         return entities;
     }
 
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void delete(@RequestBody T entity) {
-        service.delete(entity);
-    }
-
-    @RequestMapping(value = "/delete/list", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/batch", method = RequestMethod.DELETE)
     public void delete(@RequestBody List<T> entities) {
         service.delete(entities);
     }
 
-    @RequestMapping(value = "/delete/all", method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE)
     public void deleteAll() {
         service.deleteAll();
     }
