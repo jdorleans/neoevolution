@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -26,17 +28,24 @@ public abstract class EvolutionController
 
 
     @RequestMapping(value = "/evolve", method = RequestMethod.POST)
-    public T evolve(@RequestBody C configuration, @RequestParam(required = false) Boolean save) {
-        return service.evolve(configuration, save);
+    public T evolve(@RequestBody C configuration, @RequestParam(required = false) Boolean save)
+            throws ExecutionException, InterruptedException {
+        return service.evolve(configuration, save).get();
     }
 
-    @RequestMapping(value = "/evolve/list", method = RequestMethod.POST)
+    @RequestMapping(value = "/evolve/batch", method = RequestMethod.POST)
     public List<T> evolve(@RequestBody List<C> configurations, @RequestParam(required = false) Boolean save)
+            throws ExecutionException, InterruptedException
     {
         List<T> evolutions = new ArrayList<>(configurations.size());
+        List<Future<T>> futureEvolutions = new ArrayList<>(configurations.size());
 
         for (C configuration : configurations) {
-            evolutions.add(service.evolve(configuration, save));
+            futureEvolutions.add(service.evolve(configuration, save));
+        }
+
+        for (Future<T> futureEvolution : futureEvolutions) {
+            evolutions.add(futureEvolution.get());
         }
         return evolutions;
     }

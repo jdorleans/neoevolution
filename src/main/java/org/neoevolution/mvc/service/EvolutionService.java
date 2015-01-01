@@ -7,6 +7,10 @@ import org.neoevolution.mvc.model.Population;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.repository.EvolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
+
+import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
@@ -28,11 +32,12 @@ public abstract class EvolutionService
     }
 
 
-    public T evolve(C configuration) {
+    public Future<T> evolve(C configuration) {
         return evolve(configuration, true);
     }
 
-    public T evolve(C configuration, Boolean save)
+    @Async
+    public Future<T> evolve(C configuration, Boolean save)
     {
         T evolution = createEvolution(configuration);
         save(evolution, save);
@@ -43,7 +48,7 @@ public abstract class EvolutionService
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
         save(evolution, save);
-        return evolution;
+        return new AsyncResult<>(evolution);
     }
 
     private NNAlgorithm createAlgorithm(C configuration) {
