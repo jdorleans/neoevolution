@@ -41,7 +41,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         population.setFitness(fitness);
     }
 
-    private double evaluate(Species species)
+    protected double evaluate(Species species)
     {
         double fitness = 0d;
         Set<Genotype> genotypes = species.getGenotypes();
@@ -59,7 +59,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         return fitness;
     }
 
-    private void evaluate(Genotype genotype)
+    protected void evaluate(Genotype genotype)
     {
         double fitness = 0d;
         int evaluations = inputSet.size();
@@ -71,7 +71,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         genotype.setEvaluated(true);
     }
 
-    private double evaluate(Genotype genotype, List<Double> inputs, List<Double> outputs)
+    protected double evaluate(Genotype genotype, List<Double> inputs, List<Double> outputs)
     {
         errorFunction.reset();
         Set<Long> stimulated = stimuliInputs(genotype, inputs);
@@ -89,7 +89,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         return (maxFitness - errorFunction.calculate());
     }
 
-    private Set<Long> stimuliInputs(Genotype genotype, List<Double> inputs)
+    protected Set<Long> stimuliInputs(Genotype genotype, List<Double> inputs)
     {
         int idx = 0;
         Set<Long> stimulated = MapUtils.createHashSet(genotype.getNeuronsSize());
@@ -110,7 +110,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         return stimulated;
     }
 
-    private double activate(Neuron neuron, Set<Long> stimulated)
+    protected double activate(Neuron neuron, Set<Long> stimulated)
     {
         if (!stimulated.contains(neuron.getInnovation()))
         {
@@ -128,7 +128,7 @@ public abstract class TrainingEvaluation implements Evaluation {
         return neuron.activate();
     }
 
-    private double adjustFitness(Genotype genotype, int size) {
+    protected double adjustFitness(Genotype genotype, int size) {
         double adjustedFitness = genotype.getFitness() / size;
         genotype.setAdjustedFitness(adjustedFitness);
         return adjustedFitness;

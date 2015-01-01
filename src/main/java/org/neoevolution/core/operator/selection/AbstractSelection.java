@@ -73,7 +73,7 @@ public abstract class AbstractSelection<R extends Reproduction, M extends Mutati
         }
     }
 
-    private void createMissingOffsprings(long generation, int totalSize, List<Genotype> genotypes, Set<Genotype> offsprings) {
+    protected void createMissingOffsprings(long generation, int totalSize, List<Genotype> genotypes, Set<Genotype> offsprings) {
         int births = populationSize - totalSize;
         reproduce(generation, births, genotypes, offsprings);
     }
