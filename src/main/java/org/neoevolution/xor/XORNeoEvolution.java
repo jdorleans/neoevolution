@@ -14,12 +14,18 @@ import java.util.concurrent.Executor;
 @NeoEvolutionConfiguration
 public class XORNeoEvolution extends AsyncConfigurerSupport {
 
+    public static final int QUEUE_FACTOR = 10000;
+
     @Override
-    public Executor getAsyncExecutor() {
+    public Executor getAsyncExecutor()
+    {
+        int processors = Runtime.getRuntime().availableProcessors();
+        int threads = Math.max(1, processors-1);
+        int queueCapacity = threads * QUEUE_FACTOR;
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(3);
-        executor.setMaxPoolSize(3);
-        executor.setQueueCapacity(300);
+        executor.setCorePoolSize(threads);
+        executor.setMaxPoolSize(threads);
+        executor.setQueueCapacity(queueCapacity);
         executor.setThreadNamePrefix("XORNeoEvolution-");
         executor.initialize();
         return executor;
