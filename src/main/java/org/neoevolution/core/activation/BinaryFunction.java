@@ -1,15 +1,15 @@
 package org.neoevolution.core.activation;
 
-public class SigmoidFunction extends AbstractActivationFunction implements ActivationFunction {
+public class BinaryFunction extends AbstractActivationFunction implements ActivationFunction {
 
     @Override
     public ActivationFunctionType getType() {
-        return ActivationFunctionType.SIGMOID;
+        return ActivationFunctionType.BINARY;
     }
 
     @Override
 	public double calculation(double input) {
-        return (1d / (1d + Math.exp(-input)));
+        return (input >= 0 ? 1 : 0);
     }
 
     @Override

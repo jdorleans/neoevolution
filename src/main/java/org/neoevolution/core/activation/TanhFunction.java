@@ -1,6 +1,6 @@
 package org.neoevolution.core.activation;
 
-public final class TanhFunction extends AbstractActivationFunction implements ActivationFunction {
+public class TanhFunction extends AbstractActivationFunction implements ActivationFunction {
 
     @Override
     public ActivationFunctionType getType() {

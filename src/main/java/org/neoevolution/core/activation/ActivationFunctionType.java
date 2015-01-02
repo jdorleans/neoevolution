@@ -2,7 +2,11 @@ package org.neoevolution.core.activation;
 
 public enum ActivationFunctionType {
 
-    LINEAR, SIGMOID, TANH;
+    BINARY, LINEAR, SIGMOID, TANH;
+
+    public static boolean isBINARY(ActivationFunctionType type) {
+        return BINARY.equals(type);
+    }
 
     public static boolean isLINEAR(ActivationFunctionType type) {
         return LINEAR.equals(type);

@@ -1,8 +1,8 @@
 package org.neoevolution.core.activation;
 
+import org.neoevolution.mvc.model.NeuronType;
 import org.neoevolution.mvc.model.configuration.Configurable;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.neoevolution.mvc.model.NeuronType;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 
@@ -30,6 +30,9 @@ public class ActivationFunctionManager implements Configurable<NNConfiguration> 
         }
         else if (ActivationFunctionType.isTANH(type)) {
             return new TanhFunction();
+        }
+        else if (ActivationFunctionType.isBINARY(type)) {
+            return new BinaryFunction();
         }
         return new SigmoidFunction();
     }
