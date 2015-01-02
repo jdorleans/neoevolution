@@ -1,14 +1,13 @@
 package org.neoevolution.core.operator.speciation;
 
-import org.neoevolution.mvc.model.*;
 import org.neoevolution.factory.model.SpeciesFactory;
+import org.neoevolution.mvc.model.*;
+import org.neoevolution.util.InnovationUtils;
 import org.neoevolution.util.MapUtils;
 
 import java.util.*;
 
 public class NESpeciation implements Speciation {
-
-    private int populationSize;
 
     private int maxSpeciesSize;
 
@@ -118,28 +117,20 @@ public class NESpeciation implements Speciation {
     {
         int similar = 0;
         double weightDiff = 0;
+        Map<Long, Synapse> synapses = InnovationUtils.createHashMap(synapse1);
 
-        for (Synapse s1 : synapse1)
+        for (Synapse s2 : synapse2)
         {
-            for (Synapse s2 : synapse2)
-            {
-                if (s1.getInnovation().equals(s2.getInnovation())) {
-                    similar++;
-                    weightDiff += Math.abs(s1.getWeight() - s2.getWeight());
-                    break;
-                }
+            Synapse s1 = synapses.get(s2.getInnovation());
+
+            if (s1 != null) {
+                similar++;
+                weightDiff += Math.abs(s1.getWeight() - s2.getWeight());
             }
         }
         return (weightFactor * (weightDiff / similar));
     }
 
-
-    public int getPopulationSize() {
-        return populationSize;
-    }
-    public void setPopulationSize(int populationSize) {
-        this.populationSize = populationSize;
-    }
 
     public int getMaxSpeciesSize() {
         return maxSpeciesSize;

@@ -3,6 +3,8 @@ package org.neoevolution.util;
 import org.neoevolution.mvc.model.AbstractInnovationEntity;
 
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -35,6 +37,18 @@ public class InnovationUtils {
                     break;
                 }
             }
+        }
+    }
+
+    public static <T extends AbstractInnovationEntity> Map<Long, T> createHashMap(Set<T> entities) {
+        Map<Long, T> map = MapUtils.createHashMap(entities.size());
+        putMap(entities, map);
+        return map;
+    }
+
+    public static <T extends AbstractInnovationEntity> void putMap(Set<T> entities, Map<Long, T> map) {
+        for (T entity : entities) {
+            map.put(entity.getInnovation(), entity);
         }
     }
 

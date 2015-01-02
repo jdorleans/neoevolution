@@ -1,10 +1,10 @@
 package org.neoevolution.core.operator.reproduction;
 
-import org.neoevolution.mvc.model.Gene;
+import org.neoevolution.factory.model.GenotypeFactory;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.Synapse;
-import org.neoevolution.factory.model.GenotypeFactory;
+import org.neoevolution.util.InnovationUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 
@@ -109,21 +109,13 @@ public class Crossover implements Reproduction {
     private Map<Long, Neuron> createNeuronsMap(Genotype offspring, int size)
     {
         Map<Long, Neuron> neurons = MapUtils.createHashMap(size);
-        putGenes(offspring.getInputs(), neurons);
-        putGenes(offspring.getOutputs(), neurons);
+        InnovationUtils.putMap(offspring.getInputs(), neurons);
+        InnovationUtils.putMap(offspring.getOutputs(), neurons);
         return neurons;
     }
 
     private Map<Long, Synapse> createSynapsesMap(Set<Synapse> synapses) {
-        Map<Long, Synapse> map = MapUtils.createHashMap(synapses.size());
-        putGenes(synapses, map);
-        return map;
-    }
-
-    private <T extends Gene> void putGenes(Set<T> genes, Map<Long, T> geneMap) {
-        for (T gene : genes) {
-            geneMap.put(gene.getInnovation(), gene);
-        }
+        return InnovationUtils.createHashMap(synapses);
     }
 
 
