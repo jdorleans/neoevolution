@@ -9,8 +9,10 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @NodeEntity
 public class Genotype extends AbstractFitnessEntity {
@@ -24,28 +26,27 @@ public class Genotype extends AbstractFitnessEntity {
     @Fetch
     @RelatedTo(type="INPUT")
     @JsonSerialize(using = InnovationArraySerializer.class)
-    private Set<Neuron> inputs;
+    private SortedSet<Neuron> inputs;
 
     @Fetch
     @RelatedTo(type="OUTPUT")
     @JsonSerialize(using = InnovationArraySerializer.class)
-    private Set<Neuron> outputs;
+    private SortedSet<Neuron> outputs;
 
     @Fetch
     @RelatedTo(type="NEURON")
     private Set<Neuron> neurons;
 
-    // FIXME - Ordering does not work!
     @Query("MATCH (g:Genotype)-->(n1:Neuron)-[s]-(n2:Neuron) " +
-           "WHERE id(g)={self} RETURN DISTINCT s ORDER BY id(s)")
+           "WHERE id(g)={self} RETURN DISTINCT s")
     private Set<Synapse> synapses;
 
 
     public Genotype() {
-        this(1l, 1l, new LinkedHashSet<Neuron>(), new LinkedHashSet<Neuron>());
+        this(1l, 1l, new TreeSet<Neuron>(), new TreeSet<Neuron>());
     }
 
-    public Genotype(Long innovation, Long generation, Set<Neuron> inputs, Set<Neuron> outputs)
+    public Genotype(Long innovation, Long generation, SortedSet<Neuron> inputs, SortedSet<Neuron> outputs)
     {
         super(innovation, generation);
         this.evaluated = false;
@@ -53,12 +54,12 @@ public class Genotype extends AbstractFitnessEntity {
         this.inputs = inputs;
         this.outputs = outputs;
         int size = MapUtils.getSize(getInputsSize() + getOutputsSize());
-        this.synapses = new LinkedHashSet<>(size*size);
+        this.synapses = new HashSet<>(size*size);
         initNeurons(size);
     }
 
     private void initNeurons(int size) {
-        this.neurons = new LinkedHashSet<>(size);
+        this.neurons = new HashSet<>(size);
         addNeurons(inputs);
         addNeurons(outputs);
     }
@@ -143,17 +144,17 @@ public class Genotype extends AbstractFitnessEntity {
         this.adjustedFitness = adjustedFitness;
     }
 
-    public Set<Neuron> getInputs() {
+    public SortedSet<Neuron> getInputs() {
         return inputs;
     }
-    public void setInputs(Set<Neuron> inputs) {
+    public void setInputs(SortedSet<Neuron> inputs) {
         this.inputs = inputs;
     }
 
-    public Set<Neuron> getOutputs() {
+    public SortedSet<Neuron> getOutputs() {
         return outputs;
     }
-    public void setOutputs(Set<Neuron> outputs) {
+    public void setOutputs(SortedSet<Neuron> outputs) {
         this.outputs = outputs;
     }
 

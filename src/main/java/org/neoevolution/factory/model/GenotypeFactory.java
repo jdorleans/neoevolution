@@ -1,15 +1,16 @@
 package org.neoevolution.factory.model;
 
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.core.operator.mutation.AddSynapseMutation;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.model.configuration.ConfigurableFactory;
 import org.neoevolution.factory.operator.mutation.AddSynapseMutationFactory;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.util.MapUtils;
 
 import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -51,8 +52,8 @@ public class GenotypeFactory<C extends NNConfiguration>
 
 
     public Genotype createEmpty(Long generation) {
-        Set<Neuron> inputs = neuronFactory.createInputs();
-        Set<Neuron> outputs = neuronFactory.createOutputs();
+        SortedSet<Neuron> inputs = neuronFactory.createInputs();
+        SortedSet<Neuron> outputs = neuronFactory.createOutputs();
         return new Genotype(configuration.nextGenotypeInnovation(), generation, inputs, outputs);
     }
 

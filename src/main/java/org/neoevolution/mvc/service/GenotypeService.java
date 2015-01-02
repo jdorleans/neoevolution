@@ -5,11 +5,12 @@ import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.Synapse;
 import org.neoevolution.mvc.repository.GenotypeRepository;
 import org.neoevolution.util.InnovationUtils;
-import org.neoevolution.util.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -49,9 +50,9 @@ public class GenotypeService extends AbstractFitnessEntityService<Genotype, Geno
         entity.setOutputs(getNeurons(entity.getOutputs(), neurons));
     }
 
-    private Set<Neuron> getNeurons(Set<Neuron> notSavedNeurons, Set<Neuron> savedNeurons)
+    private SortedSet<Neuron> getNeurons(Set<Neuron> notSavedNeurons, Set<Neuron> savedNeurons)
     {
-        Set<Neuron> neurons = MapUtils.createHashSet(notSavedNeurons.size());
+        SortedSet<Neuron> neurons = new TreeSet<>();
 
         for (Neuron notSavedNeuron : notSavedNeurons) {
             neurons.add(InnovationUtils.find(notSavedNeuron.getInnovation(), savedNeurons));

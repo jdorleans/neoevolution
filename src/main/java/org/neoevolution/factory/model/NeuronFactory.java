@@ -1,16 +1,16 @@
 package org.neoevolution.factory.model;
 
 import org.neoevolution.core.activation.ActivationFunctionManager;
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.neoevolution.mvc.model.innovation.NeuronInnovation;
+import org.neoevolution.factory.model.configuration.ConfigurableFactory;
 import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.NeuronType;
-import org.neoevolution.factory.model.configuration.ConfigurableFactory;
-import org.neoevolution.util.MapUtils;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
+import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -74,17 +74,17 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
         return neuron;
     }
 
-    public Set<Neuron> createInputs() {
+    public SortedSet<Neuron> createInputs() {
         return copySet(inputs);
     }
 
-    public Set<Neuron> createOutputs() {
+    public SortedSet<Neuron> createOutputs() {
         return copySet(outputs);
     }
 
-    private Set<Neuron> copySet(List<Neuron> neurons)
+    private SortedSet<Neuron> copySet(List<Neuron> neurons)
     {
-        Set<Neuron> list = MapUtils.createLinkedHashSet(neurons.size(), false);
+        SortedSet<Neuron> list = new TreeSet<>();
 
         for (Neuron neuron : neurons) {
             list.add(new Neuron(neuron));
