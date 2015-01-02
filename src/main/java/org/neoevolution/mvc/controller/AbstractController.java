@@ -23,20 +23,25 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
     }
 
 
-    @RequestMapping(value = "/count")
+    @RequestMapping("/count")
     public long count() {
         return service.count();
     }
 
-    @RequestMapping(value = "/exists/{id}")
+    @RequestMapping("/exists/{id}")
     public boolean exists(@PathVariable Long id) {
         return service.exists(id);
     }
 
 
-    @RequestMapping(value = "/{id}")
+    @RequestMapping("/{id}")
     public T find(@PathVariable Long id) {
         return service.find(id);
+    }
+
+    @RequestMapping("/list")
+    public List<T> find(@RequestBody List<Long> ids) {
+        return service.find(ids);
     }
 
     @RequestMapping

@@ -39,6 +39,21 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
         return repository.findOne(id);
     }
 
+    public List<T> find(List<Long> ids)
+    {
+        List<T> entities = new ArrayList<>(ids.size());
+
+        for (Long id : ids)
+        {
+            T entity = repository.findOne(id);
+
+            if (entity != null) {
+                entities.add(entity);
+            }
+        }
+        return entities;
+    }
+
     public T find(T entity) {
         return (entity != null ? repository.findOne(entity.getId()) : null);
     }
