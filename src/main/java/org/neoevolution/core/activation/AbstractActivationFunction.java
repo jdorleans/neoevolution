@@ -2,13 +2,6 @@ package org.neoevolution.core.activation;
 
 public abstract class AbstractActivationFunction implements ActivationFunction {
 
-    protected abstract double calculation(double input);
-
-    @Override
-	public double calculate(double input) {
-        return calculation(input);
-    }
-
     @Override
     public boolean equals(Object obj)
     {

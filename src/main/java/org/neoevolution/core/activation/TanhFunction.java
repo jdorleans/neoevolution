@@ -8,7 +8,7 @@ public class TanhFunction extends AbstractActivationFunction implements Activati
     }
 
     @Override
-	public double calculation(double input) {
+	public double calculate(double input) {
         return Math.tanh(input);
     }
 

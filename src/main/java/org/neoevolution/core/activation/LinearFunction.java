@@ -8,7 +8,7 @@ public class LinearFunction extends AbstractActivationFunction implements Activa
     }
 
     @Override
-	public double calculation(double input) {
+	public double calculate(double input) {
         return input;
     }
 

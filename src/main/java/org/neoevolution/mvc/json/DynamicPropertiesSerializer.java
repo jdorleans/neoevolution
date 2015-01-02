@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import org.springframework.data.neo4j.fieldaccess.DynamicProperties;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -12,6 +13,7 @@ import java.io.IOException;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Dec 26 2014
  */
+@Component
 public class DynamicPropertiesSerializer extends JsonSerializer<DynamicProperties> {
 
     @Override

@@ -2,10 +2,15 @@ package org.neoevolution.configuration;
 
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.factory.GraphDatabaseFactory;
+import org.neoevolution.mvc.converter.ActivationToStringConverter;
+import org.neoevolution.mvc.converter.StringToActivationConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.ConverterRegistry;
 import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.rest.SpringRestGraphDatabase;
@@ -31,6 +36,12 @@ public class NENeo4jConfiguration extends Neo4jConfiguration {
     @Value("#{'${neoevolution.neo4j.packages}'.replaceAll('\\s*', '').split(',')}")
     private List<String> packages;
 
+    @Autowired
+    private StringToActivationConverter stringToActivationConverter;
+
+    @Autowired
+    private ActivationToStringConverter activationToStringConverter;
+
 
     @PostConstruct
     private void init() {
@@ -55,6 +66,14 @@ public class NENeo4jConfiguration extends Neo4jConfiguration {
     @Bean
     public GraphDatabaseService graphDatabaseService() {
         return super.getGraphDatabaseService();
+    }
+
+    @Override
+    protected ConversionService neo4jConversionService() throws Exception {
+        ConverterRegistry converterRegistry = (ConverterRegistry) super.neo4jConversionService();
+        converterRegistry.addConverter(stringToActivationConverter);
+        converterRegistry.addConverter(activationToStringConverter);
+        return (ConversionService) converterRegistry;
     }
 
 }

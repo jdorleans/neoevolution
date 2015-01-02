@@ -1,11 +1,14 @@
 package org.neoevolution.mvc.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.core.activation.ActivationFunction;
+import org.neoevolution.mvc.json.ActivationDeserializer;
 import org.neoevolution.mvc.json.InnovationArraySerializer;
 import org.springframework.data.neo4j.annotation.Fetch;
+import org.springframework.data.neo4j.annotation.GraphProperty;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.annotation.RelatedToVia;
 
@@ -13,7 +16,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
-@JsonIgnoreProperties(value = {"impulses", "activation", "function"})
+@JsonIgnoreProperties(value = {"impulses"})
 public class Neuron extends Gene {
 
     private static final long serialVersionUID = 3943751427193605529L;
@@ -22,9 +25,9 @@ public class Neuron extends Gene {
 
     private transient Double impulses;
 
-    private transient Double activation;
-
-    private transient ActivationFunction function;
+    @GraphProperty(propertyType = String.class)
+    @JsonDeserialize(using = ActivationDeserializer.class)
+    private ActivationFunction function;
 
     @Fetch
     @RelatedToVia(direction = Direction.INCOMING)
@@ -49,7 +52,6 @@ public class Neuron extends Gene {
         super(innovation);
         this.type = type;
         this.impulses = 0d;
-        this.activation = null;
         this.function = function;
         this.inputs = new LinkedHashSet<>();
         this.outputs = new LinkedHashSet<>();
@@ -73,13 +75,11 @@ public class Neuron extends Gene {
     }
 
     public double activate() {
-        activation = function.calculate(impulses);
-        return activation;
+        return function.calculate(impulses);
     }
 
     public void reset() {
         impulses = 0d;
-        activation = null;
     }
 
 
@@ -90,7 +90,7 @@ public class Neuron extends Gene {
 
     @Override
     public String toString() {
-        return type +"(i:"+ innovation +", a:"+ activation +")";
+        return type +"(i:"+ innovation +")";
     }
 
 
@@ -106,13 +106,6 @@ public class Neuron extends Gene {
     }
     public void setImpulses(Double impulses) {
         this.impulses = impulses;
-    }
-
-    public Double getActivation() {
-        return activation;
-    }
-    public void setActivation(Double activation) {
-        this.activation = activation;
     }
 
     public ActivationFunction getFunction() {

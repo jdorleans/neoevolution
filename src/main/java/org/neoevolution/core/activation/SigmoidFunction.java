@@ -8,7 +8,7 @@ public class SigmoidFunction extends AbstractActivationFunction implements Activ
     }
 
     @Override
-	public double calculation(double input) {
+	public double calculate(double input) {
         return (1d / (1d + Math.exp(-input)));
     }
 
