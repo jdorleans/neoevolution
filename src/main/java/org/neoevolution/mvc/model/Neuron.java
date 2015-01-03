@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.neo4j.graphdb.Direction;
@@ -16,13 +16,13 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @NodeEntity
+@JsonIgnoreProperties("impulses")
 public class Neuron extends Gene {
 
     private static final long serialVersionUID = 3943751427193605529L;
 
     private NeuronType type;
 
-    @JsonIgnore
     private transient Double impulses;
 
     @GraphProperty(propertyType = String.class)
