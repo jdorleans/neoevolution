@@ -23,14 +23,16 @@ public class NeuronService extends AbstractInnovationEntityService<Neuron, Neuro
 
     @Override
     @Transactional
-    public void create(Neuron entity, boolean updateReference) {
+    public Neuron create(Neuron entity, boolean updateReference)
+    {
         Set<Synapse> inputs = entity.getInputs();
         Set<Synapse> outputs = entity.getOutputs();
         entity.setInputs(null);
         entity.setOutputs(null);
-        repository.save(entity);
+        Neuron neuron = super.create(entity, updateReference);
         entity.setInputs(inputs);
         entity.setOutputs(outputs);
+        return neuron;
     }
 
     @Override

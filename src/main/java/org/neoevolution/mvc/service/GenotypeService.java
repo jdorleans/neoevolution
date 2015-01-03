@@ -77,6 +77,7 @@ public class GenotypeService extends AbstractFitnessEntityService<Genotype, Geno
         entity.setInputs(dbEntity.getInputs());
         entity.setOutputs(dbEntity.getOutputs());
         entity.setNeurons(dbEntity.getNeurons());
+        entity.setSynapses(dbEntity.getSynapses());
     }
 
 }

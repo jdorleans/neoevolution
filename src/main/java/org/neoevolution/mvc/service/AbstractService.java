@@ -15,6 +15,8 @@ import java.util.List;
  */
 public abstract class AbstractService<T extends AbstractEntity, R extends GraphRepository<T>> {
 
+    protected int CAPACITY = 100;
+
     protected R repository;
 
     @Autowired
@@ -78,53 +80,75 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
 
     // CREATE //
 
-    public final void create(T entity) {
-        create(entity, false);
+    @Transactional
+    public final T create(T entity) {
+        return create(entity, false);
     }
 
     @Transactional
-    public void create(T entity, boolean updateReference)
+    public T create(T entity, boolean updateReference)
     {
+        T e = null;
+
         if (entity != null) {
             entity.setId(null);
             beforeCreate(entity, updateReference);
-            repository.save(entity);
+            e = repository.save(entity);
             afterCreate(entity, updateReference);
         }
-    }
-
-    public final void create(Iterable<T> entities) {
-        create(entities, false);
+        return e;
     }
 
     @Transactional
-    public void create(Iterable<T> entities, boolean updateReference)
+    public final List<T> create(Iterable<T> entities) {
+        return create(entities, false);
+    }
+
+    @Transactional
+    public List<T> create(Iterable<T> entities, boolean updateReference)
     {
+        List<T> es = new ArrayList<>(CAPACITY);
+
         if (entities != null) {
             for (T entity : entities) {
-                create(entity, updateReference);
+                es.add(create(entity, updateReference));
             }
         }
+        return es;
     }
 
 
     // UPDATE //
 
     @Transactional
-    public void update(T entity)
+    public T update(T entity)
     {
+        T e = null;
+
         if (entity != null && entity.getId() != null)
         {
             T dbEntity = find(entity.getId());
 
             if (dbEntity != null) {
                 beforeUpdate(entity, dbEntity);
-                repository.save(entity);
+                e = repository.save(entity);
                 afterUpdate(entity, dbEntity);
-            } else {
-                create(entity);
             }
         }
+        return e;
+    }
+
+    @Transactional
+    public List<T> update(Iterable<T> entities)
+    {
+        List<T> es = new ArrayList<>(CAPACITY);
+
+        if (entities != null) {
+            for (T entity : entities) {
+                es.add(update(entity));
+            }
+        }
+        return es;
     }
 
 

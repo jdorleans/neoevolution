@@ -31,6 +31,7 @@ public abstract class EvolutionService
     }
 
 
+    @Async
     public Future<T> evolve(C configuration) {
         return evolve(configuration, true);
     }
@@ -46,8 +47,7 @@ public abstract class EvolutionService
 
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
-        create(evolution, create);
-        return new AsyncResult<>(evolution);
+        return new AsyncResult<>(create(evolution, create));
     }
 
     private NNAlgorithm createAlgorithm(C configuration) {
@@ -63,10 +63,11 @@ public abstract class EvolutionService
     }
 
 
-    protected void create(T evolution, Boolean create) {
+    protected T create(T evolution, Boolean create) {
         if (create == null || create) {
-            super.create(evolution);
+            return super.create(evolution);
         }
+        return evolution;
     }
 
     @Override

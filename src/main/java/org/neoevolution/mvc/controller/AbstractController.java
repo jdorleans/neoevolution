@@ -34,6 +34,8 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
     }
 
 
+    // FIND //
+
     @RequestMapping("/{id}")
     public T find(@PathVariable Long id) {
         return service.find(id);
@@ -50,18 +52,33 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
     }
 
 
+    // CREATE //
+
     @RequestMapping(method = RequestMethod.POST)
     public T create(@RequestBody T entity) {
-        service.create(entity, true);
-        return entity;
+        return service.create(entity, true);
     }
 
     @RequestMapping(value = "/batch", method = RequestMethod.POST)
     public List<T> create(@RequestBody List<T> entities) {
-        service.create(entities, true);
-        return entities;
+        return service.create(entities, true);
     }
 
+
+    // UPDATE //
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public T update(@RequestBody T entity) {
+        return service.update(entity);
+    }
+
+    @RequestMapping(value = "/batch", method = RequestMethod.PUT)
+    public List<T> update(@RequestBody List<T> entities) {
+        return service.update(entities);
+    }
+
+
+    // DELETE //
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable Long id) {
