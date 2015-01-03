@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.neoevolution.mvc.json.InnovationArraySerializer;
 import org.neoevolution.util.MapUtils;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.Query;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+import org.springframework.data.neo4j.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +16,7 @@ public class Genotype extends AbstractFitnessEntity {
 
     private static final long serialVersionUID = -849596329356657600L;
 
+    @Indexed
     private Boolean evaluated;
 
     private Double adjustedFitness;

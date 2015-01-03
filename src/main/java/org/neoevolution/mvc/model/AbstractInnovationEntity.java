@@ -1,9 +1,12 @@
 package org.neoevolution.mvc.model;
 
+import org.springframework.data.neo4j.annotation.Indexed;
+
 public abstract class AbstractInnovationEntity extends AbstractEntity {
 
     private static final long serialVersionUID = -5237757583908066829L;
 
+    @Indexed(level = Indexed.Level.INSTANCE)
     protected Long innovation;
 
 

@@ -3,6 +3,7 @@ package org.neoevolution.mvc.model;
 import org.neo4j.graphdb.Direction;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.springframework.data.neo4j.annotation.Fetch;
+import org.springframework.data.neo4j.annotation.Indexed;
 import org.springframework.data.neo4j.annotation.RelatedTo;
 
 /**
@@ -21,6 +22,7 @@ public abstract class Evolution<C extends NNConfiguration> extends AbstractEntit
     @RelatedTo(type="CONFIGURES", direction = Direction.INCOMING)
     protected C configuration;
 
+    @Indexed(level = Indexed.Level.INSTANCE)
     protected Boolean finished;
 
 
