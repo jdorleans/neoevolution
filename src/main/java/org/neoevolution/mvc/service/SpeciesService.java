@@ -27,19 +27,30 @@ public class SpeciesService extends AbstractFitnessEntityService<Species, Specie
 
 
     @Override
-    protected void beforeSave(Species entity, boolean updateReference)
+    protected void beforeCreate(Species entity, boolean updateReference)
     {
         Set<Genotype> genotypes = entity.getGenotypes();
-        genotypeService.save(genotypes, updateReference);
 
-        if (updateReference) {
-            updateBestGenotype(entity, genotypes);
+        if (genotypes != null)
+        {
+            genotypeService.create(genotypes, updateReference);
+
+            if (updateReference) {
+                updateBestGenotype(entity, genotypes);
+            }
         }
     }
 
     private void updateBestGenotype(Species entity, Set<Genotype> genotypes) {
         Long bestInnovation = entity.getBestGenotype().getInnovation();
         entity.setBestGenotype(InnovationUtils.find(bestInnovation, genotypes));
+    }
+
+
+    @Override
+    protected void beforeUpdate(Species entity, Species dbEntity) {
+        entity.setGenotypes(dbEntity.getGenotypes());
+        entity.setBestGenotype(dbEntity.getBestGenotype());
     }
 
 }

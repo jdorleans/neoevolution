@@ -39,7 +39,7 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
         return service.find(id);
     }
 
-    @RequestMapping("/list")
+    @RequestMapping("/batch")
     public List<T> find(@RequestBody List<Long> ids) {
         return service.find(ids);
     }
@@ -51,14 +51,14 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
 
 
     @RequestMapping(method = RequestMethod.POST)
-    public T save(@RequestBody T entity) {
-        service.save(entity, true);
+    public T create(@RequestBody T entity) {
+        service.create(entity, true);
         return entity;
     }
 
     @RequestMapping(value = "/batch", method = RequestMethod.POST)
-    public List<T> save(@RequestBody List<T> entities) {
-        service.save(entities, true);
+    public List<T> create(@RequestBody List<T> entities) {
+        service.create(entities, true);
         return entities;
     }
 

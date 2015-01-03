@@ -28,14 +28,18 @@ public class PopulationService extends AbstractFitnessEntityService<Population, 
 
 
     @Override
-    protected void beforeSave(Population entity, boolean updateReference)
+    protected void beforeCreate(Population entity, boolean updateReference)
     {
         Set<Species> species = entity.getSpecies();
-        speciesService.save(species, updateReference);
 
-        if (updateReference) {
-            updateBestSpecies(entity, species);
-            updateBestGenotype(entity, species);
+        if (species != null)
+        {
+            speciesService.create(species, updateReference);
+
+            if (updateReference) {
+                updateBestSpecies(entity, species);
+                updateBestGenotype(entity, species);
+            }
         }
     }
 
@@ -57,6 +61,14 @@ public class PopulationService extends AbstractFitnessEntityService<Population, 
                 break;
             }
         }
+    }
+
+
+    @Override
+    protected void beforeUpdate(Population entity, Population dbEntity) {
+        entity.setSpecies(dbEntity.getSpecies());
+        entity.setBestSpecies(dbEntity.getBestSpecies());
+        entity.setBestGenotype(dbEntity.getBestGenotype());
     }
 
 }

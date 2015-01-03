@@ -3,7 +3,6 @@ package org.neoevolution.mvc.service;
 import org.neoevolution.core.algorithm.NNAlgorithm;
 import org.neoevolution.factory.algorithm.NNAlgorithmFactory;
 import org.neoevolution.mvc.model.Evolution;
-import org.neoevolution.mvc.model.Population;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.repository.EvolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,17 +36,17 @@ public abstract class EvolutionService
     }
 
     @Async
-    public Future<T> evolve(C configuration, Boolean save)
+    public Future<T> evolve(C configuration, Boolean create)
     {
         T evolution = createEvolution(configuration);
-        save(evolution, save);
+        create(evolution, create);
 
         NNAlgorithm algorithm = createAlgorithm(configuration);
         algorithm.evolve();
 
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
-        save(evolution, save);
+        create(evolution, create);
         return new AsyncResult<>(evolution);
     }
 
@@ -64,21 +63,22 @@ public abstract class EvolutionService
     }
 
 
-    protected void save(T evolution, Boolean save) {
-        if (save == null || save) {
-            super.save(evolution);
+    protected void create(T evolution, Boolean create) {
+        if (create == null || create) {
+            super.create(evolution);
         }
     }
 
     @Override
-    protected void beforeSave(T entity, boolean updateReference)
-    {
-        Population population = entity.getPopulation();
+    protected void beforeCreate(T entity, boolean updateReference) {
+        populationService.create(entity.getPopulation(), updateReference);
+        configurationService.create(entity.getConfiguration(), updateReference);
+    }
 
-        if (population != null) {
-            populationService.save(population, updateReference);
-        }
-        configurationService.save(entity.getConfiguration(), updateReference);
+    @Override
+    protected void beforeUpdate(T entity, T dbEntity) {
+        entity.setPopulation(dbEntity.getPopulation());
+        entity.setConfiguration(dbEntity.getConfiguration());
     }
 
     protected abstract T create();

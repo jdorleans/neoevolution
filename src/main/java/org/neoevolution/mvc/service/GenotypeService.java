@@ -33,16 +33,20 @@ public class GenotypeService extends AbstractFitnessEntityService<Genotype, Geno
 
 
     @Override
-    protected void beforeSave(Genotype entity, boolean updateReference)
+    protected void beforeCreate(Genotype entity, boolean updateReference)
     {
         Set<Neuron> neurons = entity.getNeurons();
-        neuronService.save(neurons, updateReference);
 
-        if (updateReference) {
-            updateNeurons(entity, neurons);
-            updateSynapses(entity.getSynapses(), neurons);
+        if (neurons != null)
+        {
+            neuronService.create(neurons, updateReference);
+
+            if (updateReference) {
+                updateNeurons(entity, neurons);
+                updateSynapses(entity.getSynapses(), neurons);
+            }
         }
-        synapseService.save(entity.getSynapses(), updateReference);
+        synapseService.create(entity.getSynapses(), updateReference);
     }
 
     private void updateNeurons(Genotype entity, Set<Neuron> neurons) {
@@ -65,6 +69,14 @@ public class GenotypeService extends AbstractFitnessEntityService<Genotype, Geno
             synapse.setStart(InnovationUtils.find(synapse.getStart().getInnovation(), neurons));
             synapse.setEnd(InnovationUtils.find(synapse.getEnd().getInnovation(), neurons));
         }
+    }
+
+
+    @Override
+    protected void beforeUpdate(Genotype entity, Genotype dbEntity) {
+        entity.setInputs(dbEntity.getInputs());
+        entity.setOutputs(dbEntity.getOutputs());
+        entity.setNeurons(dbEntity.getNeurons());
     }
 
 }

@@ -35,6 +35,8 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
     }
 
 
+    // FIND //
+
     public T find(Long id) {
         return repository.findOne(id);
     }
@@ -74,28 +76,59 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
     }
 
 
-    public final void save(T entity) {
-        save(entity, false);
+    // CREATE //
+
+    public final void create(T entity) {
+        create(entity, false);
     }
 
     @Transactional
-    public void save(T entity, boolean updateReference) {
-        beforeSave(entity, updateReference);
-        repository.save(entity);
-        afterSave(entity, updateReference);
-    }
-
-    public final void save(Iterable<T> entities) {
-        save(entities, false);
-    }
-
-    @Transactional
-    public void save(Iterable<T> entities, boolean updateReference) {
-        for (T entity : entities) {
-            save(entity, updateReference);
+    public void create(T entity, boolean updateReference)
+    {
+        if (entity != null) {
+            entity.setId(null);
+            beforeCreate(entity, updateReference);
+            repository.save(entity);
+            afterCreate(entity, updateReference);
         }
     }
 
+    public final void create(Iterable<T> entities) {
+        create(entities, false);
+    }
+
+    @Transactional
+    public void create(Iterable<T> entities, boolean updateReference)
+    {
+        if (entities != null) {
+            for (T entity : entities) {
+                create(entity, updateReference);
+            }
+        }
+    }
+
+
+    // UPDATE //
+
+    @Transactional
+    public void update(T entity)
+    {
+        if (entity != null && entity.getId() != null)
+        {
+            T dbEntity = find(entity.getId());
+
+            if (dbEntity != null) {
+                beforeUpdate(entity, dbEntity);
+                repository.save(entity);
+                afterUpdate(entity, dbEntity);
+            } else {
+                create(entity);
+            }
+        }
+    }
+
+
+    // DELETE //
 
     @Transactional
     public void delete(Long id) {
@@ -103,16 +136,22 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
     }
 
     @Transactional
-    public void delete(T entity) {
-        beforeDelete(entity);
-        repository.delete(entity);
-        afterDelete(entity);
+    public void delete(T entity)
+    {
+        if (entity != null) {
+            beforeDelete(entity);
+            repository.delete(entity);
+            afterDelete(entity);
+        }
     }
 
     @Transactional
-    public void delete(Iterable<T> entities) {
-        for (T entity : entities) {
-            delete(entity);
+    public void delete(Iterable<T> entities)
+    {
+        if (entities != null) {
+            for (T entity : entities) {
+                delete(entity);
+            }
         }
     }
 
@@ -121,15 +160,21 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
         delete(findAll());
     }
 
-    protected final void beforeSave(T entity) {
-        beforeSave(entity, false);
+
+    // BEFORE AND AFTER //
+
+    protected final void beforeCreate(T entity) {
+        beforeCreate(entity, false);
     }
-    protected final void afterSave(T entity) {
-        afterSave(entity, false);
+    protected final void afterCreate(T entity) {
+        afterCreate(entity, false);
     }
 
-    protected void beforeSave(T entity, boolean updateReference) { }
-    protected void afterSave(T entity, boolean updateReference) { }
+    protected void beforeCreate(T entity, boolean updateReference) { }
+    protected void afterCreate(T entity, boolean updateReference) { }
+
+    protected void beforeUpdate(T entity, T dbEntity) { }
+    protected void afterUpdate(T entity, T dbEntity) { }
 
     protected void beforeDelete(T entity) { }
     protected void afterDelete(T entity) { }

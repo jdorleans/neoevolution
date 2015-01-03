@@ -1,12 +1,18 @@
 package org.neoevolution.core.operator.evaluation;
 
 import org.neoevolution.core.error.ErrorFunction;
-import org.neoevolution.mvc.model.*;
-import org.neoevolution.util.MapUtils;
+import org.neoevolution.core.operator.activation.GenotypeActivation;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.Population;
+import org.neoevolution.mvc.model.Species;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
 import java.util.Set;
 
+@Configurable
 public abstract class TrainingEvaluation implements Evaluation {
 
     public static final double MAX_FITNESS = 1d;
@@ -18,6 +24,9 @@ public abstract class TrainingEvaluation implements Evaluation {
     protected List<List<Double>> outputSet;
 
     protected ErrorFunction errorFunction;
+
+    @Autowired
+    protected GenotypeActivation genotypeActivation;
 
 
     protected TrainingEvaluation() {
@@ -74,11 +83,11 @@ public abstract class TrainingEvaluation implements Evaluation {
     protected double evaluate(Genotype genotype, List<Double> inputs, List<Double> outputs)
     {
         errorFunction.reset();
-        Set<Long> stimulated = stimuliInputs(genotype, inputs);
+        Set<Long> stimulated = genotypeActivation.stimuliInputs(genotype, inputs);
 
         int idx = 0;
         for (Neuron neuron : genotype.getOutputs()) {
-            double activation = activate(neuron, stimulated);
+            double activation = genotypeActivation.activate(neuron, stimulated);
             errorFunction.add(outputs.get(idx), activation);
             idx++;
         }
@@ -87,45 +96,6 @@ public abstract class TrainingEvaluation implements Evaluation {
 
     protected double calculateError() {
         return (maxFitness - errorFunction.calculate());
-    }
-
-    protected Set<Long> stimuliInputs(Genotype genotype, List<Double> inputs)
-    {
-        int idx = 0;
-        Set<Long> stimulated = MapUtils.createHashSet(genotype.getNeuronsSize());
-
-        for (Neuron neuron : genotype.getInputs())
-        {
-            neuron.reset();
-            NeuronType type = neuron.getType();
-            stimulated.add(neuron.getInnovation());
-
-            if (NeuronType.isInput(type)) {
-                neuron.impulse(inputs.get(idx));
-                idx++;
-            } else if (NeuronType.isBias(type)) {
-                neuron.impulse(1d);
-            }
-        }
-        return stimulated;
-    }
-
-    protected double activate(Neuron neuron, Set<Long> stimulated)
-    {
-        if (!stimulated.contains(neuron.getInnovation()))
-        {
-            neuron.reset();
-            stimulated.add(neuron.getInnovation());
-
-            for (Synapse synapse : neuron.getInputs())
-            {
-                if (synapse.isEnabled()) {
-                    double activation = activate(synapse.getStart(), stimulated);
-                    neuron.impulse(activation * synapse.getWeight());
-                }
-            }
-        }
-        return neuron.activate();
     }
 
     protected double adjustFitness(Genotype genotype, int size) {

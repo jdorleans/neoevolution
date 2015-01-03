@@ -22,7 +22,7 @@ public class SynapseService extends AbstractInnovationEntityService<Synapse, Syn
 
 
     @Override
-    protected void afterSave(Synapse entity, boolean updateReference) {
+    protected void afterCreate(Synapse entity, boolean updateReference) {
         if (updateReference) {
             updateSynapse(entity, entity.getStart().getOutputs());
             updateSynapse(entity, entity.getEnd().getInputs());
