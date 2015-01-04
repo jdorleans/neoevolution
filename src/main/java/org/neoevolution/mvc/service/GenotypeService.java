@@ -2,11 +2,13 @@ package org.neoevolution.mvc.service;
 
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.NeuronType;
 import org.neoevolution.mvc.model.Synapse;
 import org.neoevolution.mvc.repository.GenotypeRepository;
 import org.neoevolution.util.InnovationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.SortedSet;
@@ -79,5 +81,24 @@ public class GenotypeService extends AbstractFitnessEntityService<Genotype, Geno
         entity.setNeurons(dbEntity.getNeurons());
         entity.setSynapses(dbEntity.getSynapses());
     }
+
+
+    @Transactional
+    public Genotype addNeuron(Long id, Long neuronId)
+    {
+        Genotype genotype = find(id);
+        Neuron neuron = neuronService.find(neuronId);
+        genotype.addNeuron(neuron);
+        NeuronType type = neuron.getType();
+
+        if (NeuronType.isInputOrBias(type)) {
+            genotype.addInput(neuron);
+        }
+        else if (NeuronType.isOutput(type)) {
+            genotype.addOutput(neuron);
+        }
+        return repository.save(genotype);
+    }
+
 
 }

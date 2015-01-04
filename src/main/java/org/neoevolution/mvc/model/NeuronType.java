@@ -20,4 +20,8 @@ public enum NeuronType {
         return OUTPUT.equals(type);
     }
 
+    public static boolean isInputOrBias(NeuronType type) {
+        return isInput(type) || isBias(type);
+    }
+
 }

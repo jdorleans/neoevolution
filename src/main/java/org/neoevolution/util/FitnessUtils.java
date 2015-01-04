@@ -8,7 +8,10 @@ import java.util.*;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 05/11/14.
  */
-public class FitnessUtils {
+public final class FitnessUtils {
+
+    private FitnessUtils() { }
+
 
     public static <T extends AbstractFitnessEntity> List<T> sortByFitness(Set<T> entities, final boolean desc)
     {

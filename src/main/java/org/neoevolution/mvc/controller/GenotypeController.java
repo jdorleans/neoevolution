@@ -22,10 +22,12 @@ public class GenotypeController extends FitnessEntityController<Genotype, Genoty
     @Autowired
     private GenotypeActivationService activationService;
 
+
     @Autowired
     protected GenotypeController(GenotypeService service) {
         super(service);
     }
+
 
     @RequestMapping(value = "/{id}/activate", method = RequestMethod.POST)
     public EntitySampleData activate(@PathVariable Long id, @RequestBody SampleData sample)
@@ -41,6 +43,13 @@ public class GenotypeController extends FitnessEntityController<Genotype, Genoty
     @RequestMapping(value = "/activate", method = RequestMethod.POST)
     public List<EntitySampleData> activateAll(@RequestBody SampleData sample) {
         return activationService.activateAll(sample);
+    }
+
+
+    @RequestMapping(value = "/{id}/neuron/{neuronId}/add")
+    public Genotype addNeuron(@PathVariable Long id, @PathVariable Long neuronId,
+                              @RequestParam(required = false) boolean project) {
+        return projection(service.addNeuron(id, neuronId), project);
     }
 
 }

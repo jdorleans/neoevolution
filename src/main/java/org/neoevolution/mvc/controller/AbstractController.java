@@ -2,10 +2,7 @@ package org.neoevolution.mvc.controller;
 
 import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.service.AbstractService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -55,26 +52,26 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
     // CREATE //
 
     @RequestMapping(method = RequestMethod.POST)
-    public T create(@RequestBody T entity) {
-        return service.create(entity, true);
+    public T create(@RequestBody T entity, @RequestParam(required = false) boolean project) {
+        return projection(service.create(entity, true), project);
     }
 
     @RequestMapping(value = "/batch", method = RequestMethod.POST)
-    public List<T> create(@RequestBody List<T> entities) {
-        return service.create(entities, true);
+    public List<T> create(@RequestBody List<T> entities, @RequestParam(required = false) boolean project) {
+        return projection(service.create(entities, true), project);
     }
 
 
     // UPDATE //
 
     @RequestMapping(method = RequestMethod.PUT)
-    public T update(@RequestBody T entity) {
-        return service.update(entity);
+    public T update(@RequestBody T entity, @RequestParam(required = false) boolean project) {
+        return projection(service.update(entity), project);
     }
 
     @RequestMapping(value = "/batch", method = RequestMethod.PUT)
-    public List<T> update(@RequestBody List<T> entities) {
-        return service.update(entities);
+    public List<T> update(@RequestBody List<T> entities, @RequestParam(required = false) boolean project) {
+        return projection(service.update(entities), project);
     }
 
 
@@ -93,6 +90,15 @@ public abstract class AbstractController<T extends AbstractEntity, S extends Abs
     @RequestMapping(method = RequestMethod.DELETE)
     public void deleteAll() {
         service.deleteAll();
+    }
+
+
+    protected <V> V projection(V value, Boolean project)
+    {
+        if (project) {
+            return value;
+        }
+        return null;
     }
 
 }

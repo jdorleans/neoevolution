@@ -6,6 +6,7 @@ import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
 import org.neoevolution.mvc.service.EvolutionService;
+import org.neoevolution.util.FutureUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,32 +29,35 @@ public abstract class EvolutionController
 
 
     @RequestMapping(value = "/evolve", method = RequestMethod.POST)
-    public T evolve(@RequestBody C configuration, @RequestParam(required = false) Boolean save)
+    public T evolve(@RequestBody C configuration,
+                    @RequestParam(required = false) Boolean create,
+                    @RequestParam(required = false) boolean project)
             throws ExecutionException, InterruptedException {
-        return service.evolve(configuration, save).get();
+        return projection(service.evolve(configuration, create).get(), project);
     }
 
     @RequestMapping(value = "/evolve/batch", method = RequestMethod.POST)
-    public List<T> evolve(@RequestBody List<C> configurations, @RequestParam(required = false) Boolean save)
+    public List<T> evolve(@RequestBody List<C> configurations,
+                          @RequestParam(required = false) Boolean create,
+                          @RequestParam(required = false) boolean project)
             throws ExecutionException, InterruptedException
     {
-        List<T> evolutions = new ArrayList<>(configurations.size());
         List<Future<T>> futureEvolutions = new ArrayList<>(configurations.size());
 
         for (C configuration : configurations) {
-            futureEvolutions.add(service.evolve(configuration, save));
+            futureEvolutions.add(service.evolve(configuration, create));
         }
-
-        for (Future<T> futureEvolution : futureEvolutions) {
-            evolutions.add(futureEvolution.get());
-        }
-        return evolutions;
+        return projection(FutureUtils.getResults(futureEvolutions), project);
     }
 
     @RequestMapping(value = "/evolve/{runs}", method = RequestMethod.POST)
-    public void evolve(@RequestBody C configuration, @PathVariable int runs, @RequestParam(required = false) Boolean save)
+    public List<T> evolve(@RequestBody C configuration, @PathVariable int runs,
+                          @RequestParam(required = false) Boolean create,
+                          @RequestParam(required = false) boolean project)
+            throws ExecutionException, InterruptedException
     {
         long total = 0;
+        List<T> evolutions = new ArrayList<>(runs);
         configuration.setNeuronInnovation(null);
         configuration.setSynapseInnovation(null);
 
@@ -64,14 +68,14 @@ public abstract class EvolutionController
             config.setSynapseInnovation(new SynapseInnovation());
             long start = System.currentTimeMillis();
             System.out.println("Running: " + (i + 1));
-            service.evolve(config, save);
+            evolutions.add(service.evolve(config, create).get());
             long end = System.currentTimeMillis() - start;
             total += end;
             System.out.println("Finished in: " + end);
         }
         System.out.println("TOTAL TIME: " + total);
         System.out.println("AVERAGE TIME: " + total/runs);
-
+        return projection(evolutions, project);
     }
 
 }

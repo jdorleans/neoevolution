@@ -10,7 +10,10 @@ import java.util.Set;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Dez 28 2014
  */
-public class InnovationUtils {
+public final class InnovationUtils {
+
+    private InnovationUtils() { }
+
 
     public static <T extends AbstractInnovationEntity> T find(Long innovation, Iterable<T> entities)
     {

@@ -8,7 +8,7 @@ import org.neoevolution.mvc.service.NEConfigurationService;
  * @since Dec 28 2014
  */
 public abstract class NEConfigurationController<T extends NEConfiguration, S extends NEConfigurationService<T, ?>>
-        extends AbstractController<T, S> {
+        extends NNConfigurationController<T, S> {
 
     protected NEConfigurationController(S service) {
         super(service);

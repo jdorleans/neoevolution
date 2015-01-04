@@ -4,6 +4,7 @@ import org.neoevolution.core.operator.activation.EntitySampleData;
 import org.neoevolution.core.operator.activation.GenotypeActivation;
 import org.neoevolution.core.operator.activation.SampleData;
 import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.util.FutureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class GenotypeActivationService {
         for (EntitySampleData sample : samples) {
             futures.add(activation.activate(service.find(sample.getId()), sample));
         }
-        return getResults(futures);
+        return FutureUtils.getResults(futures);
     }
 
     public List<EntitySampleData> activateAll(SampleData sample)
@@ -48,21 +49,7 @@ public class GenotypeActivationService {
         for (Genotype genotype : genotypes) {
             futures.add(activation.activate(genotype, sample));
         }
-        return getResults(futures);
-    }
-
-    private List<EntitySampleData> getResults(List<Future<EntitySampleData>> futures)
-    {
-        List<EntitySampleData> results = new ArrayList<>(futures.size());
-
-        for (Future<EntitySampleData> future : futures) {
-            try {
-                results.add(future.get());
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        return results;
+        return FutureUtils.getResults(futures);
     }
 
 }

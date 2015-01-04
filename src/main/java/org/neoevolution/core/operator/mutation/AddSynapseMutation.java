@@ -110,7 +110,7 @@ public class AddSynapseMutation extends AbstractMutation {
     // TODO - Can a neuron be connected to another neuron from the same layer?
     private boolean isEnd(Neuron start, Neuron neuron, int maxIncoming) {
         NeuronType type = neuron.getType();
-        boolean isEnd = (!start.equals(neuron) && !NeuronType.isBias(type) && !NeuronType.isInput(type));
+        boolean isEnd = (!start.equals(neuron) && !NeuronType.isInputOrBias(type));
         return (isEnd && (neuron.getInputs().size() < maxIncoming) && !hasEnd(start, neuron));
     }
 
