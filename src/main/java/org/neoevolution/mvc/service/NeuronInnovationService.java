@@ -17,12 +17,4 @@ public class NeuronInnovationService extends AbstractInnovationService<NeuronInn
         super(repository);
     }
 
-    @Override
-    public NeuronInnovation create(Long configId)  {
-        NeuronInnovation innovation = new NeuronInnovation();
-        innovation.setConfigId(configId);
-        repository.save(innovation);
-        return innovation;
-    }
-
 }

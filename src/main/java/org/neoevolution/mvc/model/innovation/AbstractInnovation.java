@@ -18,8 +18,6 @@ public abstract class AbstractInnovation extends AbstractEntity {
 
     protected Long current;
 
-    protected Long configId;
-
     @JsonSerialize(using = DynamicPropertiesSerializer.class)
     @JsonDeserialize(using = DynamicPropertiesDeserializer.class)
     protected DynamicProperties innovations;
@@ -98,11 +96,11 @@ public abstract class AbstractInnovation extends AbstractEntity {
         this.current = current;
     }
 
-    public Long getConfigId() {
-        return configId;
+    public DynamicProperties getInnovations() {
+        return innovations;
     }
-    public void setConfigId(Long configId) {
-        this.configId = configId;
+    public void setInnovations(DynamicProperties innovations) {
+        this.innovations = innovations;
     }
 
 }

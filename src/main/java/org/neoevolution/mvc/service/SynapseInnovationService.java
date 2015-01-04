@@ -17,12 +17,4 @@ public class SynapseInnovationService extends AbstractInnovationService<SynapseI
         super(repository);
     }
 
-    @Override
-    public SynapseInnovation create(Long configId) {
-        SynapseInnovation innovation = new SynapseInnovation();
-        innovation.setConfigId(configId);
-        repository.save(innovation);
-        return innovation;
-    }
-
 }
