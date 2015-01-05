@@ -14,4 +14,12 @@ public abstract class AbstractConfigurableFactory<T, C> implements ConfigurableF
         this.configuration = configuration;
     }
 
+
+    public C getConfiguration() {
+        return configuration;
+    }
+    public void setConfiguration(C configuration) {
+        this.configuration = configuration;
+    }
+
 }

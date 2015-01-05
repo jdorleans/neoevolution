@@ -8,7 +8,4 @@ import org.neoevolution.mvc.model.innovation.SynapseInnovation;
  */
 public interface SynapseInnovationRepository extends InnovationRepository<SynapseInnovation> {
 
-    @Override
-    SynapseInnovation findByConfigId(Long configId);
-
 }

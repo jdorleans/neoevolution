@@ -1,10 +1,10 @@
 package org.neoevolution.factory.operator.mutation;
 
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.core.operator.mutation.AddNeuronMutation;
-import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.model.NeuronFactory;
 import org.neoevolution.factory.model.SynapseFactory;
+import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -22,6 +22,11 @@ public class AddNeuronMutationFactory<C extends NNConfiguration>
     public AddNeuronMutationFactory() {
         neuronFactory = new NeuronFactory<>();
         synapseFactory = new SynapseFactory<>();
+    }
+
+    public AddNeuronMutationFactory(NeuronFactory<C> neuronFactory, SynapseFactory<C> synapseFactory) {
+        this.neuronFactory = neuronFactory;
+        this.synapseFactory = synapseFactory;
     }
 
 

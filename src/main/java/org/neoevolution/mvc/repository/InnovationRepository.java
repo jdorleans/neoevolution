@@ -11,6 +11,4 @@ import org.springframework.data.repository.NoRepositoryBean;
 @NoRepositoryBean
 public interface InnovationRepository<T extends AbstractInnovation> extends GraphRepository<T> {
 
-    T findByConfigId(Long configId);
-
 }

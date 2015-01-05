@@ -8,7 +8,4 @@ import org.neoevolution.mvc.model.innovation.NeuronInnovation;
  */
 public interface NeuronInnovationRepository extends InnovationRepository<NeuronInnovation> {
 
-    @Override
-    NeuronInnovation findByConfigId(Long configId);
-
 }

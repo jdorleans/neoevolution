@@ -1,8 +1,10 @@
 package org.neoevolution.factory.model;
 
+import org.neoevolution.core.operator.mutation.AddNeuronMutation;
 import org.neoevolution.core.operator.mutation.AddSynapseMutation;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.model.configuration.ConfigurableFactory;
+import org.neoevolution.factory.operator.mutation.AddNeuronMutationFactory;
 import org.neoevolution.factory.operator.mutation.AddSynapseMutationFactory;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
@@ -24,7 +26,11 @@ public class GenotypeFactory<C extends NNConfiguration>
 
     private SynapseFactory<C> synapseFactory;
 
+    private AddNeuronMutationFactory<C> addNeuronMutationFactory;
+
     private AddSynapseMutationFactory<C> addSynapseMutationFactory;
+
+    private AddNeuronMutation addNeuronMutation;
 
     private AddSynapseMutation addSynapseMutation;
 
@@ -32,7 +38,8 @@ public class GenotypeFactory<C extends NNConfiguration>
     public GenotypeFactory() {
         this.neuronFactory = new NeuronFactory<>();
         this.synapseFactory = new SynapseFactory<>();
-        this.addSynapseMutationFactory = new AddSynapseMutationFactory<>();
+        this.addNeuronMutationFactory = new AddNeuronMutationFactory<>(neuronFactory, synapseFactory);
+        this.addSynapseMutationFactory = new AddSynapseMutationFactory<>(synapseFactory);
     }
 
 
@@ -41,11 +48,18 @@ public class GenotypeFactory<C extends NNConfiguration>
         super.configure(configuration);
         neuronFactory.configure(configuration);
         synapseFactory.configure(configuration);
+        initAddNeuronMutation(configuration);
         initAddSynapseMutation(configuration);
     }
 
+    private void initAddNeuronMutation(C configuration) {
+        addNeuronMutationFactory.setConfiguration(configuration);
+        addNeuronMutation = addNeuronMutationFactory.create();
+        addNeuronMutation.setRate(1d);
+    }
+
     private void initAddSynapseMutation(C configuration) {
-        addSynapseMutationFactory.configure(configuration);
+        addSynapseMutationFactory.setConfiguration(configuration);
         addSynapseMutation = addSynapseMutationFactory.create();
         addSynapseMutation.setRate(1d);
     }
@@ -67,19 +81,41 @@ public class GenotypeFactory<C extends NNConfiguration>
         Genotype genotype = createEmpty(generation);
 
         if (configuration.isFullyConnected()) {
-            connect(genotype);
+            connectAll(genotype);
         } else {
-            addSynapseMutation.mutate(genotype);
+            connectRandom(genotype);
         }
         return genotype;
     }
 
-    private void connect(Genotype genotype)
+    private void connectAll(Genotype genotype)
     {
         for (Neuron input : genotype.getInputs()) {
             for (Neuron output : genotype.getOutputs()) {
                 genotype.addSynapse(synapseFactory.create(input, output));
             }
+        }
+
+        for (int i = 0; i < configuration.getHiddenMinSize(); i++) {
+            addNeuronMutation.mutate(genotype);
+        }
+    }
+
+    private void connectRandom(Genotype genotype)
+    {
+        Integer hiddenMinSize = configuration.getHiddenMinSize();
+        addSynapseMutation.mutate(genotype);
+
+        if (hiddenMinSize > 0)
+        {
+            addNeuronMutation.mutate(genotype);
+            addSynapseMutation.setRate(0.5d);
+
+            for (int i = 1; i < hiddenMinSize; i++) {
+                addSynapseMutation.mutate(genotype);
+                addNeuronMutation.mutate(genotype);
+            }
+            addSynapseMutation.setRate(1d);
         }
     }
 

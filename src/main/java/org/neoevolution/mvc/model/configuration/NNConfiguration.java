@@ -36,13 +36,15 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected Integer outputSize;
 
+    protected Integer hiddenMinSize;
+
+    protected Integer hiddenMaxSize;
+
     protected Boolean fullyConnected;
 
     protected Double weightRange;
 
     protected Double addNeuronRate;
-
-    protected Integer hiddenMaxSize;
 
     protected Double addSynapseRate;
 
@@ -153,6 +155,20 @@ public abstract class NNConfiguration extends AbstractEntity {
         this.outputSize = outputSize;
     }
 
+    public Integer getHiddenMinSize() {
+        return hiddenMinSize;
+    }
+    public void setHiddenMinSize(Integer hiddenMinSize) {
+        this.hiddenMinSize = hiddenMinSize;
+    }
+
+    public Integer getHiddenMaxSize() {
+        return hiddenMaxSize;
+    }
+    public void setHiddenMaxSize(Integer hiddenMaxSize) {
+        this.hiddenMaxSize = hiddenMaxSize;
+    }
+
     public Boolean isFullyConnected() {
         return fullyConnected;
     }
@@ -165,13 +181,6 @@ public abstract class NNConfiguration extends AbstractEntity {
     }
     public void setAddNeuronRate(Double addNeuronRate) {
         this.addNeuronRate = addNeuronRate;
-    }
-
-    public Integer getHiddenMaxSize() {
-        return hiddenMaxSize;
-    }
-    public void setHiddenMaxSize(Integer hiddenMaxSize) {
-        this.hiddenMaxSize = hiddenMaxSize;
     }
 
     public Double getAddSynapseRate() {
