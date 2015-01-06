@@ -10,7 +10,6 @@
 
     <properties>
         <java.version>1.7</java.version>
-        <start-class>org.neoevolution.xor.XORNeoEvolution</start-class>
     </properties>
 
     <parent>
