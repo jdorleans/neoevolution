@@ -37,14 +37,14 @@ public class SigmoidFunctionTest extends AbstractActivationFunctionTest {
     @Override
     protected List<Double> getMinimumValues() {
         List<Double> values = new ArrayList<>();
-        values.add(-100d);
+        values.add(-1000d);
         return values;
     }
 
     @Override
     protected List<Double> getMaximumValues() {
         List<Double> values = new ArrayList<>();
-        values.add(100d);
+        values.add(1000d);
         return values;
     }
 
