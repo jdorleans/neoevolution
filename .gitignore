@@ -1,2 +1,8 @@
-.idea
-neoevolution.iml
+neoevolution/.idea
+neoevolution/neoevolution.iml
+neoevolution-samples/neoevolution-sample-xor/data
+neoevolution-samples/neoevolution-sample-xor/.idea
+neoevolution-samples/neoevolution-sample-xor/neoevolution-sample-xor.iml
+neoevolution-samples/neoevolution-sample-robot/data
+neoevolution-samples/neoevolution-sample-robot/.idea
+neoevolution-samples/neoevolution-sample-robot/neoevolution-sample-robot.iml
