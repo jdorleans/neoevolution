@@ -7,7 +7,7 @@ import org.neoevolution.xor.core.XOREvaluation;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 20 2014
+ * @since 1.0
  */
 public class XORAlgorithmFactory extends AbstractNEStopAlgorithmFactory
         <XORAlgorithm, XOREvaluation, XORConfiguration> {

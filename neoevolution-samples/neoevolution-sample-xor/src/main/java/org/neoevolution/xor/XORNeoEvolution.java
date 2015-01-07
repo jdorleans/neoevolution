@@ -10,6 +10,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @Configuration
 @EnableNeo4jRepositories("org.neoevolution.xor.mvc.repository")
 @Import(NeoEvolutionConfiguration.class)

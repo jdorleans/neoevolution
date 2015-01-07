@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 14 2014
+ * @since 1.0
  */
 @Service
 public class XORConfigurationService extends NEConfigurationService<XORConfiguration, XORConfigurationRepository> {

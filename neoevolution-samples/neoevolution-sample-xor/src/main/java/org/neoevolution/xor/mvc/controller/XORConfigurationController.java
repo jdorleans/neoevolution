@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Jan 03 2015
+ * @since 1.0
  */
 @RestController
 @RequestMapping("/xor/config")

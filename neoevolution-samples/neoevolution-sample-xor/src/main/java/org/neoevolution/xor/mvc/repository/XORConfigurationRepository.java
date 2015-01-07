@@ -5,7 +5,7 @@ import org.neoevolution.xor.mvc.model.XORConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 01 2014
+ * @since 1.0
  */
 public interface XORConfigurationRepository extends NEConfigurationRepository<XORConfiguration> {
 

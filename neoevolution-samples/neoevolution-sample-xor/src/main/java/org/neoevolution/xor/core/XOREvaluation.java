@@ -5,6 +5,10 @@ import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public class XOREvaluation extends TrainingEvaluation {
 
     public XOREvaluation() {

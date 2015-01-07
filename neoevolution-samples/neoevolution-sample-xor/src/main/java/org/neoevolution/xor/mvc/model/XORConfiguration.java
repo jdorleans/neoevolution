@@ -6,7 +6,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 25 2014
+ * @since 1.0
  */
 @NodeEntity
 public class XORConfiguration extends AbstractNEErrorStopConfiguration<ErrorFunctionType> {
