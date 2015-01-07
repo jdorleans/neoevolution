@@ -18,14 +18,26 @@ import java.util.concurrent.Future;
 public class GenotypeActivation {
 
     @Async
-    public Future<EntitySampleData> activate(Genotype genotype, SampleData inputs)
+    public Future<EntityDataSet> activateEntity(Genotype genotype, DataSet inputSet)
     {
-        EntitySampleData outputs = new EntitySampleData(genotype.getId());
+        EntityDataSet outputSet = new EntityDataSet(inputSet.size());
+        outputSet.setId(genotype.getId());
 
-        for (List<Double> input : inputs) {
-            outputs.add(activate(genotype, input));
+        for (List<Double> inputs : inputSet) {
+            outputSet.add(activate(genotype, inputs));
         }
-        return new AsyncResult<>(outputs);
+        return new AsyncResult<>(outputSet);
+    }
+
+    @Async
+    public Future<DataSet> activate(Genotype genotype, DataSet inputSet)
+    {
+        DataSet outputSet = new DataSet(inputSet.size());
+
+        for (List<Double> inputs : inputSet) {
+            outputSet.add(activate(genotype, inputs));
+        }
+        return new AsyncResult<>(outputSet);
     }
 
     public List<Double> activate(Genotype genotype, List<Double> inputs)

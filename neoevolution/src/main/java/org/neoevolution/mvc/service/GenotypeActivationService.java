@@ -1,8 +1,8 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.operator.activation.EntitySampleData;
+import org.neoevolution.core.operator.activation.DataSet;
+import org.neoevolution.core.operator.activation.EntityDataSet;
 import org.neoevolution.core.operator.activation.GenotypeActivation;
-import org.neoevolution.core.operator.activation.SampleData;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.util.FutureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +27,31 @@ public class GenotypeActivationService {
     private GenotypeActivation activation;
 
 
-    public EntitySampleData activate(Long id, SampleData sample) throws ExecutionException, InterruptedException {
-        return activation.activate(service.find(id), sample).get();
+    public List<Double> activate(Long id, List<Double> inputs) {
+        return activation.activate(service.find(id), inputs);
     }
 
-    public List<EntitySampleData> activate(List<EntitySampleData> samples)
-    {
-        List<Future<EntitySampleData>> futures = new ArrayList<>(samples.size());
+    public DataSet activate(Long id, DataSet inputSet) throws ExecutionException, InterruptedException {
+        return activation.activate(service.find(id), inputSet).get();
+    }
 
-        for (EntitySampleData sample : samples) {
-            futures.add(activation.activate(service.find(sample.getId()), sample));
+    public List<EntityDataSet> activate(List<EntityDataSet> inputSet)
+    {
+        List<Future<EntityDataSet>> futures = new ArrayList<>(inputSet.size());
+
+        for (EntityDataSet input : inputSet) {
+            futures.add(activation.activateEntity(service.find(input.getId()), input));
         }
         return FutureUtils.getResults(futures);
     }
 
-    public List<EntitySampleData> activateAll(SampleData sample)
+    public List<EntityDataSet> activateAll(DataSet inputSet)
     {
         List<Genotype> genotypes = service.findAll();
-        List<Future<EntitySampleData>> futures = new ArrayList<>(genotypes.size());
+        List<Future<EntityDataSet>> futures = new ArrayList<>(genotypes.size());
 
         for (Genotype genotype : genotypes) {
-            futures.add(activation.activate(genotype, sample));
+            futures.add(activation.activateEntity(genotype, inputSet));
         }
         return FutureUtils.getResults(futures);
     }

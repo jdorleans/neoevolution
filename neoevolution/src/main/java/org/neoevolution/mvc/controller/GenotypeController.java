@@ -1,7 +1,7 @@
 package org.neoevolution.mvc.controller;
 
-import org.neoevolution.core.operator.activation.EntitySampleData;
-import org.neoevolution.core.operator.activation.SampleData;
+import org.neoevolution.core.operator.activation.DataSet;
+import org.neoevolution.core.operator.activation.EntityDataSet;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.service.GenotypeActivationService;
 import org.neoevolution.mvc.service.GenotypeService;
@@ -30,19 +30,19 @@ public class GenotypeController extends FitnessEntityController<Genotype, Genoty
 
 
     @RequestMapping(value = "/{id}/activate", method = RequestMethod.POST)
-    public EntitySampleData activate(@PathVariable Long id, @RequestBody SampleData sample)
+    public DataSet activate(@PathVariable Long id, @RequestBody DataSet inputSet)
             throws ExecutionException, InterruptedException {
-        return activationService.activate(id, sample);
+        return activationService.activate(id, inputSet);
     }
 
     @RequestMapping(value = "/activate/batch", method = RequestMethod.POST)
-    public List<EntitySampleData> activate(@RequestBody List<EntitySampleData> samples) {
-        return activationService.activate(samples);
+    public List<EntityDataSet> activate(@RequestBody List<EntityDataSet> entityInputSet) {
+        return activationService.activate(entityInputSet);
     }
 
     @RequestMapping(value = "/activate", method = RequestMethod.POST)
-    public List<EntitySampleData> activateAll(@RequestBody SampleData sample) {
-        return activationService.activateAll(sample);
+    public List<EntityDataSet> activateAll(@RequestBody DataSet inputSet) {
+        return activationService.activateAll(inputSet);
     }
 
 

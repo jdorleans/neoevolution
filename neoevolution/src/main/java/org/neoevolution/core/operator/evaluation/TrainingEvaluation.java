@@ -2,6 +2,7 @@ package org.neoevolution.core.operator.evaluation;
 
 import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.core.operator.activation.GenotypeActivation;
+import org.neoevolution.core.operator.activation.SampleData;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.Population;
@@ -9,6 +10,7 @@ import org.neoevolution.mvc.model.Species;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -19,9 +21,7 @@ public abstract class TrainingEvaluation implements Evaluation {
 
     protected Double maxFitness;
 
-    protected List<List<Double>> inputSet;
-
-    protected List<List<Double>> outputSet;
+    protected List<SampleData> data;
 
     protected ErrorFunction errorFunction;
 
@@ -35,6 +35,7 @@ public abstract class TrainingEvaluation implements Evaluation {
 
     protected TrainingEvaluation(Double maxFitness) {
         this.maxFitness = maxFitness;
+        this.data = new ArrayList<>();
     }
 
 
@@ -71,24 +72,24 @@ public abstract class TrainingEvaluation implements Evaluation {
     protected void evaluate(Genotype genotype)
     {
         double fitness = 0d;
-        int evaluations = inputSet.size();
+        int evaluations = data.size();
 
-        for (int idx = 0; idx < evaluations; idx++) {
-            fitness += evaluate(genotype, inputSet.get(idx), outputSet.get(idx));
+        for (SampleData sampleData : data) {
+            fitness += evaluate(genotype, sampleData);
         }
         genotype.setFitness(fitness / evaluations);
         genotype.setEvaluated(true);
     }
 
-    protected double evaluate(Genotype genotype, List<Double> inputs, List<Double> outputs)
+    protected double evaluate(Genotype genotype, SampleData sampleData)
     {
         errorFunction.reset();
-        Set<Long> stimulated = genotypeActivation.stimuliInputs(genotype, inputs);
+        Set<Long> stimulated = genotypeActivation.stimuliInputs(genotype, sampleData.getInputs());
 
         int idx = 0;
         for (Neuron neuron : genotype.getOutputs()) {
             double activation = genotypeActivation.activate(neuron, stimulated);
-            errorFunction.add(outputs.get(idx), activation);
+            errorFunction.add(sampleData.getOutput(idx), activation);
             idx++;
         }
         return calculateError();
@@ -105,18 +106,18 @@ public abstract class TrainingEvaluation implements Evaluation {
     }
 
 
-    public List<List<Double>> getInputSet() {
-        return inputSet;
+    public Double getMaxFitness() {
+        return maxFitness;
     }
-    public void setInputSet(List<List<Double>> inputSet) {
-        this.inputSet = inputSet;
+    public void setMaxFitness(Double maxFitness) {
+        this.maxFitness = maxFitness;
     }
 
-    public List<List<Double>> getOutputSet() {
-        return outputSet;
+    public List<SampleData> getData() {
+        return data;
     }
-    public void setOutputSet(List<List<Double>> outputSet) {
-        this.outputSet = outputSet;
+    public void setData(List<SampleData> data) {
+        this.data = data;
     }
 
     public ErrorFunction getErrorFunction() {
@@ -124,6 +125,13 @@ public abstract class TrainingEvaluation implements Evaluation {
     }
     public void setErrorFunction(ErrorFunction errorFunction) {
         this.errorFunction = errorFunction;
+    }
+
+    public GenotypeActivation getGenotypeActivation() {
+        return genotypeActivation;
+    }
+    public void setGenotypeActivation(GenotypeActivation genotypeActivation) {
+        this.genotypeActivation = genotypeActivation;
     }
 
 }

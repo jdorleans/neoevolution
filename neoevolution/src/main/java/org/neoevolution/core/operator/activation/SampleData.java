@@ -3,59 +3,78 @@ package org.neoevolution.core.operator.activation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Jan 02 2015
  */
-public class SampleData implements Iterable<List<Double>> {
+public class SampleData {
 
-    private List<List<Double>> data;
+    public static final int SIZE = 10;
+
+    private List<Double> inputs;
+
+    private List<Double> outputs;
 
 
     public SampleData() {
-        this(new ArrayList<List<Double>>());
+        this(SIZE, SIZE);
     }
 
-    public SampleData(List<List<Double>> data) {
-        this.data = data;
+    public SampleData(int inputs, int outputs) {
+        this(new ArrayList<Double>(inputs), new ArrayList<Double>(outputs));
+    }
+
+    public SampleData(List<Double> inputs, List<Double> outputs) {
+        this.inputs = inputs;
+        this.outputs = outputs;
     }
 
 
-    public boolean hasData() {
-        return data != null;
+    public Double getInput(int index) {
+        return inputs.get(index);
+    }
+    public Double getOutput(int index) {
+        return outputs.get(index);
     }
 
-    public void add(List<Double> values)
-    {
-        if (!hasData()) {
-            data = new ArrayList<>();
-        }
-        data.add(values);
+    public void addInput(Double value) {
+        inputs.add(value);
+    }
+    public void addOutput(Double value) {
+        outputs.add(value);
     }
 
-    public int size() {
-        return (hasData() ? data.size() : 0);
+    public int inputSize() {
+        return inputs.size();
+    }
+    public int outputSize() {
+        return outputs.size();
     }
 
     @JsonIgnore
-    public boolean isEmpty() {
-        return (size() == 0);
+    public boolean isInputEmpty() {
+        return inputs.isEmpty();
+    }
+    @JsonIgnore
+    public boolean isOutputEmpty() {
+        return outputs.isEmpty();
     }
 
-    @Override
-    public Iterator<List<Double>> iterator() {
-        return (hasData() ? data.iterator() : new SampleData().iterator());
+
+    public List<Double> getInputs() {
+        return inputs;
+    }
+    public void setInputs(List<Double> inputs) {
+        this.inputs = inputs;
     }
 
-
-    public List<List<Double>> getData() {
-        return data;
+    public List<Double> getOutputs() {
+        return outputs;
     }
-    public void setData(List<List<Double>> data) {
-        this.data = data;
+    public void setOutputs(List<Double> outputs) {
+        this.outputs = outputs;
     }
 
 }
