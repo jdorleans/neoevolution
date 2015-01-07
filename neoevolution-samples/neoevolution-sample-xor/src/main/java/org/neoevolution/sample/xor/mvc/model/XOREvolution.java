@@ -1,4 +1,4 @@
-package org.neoevolution.xor.mvc.model;
+package org.neoevolution.sample.xor.mvc.model;
 
 import org.neoevolution.mvc.model.Evolution;
 import org.springframework.data.neo4j.annotation.NodeEntity;

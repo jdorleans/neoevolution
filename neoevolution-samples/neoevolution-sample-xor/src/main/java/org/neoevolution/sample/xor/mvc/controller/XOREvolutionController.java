@@ -1,9 +1,9 @@
-package org.neoevolution.xor.mvc.controller;
+package org.neoevolution.sample.xor.mvc.controller;
 
 import org.neoevolution.mvc.controller.EvolutionController;
-import org.neoevolution.xor.mvc.model.XORConfiguration;
-import org.neoevolution.xor.mvc.model.XOREvolution;
-import org.neoevolution.xor.mvc.service.XOREvolutionService;
+import org.neoevolution.sample.xor.mvc.model.XORConfiguration;
+import org.neoevolution.sample.xor.mvc.model.XOREvolution;
+import org.neoevolution.sample.xor.mvc.service.XOREvolutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package org.neoevolution.xor.mvc.model;
+package org.neoevolution.sample.xor.mvc.model;
 
 import org.neoevolution.core.error.ErrorFunctionType;
 import org.neoevolution.mvc.model.configuration.AbstractNEErrorStopConfiguration;

@@ -1,7 +1,7 @@
-package org.neoevolution.xor.mvc.repository;
+package org.neoevolution.sample.xor.mvc.repository;
 
 import org.neoevolution.mvc.repository.EvolutionRepository;
-import org.neoevolution.xor.mvc.model.XOREvolution;
+import org.neoevolution.sample.xor.mvc.model.XOREvolution;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

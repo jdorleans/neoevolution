@@ -1,8 +1,8 @@
-package org.neoevolution.xor.mvc.service;
+package org.neoevolution.sample.xor.mvc.service;
 
 import org.neoevolution.mvc.service.NEConfigurationService;
-import org.neoevolution.xor.mvc.model.XORConfiguration;
-import org.neoevolution.xor.mvc.repository.XORConfigurationRepository;
+import org.neoevolution.sample.xor.mvc.model.XORConfiguration;
+import org.neoevolution.sample.xor.mvc.repository.XORConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

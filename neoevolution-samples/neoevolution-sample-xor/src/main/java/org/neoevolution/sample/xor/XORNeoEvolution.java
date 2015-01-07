@@ -1,4 +1,4 @@
-package org.neoevolution.xor;
+package org.neoevolution.sample.xor;
 
 import org.neoevolution.configuration.NeoEvolutionConfiguration;
 import org.springframework.boot.SpringApplication;
@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
  * @since 1.0
  */
 @Configuration
-@EnableNeo4jRepositories("org.neoevolution.xor.mvc.repository")
+@EnableNeo4jRepositories("org.neoevolution.sample.xor.mvc.repository")
 @Import(NeoEvolutionConfiguration.class)
 public class XORNeoEvolution extends AsyncConfigurerSupport {
 

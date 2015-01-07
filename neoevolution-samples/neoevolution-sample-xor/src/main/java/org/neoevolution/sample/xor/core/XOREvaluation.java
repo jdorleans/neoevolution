@@ -1,4 +1,4 @@
-package org.neoevolution.xor.core;
+package org.neoevolution.sample.xor.core;
 
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 
