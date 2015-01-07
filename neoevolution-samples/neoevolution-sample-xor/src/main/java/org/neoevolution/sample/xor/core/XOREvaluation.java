@@ -12,6 +12,7 @@ import java.util.List;
 public class XOREvaluation extends TrainingEvaluation {
 
     public XOREvaluation() {
+        super();
         initInputs();
         initOutputs();
     }
