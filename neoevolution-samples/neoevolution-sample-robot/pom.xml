@@ -14,6 +14,7 @@
 
     <properties>
         <java.version>1.7</java.version>
+        <jme3.version>3.0.10</jme3.version>
         <start-class>org.neoevolution.org.neoevolution.sample.robot.RobotNeoEvolution</start-class>
     </properties>
 
@@ -90,7 +91,32 @@
             <artifactId>cache-api</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <!-- jMonkeyEngine 3 -->
+        <dependency>
+            <groupId>com.jme3</groupId>
+            <artifactId>jme3-core</artifactId>
+            <version>${jme3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jme3</groupId>
+            <artifactId>jme3-desktop</artifactId>
+            <version>${jme3.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jme3</groupId>
+            <artifactId>jme3-lwjgl</artifactId>
+            <version>${jme3.version}</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>com.jme3</id>
+            <name>jMonkeyEngine Repo</name>
+            <url>http://updates.jmonkeyengine.org/maven/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
