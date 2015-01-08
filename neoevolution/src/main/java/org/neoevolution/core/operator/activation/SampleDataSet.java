@@ -10,11 +10,11 @@ import java.util.List;
 public class SampleDataSet extends AbstractDataSet<SampleData> {
 
     public SampleDataSet() {
-        super(SIZE);
+        this(SIZE);
     }
 
     public SampleDataSet(int size) {
-        super(new ArrayList<SampleData>(size));
+        this(new ArrayList<SampleData>(size));
     }
 
     public SampleDataSet(List<SampleData> data) {

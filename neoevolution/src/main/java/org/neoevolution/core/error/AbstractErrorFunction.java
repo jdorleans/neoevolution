@@ -32,4 +32,11 @@ public abstract class AbstractErrorFunction implements ErrorFunction {
 
     protected abstract double compute();
 
+    @Override
+    public ErrorFunction clone() throws CloneNotSupportedException {
+        ErrorFunction clone = (ErrorFunction) super.clone();
+        clone.reset();
+        return clone;
+    }
+
 }

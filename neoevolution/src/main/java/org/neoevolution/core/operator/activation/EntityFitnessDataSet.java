@@ -9,30 +9,35 @@ import java.util.List;
  * @since Jan 02 2015
  */
 @JsonPropertyOrder({"id", "data"})
-public class EntitySampleDataSet extends SampleDataSet {
+public class EntityFitnessDataSet extends AbstractDataSet<Double> {
 
     private Long id;
 
 
-    public EntitySampleDataSet() {
+    public EntityFitnessDataSet() {
         super();
     }
 
-    public EntitySampleDataSet(Long id) {
+    public EntityFitnessDataSet(Long id) {
         super();
         this.id = id;
     }
 
-    public EntitySampleDataSet(int size) {
+    public EntityFitnessDataSet(int size) {
         super(size);
     }
 
-    public EntitySampleDataSet(List<SampleData> samples) {
-        this(null, samples);
+    public EntityFitnessDataSet(Long id, int size) {
+        super(size);
+        this.id = id;
     }
 
-    public EntitySampleDataSet(Long id, List<SampleData> samples) {
-        super(samples);
+    public EntityFitnessDataSet(List<Double> data) {
+        this(null, data);
+    }
+
+    public EntityFitnessDataSet(Long id, List<Double> data) {
+        super(data);
         this.id = id;
     }
 
