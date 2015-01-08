@@ -1,9 +1,8 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.operator.activation.EntityErrorDataSet;
-import org.neoevolution.core.operator.activation.EntityFitnessDataSet;
-import org.neoevolution.core.operator.activation.ErrorCalculator;
-import org.neoevolution.core.operator.activation.ErrorDataSet;
+import org.neoevolution.core.error.ErrorCalculator;
+import org.neoevolution.mvc.dataset.EntityDataSet;
+import org.neoevolution.mvc.dataset.ErrorDataSet;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.util.FutureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +30,35 @@ public class GenotypeErrorService {
         return activation.calculate(service.find(id), dataSet);
     }
 
-    public List<EntityFitnessDataSet> calculate(List<EntityErrorDataSet> dataSet)
-    {
-        List<Future<EntityFitnessDataSet>> futures = new ArrayList<>(dataSet.size());
+    public EntityDataSet calculateEntity(Long id, ErrorDataSet dataSet) {
+        return activation.calculateEntity(service.find(id), dataSet);
+    }
 
-        for (EntityErrorDataSet data : dataSet) {
+
+    public List<EntityDataSet> calculate(List<Long> ids, ErrorDataSet dataSet)
+    {
+        List<Future<EntityDataSet>> futures = new ArrayList<>(ids.size());
+
+        for (Long id : ids) {
+            futures.add(activation.calculateEntityAsync(service.find(id), dataSet));
+        }
+        return FutureUtils.getResults(futures);
+    }
+
+    public List<EntityDataSet> calculate(List<ErrorDataSet> dataSets)
+    {
+        List<Future<EntityDataSet>> futures = new ArrayList<>(dataSets.size());
+
+        for (ErrorDataSet data : dataSets) {
             futures.add(activation.calculateEntityAsync(service.find(data.getId()), data));
         }
         return FutureUtils.getResults(futures);
     }
 
-    public List<EntityFitnessDataSet> calculateAll(ErrorDataSet dataSet)
+    public List<EntityDataSet> calculateAll(ErrorDataSet dataSet)
     {
         List<Genotype> genotypes = service.findAll();
-        List<Future<EntityFitnessDataSet>> futures = new ArrayList<>(genotypes.size());
+        List<Future<EntityDataSet>> futures = new ArrayList<>(genotypes.size());
 
         for (Genotype genotype : genotypes) {
             futures.add(activation.calculateEntityAsync(genotype, dataSet));

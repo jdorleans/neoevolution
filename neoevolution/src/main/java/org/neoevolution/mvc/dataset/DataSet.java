@@ -1,4 +1,4 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.mvc.dataset;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -10,22 +10,22 @@ import java.util.List;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Jan 02 2015
  */
-public abstract class AbstractDataSet<T> implements Iterable<T> {
+public class DataSet<T> implements Iterable<T> {
 
     public static final int SIZE = 10;
 
     protected List<T> data;
 
 
-    public AbstractDataSet() {
+    public DataSet() {
         this(SIZE);
     }
 
-    public AbstractDataSet(int size) {
+    public DataSet(int size) {
         this(new ArrayList<T>(size));
     }
 
-    public AbstractDataSet(List<T> data) {
+    public DataSet(List<T> data) {
         this.data = data;
     }
 

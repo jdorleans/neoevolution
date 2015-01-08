@@ -1,8 +1,9 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.core.error;
 
-import org.neoevolution.core.error.ErrorFunction;
-import org.neoevolution.core.error.ErrorFunctionManager;
-import org.neoevolution.core.error.ErrorFunctionType;
+import org.neoevolution.core.activation.GenotypeActivation;
+import org.neoevolution.mvc.dataset.EntityDataSet;
+import org.neoevolution.mvc.dataset.ErrorDataSet;
+import org.neoevolution.mvc.dataset.SampleData;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class ErrorCalculator {
 
 
     @Async
-    public Future<EntityFitnessDataSet> calculateEntityAsync(Genotype genotype, ErrorDataSet dataSet) {
-        return new AsyncResult<>(new EntityFitnessDataSet(genotype.getId(), calculate(genotype, dataSet)));
+    public Future<EntityDataSet> calculateEntityAsync(Genotype genotype, ErrorDataSet dataSet) {
+        return new AsyncResult<>(calculateEntity(genotype, dataSet));
     }
 
     @Async
@@ -36,8 +37,8 @@ public class ErrorCalculator {
     }
 
 
-    public EntityFitnessDataSet calculateEntity(Genotype genotype, ErrorDataSet dataSet) {
-        return new EntityFitnessDataSet(genotype.getId(), calculate(genotype, dataSet));
+    public EntityDataSet calculateEntity(Genotype genotype, ErrorDataSet dataSet) {
+        return new EntityDataSet<>(genotype.getId(), calculate(genotype, dataSet));
     }
 
     public List<Double> calculate(Genotype genotype, ErrorDataSet dataSet)

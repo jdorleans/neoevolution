@@ -1,5 +1,6 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.core.activation;
 
+import org.neoevolution.mvc.dataset.ListDataSet;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.NeuronType;
@@ -18,26 +19,25 @@ import java.util.concurrent.Future;
 public class GenotypeActivation {
 
     @Async
-    public Future<EntityDataSet> activateEntity(Genotype genotype, DataSet inputSet)
+    public Future<ListDataSet> activateAsync(Genotype genotype, ListDataSet inputSet) {
+        return new AsyncResult<>(activate(genotype, inputSet));
+    }
+
+    @Async
+    public Future<List<Double>> activateAsync(Genotype genotype, List<Double> inputSet) {
+        return new AsyncResult<>(activate(genotype, inputSet));
+    }
+
+
+    public ListDataSet activate(Genotype genotype, ListDataSet inputSet)
     {
-        EntityDataSet outputSet = new EntityDataSet(inputSet.size());
+        ListDataSet outputSet = new ListDataSet(inputSet.size());
         outputSet.setId(genotype.getId());
 
         for (List<Double> inputs : inputSet) {
             outputSet.add(activate(genotype, inputs));
         }
-        return new AsyncResult<>(outputSet);
-    }
-
-    @Async
-    public Future<DataSet> activate(Genotype genotype, DataSet inputSet)
-    {
-        DataSet outputSet = new DataSet(inputSet.size());
-
-        for (List<Double> inputs : inputSet) {
-            outputSet.add(activate(genotype, inputs));
-        }
-        return new AsyncResult<>(outputSet);
+        return outputSet;
     }
 
     public List<Double> activate(Genotype genotype, List<Double> inputs)
@@ -51,6 +51,7 @@ public class GenotypeActivation {
         }
         return outputs;
     }
+
 
     public Set<Long> stimuliInputs(Genotype genotype, List<Double> inputs)
     {

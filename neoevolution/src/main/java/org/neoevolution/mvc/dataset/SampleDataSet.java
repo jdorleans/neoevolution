@@ -1,4 +1,4 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.mvc.dataset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.List;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Jan 02 2015
  */
-public class SampleDataSet extends AbstractDataSet<SampleData> {
+public class SampleDataSet extends EntityDataSet<SampleData> {
 
     public SampleDataSet() {
         this(SIZE);

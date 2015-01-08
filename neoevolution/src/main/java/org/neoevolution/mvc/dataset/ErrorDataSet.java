@@ -1,4 +1,4 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.mvc.dataset;
 
 import org.neoevolution.core.error.ErrorFunctionType;
 

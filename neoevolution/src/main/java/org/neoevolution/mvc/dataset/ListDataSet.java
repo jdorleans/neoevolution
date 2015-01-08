@@ -1,4 +1,4 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.mvc.dataset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,17 +7,17 @@ import java.util.List;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Jan 02 2015
  */
-public class DataSet extends AbstractDataSet<List<Double>> {
+public class ListDataSet extends EntityDataSet<List<Double>> {
 
-    public DataSet() {
+    public ListDataSet() {
         super(SIZE);
     }
 
-    public DataSet(int size) {
+    public ListDataSet(int size) {
         super(new ArrayList<List<Double>>(size));
     }
 
-    public DataSet(List<List<Double>> data) {
+    public ListDataSet(List<List<Double>> data) {
         super(data);
     }
 

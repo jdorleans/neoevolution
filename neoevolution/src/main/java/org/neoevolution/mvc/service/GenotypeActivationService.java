@@ -1,8 +1,7 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.core.operator.activation.DataSet;
-import org.neoevolution.core.operator.activation.EntityDataSet;
-import org.neoevolution.core.operator.activation.GenotypeActivation;
+import org.neoevolution.core.activation.GenotypeActivation;
+import org.neoevolution.mvc.dataset.ListDataSet;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.util.FutureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -31,27 +29,38 @@ public class GenotypeActivationService {
         return activation.activate(service.find(id), inputs);
     }
 
-    public DataSet activate(Long id, DataSet inputSet) throws ExecutionException, InterruptedException {
-        return activation.activate(service.find(id), inputSet).get();
+    public ListDataSet activate(Long id, ListDataSet inputSet) {
+        return activation.activate(service.find(id), inputSet);
     }
 
-    public List<EntityDataSet> activate(List<EntityDataSet> inputSet)
-    {
-        List<Future<EntityDataSet>> futures = new ArrayList<>(inputSet.size());
 
-        for (EntityDataSet input : inputSet) {
-            futures.add(activation.activateEntity(service.find(input.getId()), input));
+    public List<ListDataSet> activate(List<Long> ids, ListDataSet inputSet)
+    {
+        List<Future<ListDataSet>> futures = new ArrayList<>(ids.size());
+
+        for (Long id : ids) {
+            futures.add(activation.activateAsync(service.find(id), inputSet));
         }
         return FutureUtils.getResults(futures);
     }
 
-    public List<EntityDataSet> activateAll(DataSet inputSet)
+    public List<ListDataSet> activate(List<ListDataSet> inputSets)
+    {
+        List<Future<ListDataSet>> futures = new ArrayList<>(inputSets.size());
+
+        for (ListDataSet inputSet : inputSets) {
+            futures.add(activation.activateAsync(service.find(inputSet.getId()), inputSet));
+        }
+        return FutureUtils.getResults(futures);
+    }
+
+    public List<ListDataSet> activateAll(ListDataSet inputSet)
     {
         List<Genotype> genotypes = service.findAll();
-        List<Future<EntityDataSet>> futures = new ArrayList<>(genotypes.size());
+        List<Future<ListDataSet>> futures = new ArrayList<>(genotypes.size());
 
         for (Genotype genotype : genotypes) {
-            futures.add(activation.activateEntity(genotype, inputSet));
+            futures.add(activation.activateAsync(genotype, inputSet));
         }
         return FutureUtils.getResults(futures);
     }

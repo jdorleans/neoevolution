@@ -1,4 +1,4 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.mvc.dataset;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -9,37 +9,38 @@ import java.util.List;
  * @since Jan 02 2015
  */
 @JsonPropertyOrder({"id", "data"})
-public class EntityFitnessDataSet extends AbstractDataSet<Double> {
+public class EntityDataSet<T> extends DataSet<T> {
 
-    private Long id;
+    protected Long id;
 
 
-    public EntityFitnessDataSet() {
+    public EntityDataSet() {
         super();
     }
 
-    public EntityFitnessDataSet(Long id) {
+    public EntityDataSet(Long id) {
         super();
         this.id = id;
     }
 
-    public EntityFitnessDataSet(int size) {
+    public EntityDataSet(int size) {
         super(size);
     }
 
-    public EntityFitnessDataSet(Long id, int size) {
+    public EntityDataSet(Long id, int size) {
         super(size);
         this.id = id;
     }
 
-    public EntityFitnessDataSet(List<Double> data) {
+    public EntityDataSet(List<T> data) {
         this(null, data);
     }
 
-    public EntityFitnessDataSet(Long id, List<Double> data) {
+    public EntityDataSet(Long id, List<T> data) {
         super(data);
         this.id = id;
     }
+
 
 
     public Long getId() {

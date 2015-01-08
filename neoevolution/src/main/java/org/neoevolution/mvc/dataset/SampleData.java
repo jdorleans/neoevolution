@@ -1,4 +1,4 @@
-package org.neoevolution.core.operator.activation;
+package org.neoevolution.mvc.dataset;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

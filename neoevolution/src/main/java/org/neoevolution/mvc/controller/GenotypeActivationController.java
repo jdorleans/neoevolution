@@ -1,7 +1,6 @@
 package org.neoevolution.mvc.controller;
 
-import org.neoevolution.core.operator.activation.DataSet;
-import org.neoevolution.core.operator.activation.EntityDataSet;
+import org.neoevolution.mvc.dataset.ListDataSet;
 import org.neoevolution.mvc.service.GenotypeActivationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,23 +17,23 @@ import java.util.concurrent.ExecutionException;
 public class GenotypeActivationController {
 
     @Autowired
-    private GenotypeActivationService activationService;
+    private GenotypeActivationService service;
 
 
     @RequestMapping(value = "/{id}/activate", method = RequestMethod.POST)
-    public DataSet activate(@PathVariable Long id, @RequestBody DataSet inputSet)
+    public ListDataSet activate(@PathVariable Long id, @RequestBody ListDataSet inputSet)
             throws ExecutionException, InterruptedException {
-        return activationService.activate(id, inputSet);
+        return service.activate(id, inputSet);
     }
 
     @RequestMapping(value = "/activate/batch", method = RequestMethod.POST)
-    public List<EntityDataSet> activate(@RequestBody List<EntityDataSet> entityInputSet) {
-        return activationService.activate(entityInputSet);
+    public List<ListDataSet> activate(@RequestBody List<ListDataSet> entityInputSet) {
+        return service.activate(entityInputSet);
     }
 
     @RequestMapping(value = "/activate", method = RequestMethod.POST)
-    public List<EntityDataSet> activateAll(@RequestBody DataSet inputSet) {
-        return activationService.activateAll(inputSet);
+    public List<ListDataSet> activateAll(@RequestBody ListDataSet inputSet) {
+        return service.activateAll(inputSet);
     }
 
 }

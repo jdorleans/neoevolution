@@ -1,8 +1,8 @@
 package org.neoevolution.mvc.controller;
 
-import org.neoevolution.core.operator.activation.DataSet;
-import org.neoevolution.core.operator.activation.EntityDataSet;
-import org.neoevolution.mvc.service.GenotypeActivationService;
+import org.neoevolution.mvc.dataset.EntityDataSet;
+import org.neoevolution.mvc.dataset.ErrorDataSet;
+import org.neoevolution.mvc.service.GenotypeErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,23 +18,23 @@ import java.util.concurrent.ExecutionException;
 public class GenotypeErrorController {
 
     @Autowired
-    private GenotypeActivationService activationService;
+    private GenotypeErrorService service;
 
 
     @RequestMapping(value = "/{id}/error", method = RequestMethod.POST)
-    public DataSet activate(@PathVariable Long id, @RequestBody DataSet inputSet)
+    public EntityDataSet activate(@PathVariable Long id, @RequestBody ErrorDataSet dataSet)
             throws ExecutionException, InterruptedException {
-        return activationService.activate(id, inputSet);
+        return service.calculateEntity(id, dataSet);
     }
 
     @RequestMapping(value = "/error/batch", method = RequestMethod.POST)
-    public List<EntityDataSet> activate(@RequestBody List<EntityDataSet> entityInputSet) {
-        return activationService.activate(entityInputSet);
+    public List<EntityDataSet> activate(@RequestBody List<ErrorDataSet> dataSets) {
+        return service.calculate(dataSets);
     }
 
     @RequestMapping(value = "/error", method = RequestMethod.POST)
-    public List<EntityDataSet> activateAll(@RequestBody DataSet inputSet) {
-        return activationService.activateAll(inputSet);
+    public List<EntityDataSet> activateAll(@RequestBody ErrorDataSet dataSet) {
+        return service.calculateAll(dataSet);
     }
 
 }
