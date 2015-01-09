@@ -1,11 +1,11 @@
 package org.neoevolution.factory.operator.selection;
 
-import org.neoevolution.mvc.model.configuration.NEConfiguration;
 import org.neoevolution.core.operator.mutation.ComposedMutation;
 import org.neoevolution.core.operator.reproduction.Crossover;
 import org.neoevolution.core.operator.selection.NaturalSelection;
 import org.neoevolution.factory.operator.mutation.NEMutationFactory;
 import org.neoevolution.factory.operator.reproduction.CrossoverFactory;
+import org.neoevolution.mvc.model.configuration.NEConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

@@ -1,8 +1,8 @@
 package org.neoevolution.factory.operator.mutation;
 
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.core.operator.mutation.WeightSynapseMutation;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

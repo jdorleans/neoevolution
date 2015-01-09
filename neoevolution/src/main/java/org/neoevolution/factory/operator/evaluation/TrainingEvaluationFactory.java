@@ -1,10 +1,10 @@
 package org.neoevolution.factory.operator.evaluation;
 
-import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
 import org.neoevolution.core.error.ErrorFunctionType;
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
-import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.error.ErrorFunctionFactory;
+import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
+import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

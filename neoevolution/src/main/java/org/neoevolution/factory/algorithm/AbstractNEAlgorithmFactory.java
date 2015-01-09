@@ -1,13 +1,13 @@
 package org.neoevolution.factory.algorithm;
 
 import org.neoevolution.core.algorithm.AbstractNEAlgorithm;
-import org.neoevolution.mvc.model.configuration.NEConfiguration;
 import org.neoevolution.core.operator.evaluation.Evaluation;
 import org.neoevolution.core.operator.selection.NaturalSelection;
 import org.neoevolution.core.operator.speciation.NESpeciation;
 import org.neoevolution.core.stop.StopCondition;
 import org.neoevolution.factory.operator.selection.NaturalSelectionFactory;
 import org.neoevolution.factory.operator.speciation.NESpeciationFactory;
+import org.neoevolution.mvc.model.configuration.NEConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

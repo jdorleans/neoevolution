@@ -1,10 +1,10 @@
 package org.neoevolution.factory.model;
 
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.mvc.model.Species;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.model.configuration.ConfigurableFactory;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Species;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

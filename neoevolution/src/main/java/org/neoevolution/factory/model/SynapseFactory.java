@@ -1,12 +1,12 @@
 package org.neoevolution.factory.model;
 
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.neoevolution.mvc.model.innovation.SynapseInnovation;
-import org.neoevolution.mvc.model.Neuron;
-import org.neoevolution.mvc.model.Synapse;
 import org.neoevolution.core.operator.mutation.WeightSynapseMutation;
 import org.neoevolution.factory.model.configuration.ConfigurableFactory;
 import org.neoevolution.factory.operator.mutation.WeightSynapseMutationFactory;
+import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.Synapse;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
+import org.neoevolution.mvc.model.innovation.SynapseInnovation;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

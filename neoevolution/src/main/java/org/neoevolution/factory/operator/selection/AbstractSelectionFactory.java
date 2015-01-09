@@ -1,12 +1,12 @@
 package org.neoevolution.factory.operator.selection;
 
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.core.operator.mutation.Mutation;
 import org.neoevolution.core.operator.reproduction.Reproduction;
 import org.neoevolution.core.operator.selection.Selection;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.operator.mutation.MutationFactory;
 import org.neoevolution.factory.operator.reproduction.ReproductionFactory;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

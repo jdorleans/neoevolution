@@ -1,9 +1,9 @@
 package org.neoevolution.factory.error;
 
-import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
 import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.core.error.ErrorFunctionType;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
+import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

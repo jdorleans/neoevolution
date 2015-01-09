@@ -15,12 +15,12 @@ import java.util.Map;
 @Component
 public class ActivationTypeToActivationConverter implements Converter<ActivationFunctionType, ActivationFunction> {
 
-    @Resource(name = "activationFunctions")
-    private Map<ActivationFunctionType, ActivationFunction> activations;
+    @Resource
+    private Map<ActivationFunctionType, ActivationFunction> activationFunctions;
 
     @Override
     public ActivationFunction convert(ActivationFunctionType source) {
-        return activations.get(source);
+        return activationFunctions.get(source);
     }
 
 }

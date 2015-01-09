@@ -1,17 +1,17 @@
 package org.neoevolution.factory.algorithm;
 
 import org.neoevolution.core.algorithm.AbstractNNAlgorithm;
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.core.operator.evaluation.Evaluation;
 import org.neoevolution.core.operator.selection.Selection;
 import org.neoevolution.core.operator.speciation.Speciation;
 import org.neoevolution.core.stop.StopCondition;
-import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.model.PopulationFactory;
+import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
 import org.neoevolution.factory.operator.evaluation.EvaluationFactory;
 import org.neoevolution.factory.operator.selection.SelectionFactory;
 import org.neoevolution.factory.operator.speciation.SpeciationFactory;
 import org.neoevolution.factory.stop.StopConditionFactory;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

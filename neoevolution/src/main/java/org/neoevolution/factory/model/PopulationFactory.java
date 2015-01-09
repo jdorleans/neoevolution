@@ -1,10 +1,10 @@
 package org.neoevolution.factory.model;
 
-import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.mvc.model.Population;
 import org.neoevolution.core.operator.speciation.Speciation;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
+import org.neoevolution.mvc.model.Genotype;
+import org.neoevolution.mvc.model.Population;
+import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 import java.util.Set;
 

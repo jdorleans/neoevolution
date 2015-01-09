@@ -1,7 +1,7 @@
 package org.neoevolution.mvc.service;
 
-import org.neoevolution.mvc.model.configuration.NEConfiguration;
 import org.neoevolution.mvc.model.Evolution;
+import org.neoevolution.mvc.model.configuration.NEConfiguration;
 import org.neoevolution.mvc.repository.EvolutionRepository;
 
 /**

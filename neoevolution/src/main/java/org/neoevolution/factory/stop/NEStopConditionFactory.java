@@ -1,9 +1,9 @@
 package org.neoevolution.factory.stop;
 
-import org.neoevolution.mvc.model.configuration.StopConfiguration;
 import org.neoevolution.core.stop.ComposedStop;
 import org.neoevolution.core.stop.FitnessStop;
 import org.neoevolution.core.stop.GenerationStop;
+import org.neoevolution.mvc.model.configuration.StopConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

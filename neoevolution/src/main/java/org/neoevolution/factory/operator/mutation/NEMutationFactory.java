@@ -1,8 +1,8 @@
 package org.neoevolution.factory.operator.mutation;
 
-import org.neoevolution.mvc.model.configuration.NEConfiguration;
 import org.neoevolution.core.operator.mutation.ComposedMutation;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
+import org.neoevolution.mvc.model.configuration.NEConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

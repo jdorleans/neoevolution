@@ -1,7 +1,7 @@
 package org.neoevolution.core.operator.evaluation;
 
-import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.core.activation.GenotypeActivation;
+import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.mvc.dataset.SampleData;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;

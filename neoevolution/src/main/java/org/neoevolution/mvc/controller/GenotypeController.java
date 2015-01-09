@@ -4,7 +4,10 @@ import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.service.GenotypeActivationService;
 import org.neoevolution.mvc.service.GenotypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
