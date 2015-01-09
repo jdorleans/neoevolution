@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Configurable;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Dez 25 2014
  */
-@Configurable(preConstruction = true)
+@Configurable
 public class NEErrorFunctionFactory<C extends ErrorConfiguration<ErrorFunctionType>>
         extends AbstractErrorFunctionFactory<ErrorFunctionType, C> {
 

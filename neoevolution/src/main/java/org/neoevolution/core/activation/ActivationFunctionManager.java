@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
-@org.springframework.beans.factory.annotation.Configurable(preConstruction = true)
+@org.springframework.beans.factory.annotation.Configurable
 public class ActivationFunctionManager implements Configurable<NNConfiguration> {
 
     private Map<NeuronType, ActivationFunction> functions;
