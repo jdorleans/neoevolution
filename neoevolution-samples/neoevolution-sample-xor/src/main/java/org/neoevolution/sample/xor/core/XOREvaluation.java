@@ -14,14 +14,11 @@ public class XOREvaluation extends TrainingEvaluation {
         initSamples();
     }
 
-    private void initSamples()
-    {
-        for (int i = 0; i < 1000; i++) {
-            addSample(0d, 0d, 0d);
-            addSample(0d, 1d, 1d);
-            addSample(1d, 0d, 1d);
-            addSample(1d, 1d, 0d);
-        }
+    private void initSamples() {
+        addSample(0d, 0d, 0d);
+        addSample(0d, 1d, 1d);
+        addSample(1d, 0d, 1d);
+        addSample(1d, 1d, 0d);
     }
 
     private void addSample(double in1, double in2, double out1) {
