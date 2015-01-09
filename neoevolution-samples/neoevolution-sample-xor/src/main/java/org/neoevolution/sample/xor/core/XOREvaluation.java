@@ -1,9 +1,7 @@
 package org.neoevolution.sample.xor.core;
 
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.neoevolution.mvc.dataset.SampleData;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -13,44 +11,25 @@ public class XOREvaluation extends TrainingEvaluation {
 
     public XOREvaluation() {
         super();
-        initInputs();
-        initOutputs();
+        initSamples();
     }
 
-    private void initOutputs() {
-        List<Double> output1 = new ArrayList<>(1);
-        output1.add(0d);
-        List<Double> output2 = new ArrayList<>(1);
-        output2.add(1d);
-        List<Double> output3 = new ArrayList<>(1);
-        output3.add(1d);
-        List<Double> output4 = new ArrayList<>(1);
-        output4.add(0d);
-        outputSet = new ArrayList<>(4);
-        outputSet.add(output1);
-        outputSet.add(output2);
-        outputSet.add(output3);
-        outputSet.add(output4);
+    private void initSamples()
+    {
+        for (int i = 0; i < 1000; i++) {
+            addSample(0d, 0d, 0d);
+            addSample(0d, 1d, 1d);
+            addSample(1d, 0d, 1d);
+            addSample(1d, 1d, 0d);
+        }
     }
 
-    private void initInputs() {
-        List<Double> input1 = new ArrayList<>(2);
-        input1.add(0d);
-        input1.add(0d);
-        List<Double> input2 = new ArrayList<>(2);
-        input2.add(0d);
-        input2.add(1d);
-        List<Double> input3 = new ArrayList<>(2);
-        input3.add(1d);
-        input3.add(0d);
-        List<Double> input4 = new ArrayList<>(2);
-        input4.add(1d);
-        input4.add(1d);
-        inputSet = new ArrayList<>(4);
-        inputSet.add(input1);
-        inputSet.add(input2);
-        inputSet.add(input3);
-        inputSet.add(input4);
+    private void addSample(double in1, double in2, double out1) {
+        SampleData sample = new SampleData(2, 1);
+        sample.addInput(in1);
+        sample.addInput(in2);
+        sample.addOutput(out1);
+        data.add(sample);
     }
 
 }
