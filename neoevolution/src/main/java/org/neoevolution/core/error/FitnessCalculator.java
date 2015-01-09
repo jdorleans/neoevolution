@@ -2,7 +2,7 @@ package org.neoevolution.core.error;
 
 import org.neoevolution.core.activation.GenotypeActivation;
 import org.neoevolution.mvc.dataset.EntityDataSet;
-import org.neoevolution.mvc.dataset.ErrorDataSet;
+import org.neoevolution.mvc.dataset.FitnessDataSet;
 import org.neoevolution.mvc.dataset.SampleData;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.concurrent.Future;
 
 @Component
-public class ErrorCalculator {
+public class FitnessCalculator {
 
     @Autowired
     protected GenotypeActivation activation;
@@ -27,21 +27,21 @@ public class ErrorCalculator {
 
 
     @Async
-    public Future<EntityDataSet> calculateEntityAsync(Genotype genotype, ErrorDataSet dataSet) {
+    public Future<EntityDataSet> calculateEntityAsync(Genotype genotype, FitnessDataSet dataSet) {
         return new AsyncResult<>(calculateEntity(genotype, dataSet));
     }
 
     @Async
-    public Future<List<Double>> calculateAsync(Genotype genotype, ErrorDataSet dataSet) {
+    public Future<List<Double>> calculateAsync(Genotype genotype, FitnessDataSet dataSet) {
         return new AsyncResult<>(calculate(genotype, dataSet));
     }
 
 
-    public EntityDataSet calculateEntity(Genotype genotype, ErrorDataSet dataSet) {
+    public EntityDataSet calculateEntity(Genotype genotype, FitnessDataSet dataSet) {
         return new EntityDataSet<>(genotype.getId(), calculate(genotype, dataSet));
     }
 
-    public List<Double> calculate(Genotype genotype, ErrorDataSet dataSet)
+    public List<Double> calculate(Genotype genotype, FitnessDataSet dataSet)
     {
         List<Double> outputs = new ArrayList<>(dataSet.size());
         Double maxFitness = dataSet.getMaxFitness();

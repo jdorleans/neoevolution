@@ -9,26 +9,26 @@ import java.util.List;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since Jan 02 2015
  */
-public class ErrorDataSet extends SampleDataSet {
+public class FitnessDataSet extends SampleDataSet {
 
     private Double maxFitness;
 
     private ErrorFunctionType type;
 
 
-    public ErrorDataSet() {
+    public FitnessDataSet() {
         this(SIZE);
     }
 
-    public ErrorDataSet(int size) {
+    public FitnessDataSet(int size) {
         this(new ArrayList<SampleData>(size));
     }
 
-    public ErrorDataSet(List<SampleData> data) {
+    public FitnessDataSet(List<SampleData> data) {
         this(data, 1d, ErrorFunctionType.MSE);
     }
 
-    public ErrorDataSet(List<SampleData> data, Double maxFitness, ErrorFunctionType type) {
+    public FitnessDataSet(List<SampleData> data, Double maxFitness, ErrorFunctionType type) {
         super(data);
         this.maxFitness = maxFitness;
         this.type = type;

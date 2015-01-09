@@ -1,7 +1,6 @@
 package org.neoevolution.mvc.controller;
 
 import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.mvc.service.GenotypeActivationService;
 import org.neoevolution.mvc.service.GenotypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,30 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class GenotypeController extends FitnessEntityController<Genotype, GenotypeService> {
 
     @Autowired
-    private GenotypeActivationService activationService;
-
-
-    @Autowired
     protected GenotypeController(GenotypeService service) {
         super(service);
     }
-
-
-//    @RequestMapping(value = "/{id}/activate", method = RequestMethod.POST)
-//    public DataSet activate(@PathVariable Long id, @RequestBody DataSet inputSet)
-//            throws ExecutionException, InterruptedException {
-//        return activationService.activate(id, inputSet);
-//    }
-//
-//    @RequestMapping(value = "/activate/batch", method = RequestMethod.POST)
-//    public List<EntityDataSet> activate(@RequestBody List<EntityDataSet> entityInputSet) {
-//        return activationService.activate(entityInputSet);
-//    }
-//
-//    @RequestMapping(value = "/activate", method = RequestMethod.POST)
-//    public List<EntityDataSet> activateAll(@RequestBody DataSet inputSet) {
-//        return activationService.activateAll(inputSet);
-//    }
 
 
     @RequestMapping(value = "/{id}/neuron/{neuronId}/add")

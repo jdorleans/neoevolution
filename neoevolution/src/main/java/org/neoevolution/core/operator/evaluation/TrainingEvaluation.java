@@ -1,10 +1,9 @@
 package org.neoevolution.core.operator.evaluation;
 
-import org.neoevolution.core.activation.GenotypeActivation;
-import org.neoevolution.core.error.ErrorFunction;
+import org.neoevolution.core.error.ErrorFunctionType;
+import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.mvc.dataset.SampleData;
 import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.Population;
 import org.neoevolution.mvc.model.Species;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +22,10 @@ public abstract class TrainingEvaluation implements Evaluation {
 
     protected List<SampleData> data;
 
-    protected ErrorFunction errorFunction;
+    protected ErrorFunctionType errorType;
 
     @Autowired
-    protected GenotypeActivation genotypeActivation;
+    protected FitnessCalculator fitnessCalculator;
 
 
     protected TrainingEvaluation() {
@@ -75,28 +74,10 @@ public abstract class TrainingEvaluation implements Evaluation {
         int evaluations = data.size();
 
         for (SampleData sampleData : data) {
-            fitness += evaluate(genotype, sampleData);
+            fitness += fitnessCalculator.calculate(genotype, sampleData, maxFitness, errorType);
         }
         genotype.setFitness(fitness / evaluations);
         genotype.setEvaluated(true);
-    }
-
-    protected double evaluate(Genotype genotype, SampleData sampleData)
-    {
-        errorFunction.reset();
-        Set<Long> stimulated = genotypeActivation.stimuliInputs(genotype, sampleData.getInputs());
-
-        int idx = 0;
-        for (Neuron neuron : genotype.getOutputs()) {
-            double activation = genotypeActivation.activate(neuron, stimulated);
-            errorFunction.add(sampleData.getOutput(idx), activation);
-            idx++;
-        }
-        return calculateError();
-    }
-
-    protected double calculateError() {
-        return (maxFitness - errorFunction.calculate());
     }
 
     protected double adjustFitness(Genotype genotype, int size) {
@@ -120,18 +101,18 @@ public abstract class TrainingEvaluation implements Evaluation {
         this.data = data;
     }
 
-    public ErrorFunction getErrorFunction() {
-        return errorFunction;
+    public ErrorFunctionType getErrorType() {
+        return errorType;
     }
-    public void setErrorFunction(ErrorFunction errorFunction) {
-        this.errorFunction = errorFunction;
+    public void setErrorType(ErrorFunctionType errorType) {
+        this.errorType = errorType;
     }
 
-    public GenotypeActivation getGenotypeActivation() {
-        return genotypeActivation;
+    public FitnessCalculator getFitnessCalculator() {
+        return fitnessCalculator;
     }
-    public void setGenotypeActivation(GenotypeActivation genotypeActivation) {
-        this.genotypeActivation = genotypeActivation;
+    public void setFitnessCalculator(FitnessCalculator fitnessCalculator) {
+        this.fitnessCalculator = fitnessCalculator;
     }
 
 }
