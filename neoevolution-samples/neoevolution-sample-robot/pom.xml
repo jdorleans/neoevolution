@@ -14,7 +14,7 @@
 
     <properties>
         <java.version>1.7</java.version>
-        <jme3.version>3.0.10</jme3.version>
+        <libgdx.version>1.5.2</libgdx.version>
         <start-class>org.neoevolution.org.neoevolution.sample.robot.RobotNeoEvolution</start-class>
     </properties>
 
@@ -92,31 +92,29 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!-- jMonkeyEngine 3 -->
+        <!-- LIBGDX -->
         <dependency>
-            <groupId>com.jme3</groupId>
-            <artifactId>jme3-core</artifactId>
-            <version>${jme3.version}</version>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>${libgdx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.jme3</groupId>
-            <artifactId>jme3-desktop</artifactId>
-            <version>${jme3.version}</version>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-backend-lwjgl</artifactId>
+            <version>${libgdx.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.jme3</groupId>
-            <artifactId>jme3-lwjgl</artifactId>
-            <version>${jme3.version}</version>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>${libgdx.version}</version>
+            <classifier>natives-desktop</classifier>
+        </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-box2d-platform</artifactId>
+            <version>${libgdx.version}</version>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>com.jme3</id>
-            <name>jMonkeyEngine Repo</name>
-            <url>http://updates.jmonkeyengine.org/maven/</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
