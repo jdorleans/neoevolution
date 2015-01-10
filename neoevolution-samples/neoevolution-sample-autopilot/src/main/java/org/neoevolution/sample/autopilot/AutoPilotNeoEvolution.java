@@ -37,7 +37,7 @@ public class AutoPilotNeoEvolution extends AsyncConfigurerSupport {
     }
 
     public static void main(String[] args) throws Exception {
-//        SpringApplication.run(AutoPilotNeoEvolution.class, args);
+        SpringApplication.run(AutoPilotNeoEvolution.class, args);
     }
 
 }

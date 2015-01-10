@@ -1,7 +1,6 @@
 package org.neoevolution.sample.autopilot.mvc.model;
 
-import org.neoevolution.core.error.ErrorFunctionType;
-import org.neoevolution.mvc.model.configuration.AbstractNEErrorStopConfiguration;
+import org.neoevolution.mvc.model.configuration.AbstractNEStopConfiguration;
 import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**
@@ -9,8 +8,8 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
  * @since 1.0
  */
 @NodeEntity
-public class AutoPilotConfiguration extends AbstractNEErrorStopConfiguration<ErrorFunctionType> {
+public class AutoPilotConfiguration extends AbstractNEStopConfiguration {
 
-    private static final long serialVersionUID = 546029848233749645L;
+    private static final long serialVersionUID = -708962913514236355L;
 
 }

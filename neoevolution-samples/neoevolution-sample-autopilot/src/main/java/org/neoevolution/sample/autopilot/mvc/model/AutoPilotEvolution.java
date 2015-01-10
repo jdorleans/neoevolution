@@ -10,6 +10,6 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 @NodeEntity
 public class AutoPilotEvolution extends Evolution<AutoPilotConfiguration> {
 
-    private static final long serialVersionUID = -3578573617352491814L;
+    private static final long serialVersionUID = 2355905888385514119L;
 
 }
