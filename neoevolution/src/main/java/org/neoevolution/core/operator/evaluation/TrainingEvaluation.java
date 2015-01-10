@@ -4,17 +4,14 @@ import org.neoevolution.core.error.ErrorFunctionType;
 import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.mvc.dataset.SampleData;
 import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.mvc.model.Population;
-import org.neoevolution.mvc.model.Species;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Configurable
-public abstract class TrainingEvaluation implements Evaluation {
+public abstract class TrainingEvaluation extends AbstractEvaluation {
 
     public static final double MAX_FITNESS = 1d;
 
@@ -39,35 +36,6 @@ public abstract class TrainingEvaluation implements Evaluation {
 
 
     @Override
-    public void evaluate(Population population)
-    {
-        double fitness = 0d;
-
-        for (Species species : population.getSpecies()) {
-            fitness += evaluate(species);
-            population.updateBestSpecies(species);
-        }
-        population.setFitness(fitness);
-    }
-
-    protected double evaluate(Species species)
-    {
-        double fitness = 0d;
-        Set<Genotype> genotypes = species.getGenotypes();
-        int size = genotypes.size();
-
-        for (Genotype genotype : genotypes)
-        {
-            if (!genotype.isEvaluated()) {
-                evaluate(genotype);
-            }
-            species.updateBestGenotype(genotype);
-            fitness += adjustFitness(genotype, size);
-        }
-        species.setFitness(fitness);
-        return fitness;
-    }
-
     protected void evaluate(Genotype genotype)
     {
         double fitness = 0d;
@@ -78,12 +46,6 @@ public abstract class TrainingEvaluation implements Evaluation {
         }
         genotype.setFitness(fitness / evaluations);
         genotype.setEvaluated(true);
-    }
-
-    protected double adjustFitness(Genotype genotype, int size) {
-        double adjustedFitness = genotype.getFitness() / size;
-        genotype.setAdjustedFitness(adjustedFitness);
-        return adjustedFitness;
     }
 
 
