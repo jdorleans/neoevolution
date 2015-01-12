@@ -21,6 +21,8 @@ public class AutoPilotNeoEvolution extends AsyncConfigurerSupport {
 
     public static final int QUEUE_FACTOR = 10000;
 
+    public static final Application application = new Application();
+
     @Override
     public Executor getAsyncExecutor()
     {

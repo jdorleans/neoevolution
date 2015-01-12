@@ -1,17 +1,40 @@
 package org.neoevolution.sample.autopilot.core;
 
-import org.neoevolution.core.operator.evaluation.Evaluation;
+import org.neoevolution.core.operator.evaluation.AbstractEvaluation;
+import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
+import org.neoevolution.sample.autopilot.AutoPilotNeoEvolution;
+import org.springframework.beans.factory.annotation.Configurable;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public class AutoPilotEvaluation implements Evaluation {
+@Configurable
+public class AutoPilotEvaluation extends AbstractEvaluation {
 
     @Override
     public void evaluate(Population population) {
+        AutoPilotNeoEvolution.application.resetWorld();
+        super.evaluate(population);
+    }
 
+    @Override
+    protected void evaluate(Genotype genotype)
+    {
+        AutoPilotNeoEvolution.application.start(genotype);
+        long millis = 0;
+
+        while (AutoPilotNeoEvolution.application.isRunning()) {
+            try {
+                Thread.sleep(100);
+                millis += 100;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        String scores = AutoPilotNeoEvolution.application.getScore() +"."+ millis;
+        genotype.setFitness(Double.parseDouble(scores));
     }
 
 }

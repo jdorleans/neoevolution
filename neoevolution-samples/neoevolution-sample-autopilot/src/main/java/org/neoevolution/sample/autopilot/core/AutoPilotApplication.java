@@ -16,13 +16,20 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import org.neoevolution.core.activation.GenotypeActivation;
+import org.neoevolution.mvc.model.Genotype;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AutoPilotApplication extends ApplicationAdapter {
+
     private static final float PLANE_JUMP_IMPULSE = 350;
-    private static final float GRAVITY = -20;
+    private static final float GRAVITY = -150;
     private static final float PLANE_VELOCITY_X = 200;
     private static final float PLANE_START_Y = 240;
     private static final float PLANE_START_X = 50;
+
     ShapeRenderer shapeRenderer;
     SpriteBatch batch;
     OrthographicCamera camera;
@@ -46,8 +53,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     GameState gameState = GameState.START;
     int score = 0;
-    Rectangle rect1 = new Rectangle();
-    Rectangle rect2 = new Rectangle();
+    Rectangle planeBox = new Rectangle();
+    Rectangle rockBox = new Rectangle();
 
     Music music;
     Sound explode;
@@ -57,6 +64,13 @@ public class AutoPilotApplication extends ApplicationAdapter {
     Vector2 planeCenterPos = new Vector2();
     Vector2 groundCenterPos = new Vector2();
     Vector2 ceilingCenterPos = new Vector2();
+
+    Genotype genotype;
+    GenotypeActivation activation;
+
+    public AutoPilotApplication(GenotypeActivation activation) {
+        this.activation = activation;
+    }
 
     @Override
     public void create() {
@@ -107,8 +121,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         groundCenterPos.set(planeCenterPos.x, ground.getRegionY() + ground.getRegionHeight());
     }
 
-    private void resetWorld() {
-        score = 0;
+    public void resetWorld() {
         groundOffsetX = 0;
         planePosition.set(PLANE_START_X, PLANE_START_Y);
         planeVelocity.set(0, 0);
@@ -143,7 +156,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 planePosition.y + plane.getKeyFrames()[0].getRegionHeight() > 480 - ground.getRegionHeight() + 20) {
             gameOver();
         }
-        rect1.set(planePosition.x + 20, planePosition.y, plane.getKeyFrames()[0].getRegionWidth() - 20, plane.getKeyFrames()[0].getRegionHeight());
+        planeBox.set(planePosition.x + 20, planePosition.y, plane.getKeyFrames()[0].getRegionWidth() - 20, plane.getKeyFrames()[0].getRegionHeight());
 
         for (Rock r : rocks)
         {
@@ -155,10 +168,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 r.counted = false;
                 r.updatePickCenter();
             }
-            rect2.set(r.position.x + (r.image.getRegionWidth() - 30) / 2 + 20,
-                      r.position.y, 20, r.image.getRegionHeight() - 10);
+            rockBox.set(r.position.x + (r.image.getRegionWidth() - 30) / 2 + 20,
+                    r.position.y, 20, r.image.getRegionHeight() - 10);
 
-            if (rect1.overlaps(rect2)) {
+            if (planeBox.overlaps(rockBox)) {
                 gameOver();
             }
             if (r.position.x < planePosition.x && !r.counted) {
@@ -170,28 +183,35 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private void updateOnTouch()
     {
-        if (Gdx.input.justTouched())
+        if (gameState == GameState.RUNNING)
         {
-            if (gameState == GameState.START) {
-                gameState = GameState.RUNNING;
+            List<Double> inputs = new ArrayList<>(12);
+            float distCeil = planeCenterPos.dst(ceilingCenterPos);
+            float distGround = planeCenterPos.dst(groundCenterPos);
+            inputs.add((double) distCeil);
+            inputs.add((double) distGround);
+
+            for (Rock r : rocks) {
+                float distRock = planeCenterPos.dst(r.pickCenter);
+                inputs.add(r.isDown ? 1d : 0d);
+                inputs.add((double) distRock);
             }
-            if (gameState == GameState.RUNNING) {
-                planeVelocity.set(PLANE_VELOCITY_X, PLANE_JUMP_IMPULSE);
+            List<Double> outputs = activation.activate(genotype, inputs);
 
-                if (isDebug)
-                {
-                    System.out.println("Distance to Sky: "+ planeCenterPos.dst(ceilingCenterPos));
-                    System.out.println("Distance to Ground: "+ planeCenterPos.dst(groundCenterPos));
-
-                    for (Rock r : rocks) {
-                        System.out.println("Distance to Rock("+r.pos+"): "+ planeCenterPos.dst(r.pickCenter));
-                    }
+            if (outputs.get(0) >= 0.5)
+            {
+                if (score >= 20) {
+                    gameOver();
                 }
+                planeVelocity.set(PLANE_VELOCITY_X, PLANE_JUMP_IMPULSE);
+//            } else {
+//                planeVelocity.set(PLANE_VELOCITY_X, 0);
             }
-            if (gameState == GameState.GAME_OVER) {
-                gameState = GameState.START;
-                resetWorld();
-            }
+        }
+
+        if (gameState == GameState.GAME_OVER) {
+            gameState = GameState.START;
+            resetWorld();
         }
     }
 
@@ -200,9 +220,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
         if (gameState != GameState.GAME_OVER) {
             explode.play();
         }
-        Rock.count = 0;
-        gameState = GameState.GAME_OVER;
         planeVelocity.x = 0;
+        gameState = GameState.GAME_OVER;
     }
 
     private void drawWorld()
@@ -282,9 +301,21 @@ public class AutoPilotApplication extends ApplicationAdapter {
         font.dispose();
     }
 
+    public void start(Genotype genotype) {
+        score = 0;
+        this.genotype = genotype;
+        gameState = GameState.RUNNING;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public boolean isRunning() {
+        return GameState.RUNNING == gameState;
+    }
+
     static class Rock {
-        static int count;
-        int pos;
         Vector2 position = new Vector2();
         Vector2 pickCenter = new Vector2();
         TextureRegion image;
@@ -292,7 +323,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
         boolean isDown;
 
         public Rock(float x, float y, TextureRegion image, boolean isDown) {
-            this.pos = count++;
             this.position.x = x;
             this.position.y = y;
             this.image = image;
