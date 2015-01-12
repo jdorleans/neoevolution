@@ -26,11 +26,11 @@ import com.badlogic.gdx.utils.Array;
  */
 public class AutoPilotTest extends ApplicationAdapter {
 
-    private static final float PLANE_JUMP_IMPULSE = 350;
     private static final float GRAVITY = -150;
-    private static final float PLANE_VELOCITY_X = 200;
     private static final float PLANE_START_X = 50;
     private static final float PLANE_START_Y = 240;
+    private static final float PLANE_VELOCITY_X = 200;
+    private static final float PLANE_JUMP_IMPULSE = 350;
 
     private static final float MAX_WIDTH = 800;
     private static final float MAX_HEIGHT = 480;
@@ -49,15 +49,14 @@ public class AutoPilotTest extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
 
+    private Plane plane;
+    private Ground ground;
+    private Ground ceiling;
     private Texture background;
-    private Sprite ground;
-    private Sprite ceiling;
     private float groundOffsetX;
 
     private TextureRegion readyTR;
     private TextureRegion gameOverTR;
-
-    private Animation planeAnimation;
 
     private BitmapFont font;
     private Sound explodeSound;
@@ -65,7 +64,6 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     private int scores = 0;
     private State state = State.START;
-    private Vector2 gravity = new Vector2();
     private boolean isDebug = true;
 
     private float planeStateTime = 0;
@@ -93,7 +91,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
 
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, GRAVITY), true);
         background = new Texture("assets/background.png");
 
         createCamera();
@@ -121,16 +119,10 @@ public class AutoPilotTest extends ApplicationAdapter {
     }
 
 
-    private void createPlane()
-    {
-        TextureRegion frame1 = new TextureRegion(new Texture("assets/plane1.png"));
-        TextureRegion frame2 = new TextureRegion(new Texture("assets/plane2.png"));
-        TextureRegion frame3 = new TextureRegion(new Texture("assets/plane3.png"));
-//        frame1.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        planeAnimation = new Animation(0.05f, frame1, frame2, frame3, frame2);
-        planeAnimation.setPlayMode(Animation.PlayMode.LOOP);
-        planeCW = frame1.getRegionWidth() / 2;
-        planeCH = frame1.getRegionHeight() / 2;
+    private void createPlane() {
+        plane = new Plane();
+        planeCW = (int) (plane.size.x / 2);
+        planeCH = (int) (plane.size.y / 2);
     }
 
     private void createText() {
@@ -198,8 +190,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         state = State.RUNNING;
         groundOffsetX = 0;
         planePosition.set(PLANE_START_X, PLANE_START_Y);
-        planeVelocity.set(200, 0);
-//        gravity.set(0, GRAVITY);
+//        planeVelocity.set(200, 0);
         camera.position.x = WIDTH_CENTER;
         createRocks();
     }
@@ -249,9 +240,6 @@ public class AutoPilotTest extends ApplicationAdapter {
         planeStateTime += deltaTime;
 //        updateOnTouch();
 
-//        if (state != State.START) {
-//            planeVelocity.add(gravity);
-//        }
         planePosition.mulAdd(planeVelocity, deltaTime);
         updateCenterPosition();
 
@@ -262,12 +250,10 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
 
         if (planePosition.y < ground.getHeight() - 20 ||
-                planePosition.y + planeAnimation.getKeyFrames()[0].getRegionHeight() > MAX_HEIGHT - ground.getHeight() + 20) {
+                planePosition.y + plane.size.y > MAX_HEIGHT - ground.getHeight() + 20) {
             gameOver();
         }
-        planeBox.set(planePosition.x + 20, planePosition.y,
-                     planeAnimation.getKeyFrames()[0].getRegionWidth() - 20,
-                     planeAnimation.getKeyFrames()[0].getRegionHeight());
+        planeBox.set(planePosition.x + 20, planePosition.y, plane.size.x - 20, plane.size.y);
 
         updateRocks();
     }
@@ -311,7 +297,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         drawRocks();
         drawBoundary();
         drawText();
-        spriteBatch.draw(planeAnimation.getKeyFrame(planeStateTime), planePosition.x, planePosition.y);
+        spriteBatch.draw(plane.animation.getKeyFrame(planeStateTime), planePosition.x, planePosition.y);
 
         drawLinesToBoundary();
 
@@ -423,6 +409,51 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     }
 
+    private class Plane {
+
+        Body body;
+        Vector2 size;
+        Animation animation;
+
+        public Plane()
+        {
+            TextureRegion frame1 = new TextureRegion(new Texture("assets/plane1.png"));
+            TextureRegion frame2 = new TextureRegion(new Texture("assets/plane2.png"));
+            TextureRegion frame3 = new TextureRegion(new Texture("assets/plane3.png"));
+            animation = new Animation(0.05f, frame1, frame2, frame3, frame2);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+            size = new Vector2(frame1.getRegionWidth(), frame1.getRegionHeight());
+            body = createBody();
+            body.applyLinearImpulse(new Vector2(1000, 0), body.getWorldCenter(), true);
+        }
+
+        private void update() {
+
+        }
+
+        private Body createBody()
+        {
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(size.x, size.y);
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(PLANE_START_X, PLANE_START_Y);
+            bodyDef.linearVelocity.add(PLANE_VELOCITY_X*2, 0);
+            Body body = world.createBody(bodyDef);
+
+            FixtureDef fixtureDef = new FixtureDef();
+            fixtureDef.shape = shape;
+            fixtureDef.density = 1f;
+            fixtureDef.friction = 0f;
+            fixtureDef.restitution = 0f;
+            body.createFixture(fixtureDef);
+
+            shape.dispose();
+            return body;
+        }
+
+    }
 
     private class Ground extends Sprite {
 
