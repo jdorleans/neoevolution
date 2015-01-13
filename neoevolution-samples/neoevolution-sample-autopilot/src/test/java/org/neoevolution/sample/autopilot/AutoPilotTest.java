@@ -52,23 +52,23 @@ public class AutoPilotTest extends ApplicationAdapter {
     private Plane plane;
     private Ground ground;
     private Ground ceiling;
+    private Array<Rock> rocks;
     private Texture background;
-    private float groundOffsetX;
 
-    private TextureRegion readyTR;
-    private TextureRegion gameOverTR;
+    private float groundOffsetX;
+    private Vector2 groundCenterPos;
+    private Vector2 ceilingCenterPos;
 
     private Music music;
     private Sound explode;
     private BitmapFont font;
+    private TextureRegion readyTR;
+    private TextureRegion gameOverTR;
 
     private int scores;
     private State state;
     private boolean isDebug;
 
-    private Array<Rock> rocks = new Array<>();
-    private Vector2 groundCenterPos = new Vector2();
-    private Vector2 ceilingCenterPos = new Vector2();
 
     @Override
     public void create()
@@ -89,9 +89,12 @@ public class AutoPilotTest extends ApplicationAdapter {
         camera.setToOrtho(false, MAX_WIDTH, MAX_HEIGHT);
 
         plane = new Plane();
+        rocks = new Array<>();
         ground = new Ground(false);
         ceiling = new Ground(true);
         background = new Texture("assets/background.png");
+        groundCenterPos = new Vector2();
+        ceilingCenterPos = new Vector2();
 
         createText();
 //        createMusic();
@@ -166,7 +169,6 @@ public class AutoPilotTest extends ApplicationAdapter {
         if (plane.center.y < groundCenterPos.y || plane.center.y > ceilingCenterPos.y) {
             gameOver();
         }
-
         updateRocks();
 //        updateOnTouch();
     }
@@ -253,19 +255,6 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
-
-    private void drawLinesToRock(Rock rock)
-    {
-        if (isDebug)
-        {
-            if (rock.isDown) {
-                shapeRenderer.setColor(1, 0, 0, 1);
-            } else {
-                shapeRenderer.setColor(0, 0, 1, 1);
-            }
-            shapeRenderer.line(plane.center, rock.pickCenter);
-        }
-    }
 
     private void drawMouseLines() {
         shapeRenderer.setColor(1, 0, 0, 1);
