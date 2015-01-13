@@ -54,10 +54,7 @@ public class AutoPilotTest extends ApplicationAdapter {
     private Ground ceiling;
     private Array<Rock> rocks;
     private Texture background;
-
     private float groundOffsetX;
-    private Vector2 groundCenterPos;
-    private Vector2 ceilingCenterPos;
 
     private Music music;
     private Sound explode;
@@ -67,7 +64,7 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     private int scores;
     private State state;
-    private boolean isDebug;
+    private boolean isDebug = true;
 
 
     @Override
@@ -93,8 +90,6 @@ public class AutoPilotTest extends ApplicationAdapter {
         ground = new Ground(false);
         ceiling = new Ground(true);
         background = new Texture("assets/background.png");
-        groundCenterPos = new Vector2();
-        ceilingCenterPos = new Vector2();
 
         createText();
 //        createMusic();
@@ -157,16 +152,16 @@ public class AutoPilotTest extends ApplicationAdapter {
     private void update()
     {
         plane.update();
-
+        ground.update();
+        ceiling.update();
         camera.position.x = plane.center.x + 350;
-        groundCenterPos.set(plane.center.x, ground.getY() + ground.getHeight());
-        ceilingCenterPos.set(plane.center.x, MAX_HEIGHT - ceiling.getHeight());
 
         if (camera.position.x - groundOffsetX > ground.getWidth() + WIDTH_CENTER) {
             groundOffsetX += ground.getWidth();
         }
+        float hh = plane.size.y / 2;
 
-        if (plane.center.y < groundCenterPos.y || plane.center.y > ceilingCenterPos.y) {
+        if (plane.center.y - hh < ground.position.y || plane.center.y + hh > ceiling.position.y) {
             gameOver();
         }
         updateRocks();
@@ -252,9 +247,9 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     private void drawLinesToBoundary() {
         shapeRenderer.setColor(0, 0, 0, 1);
-        shapeRenderer.line(plane.center, groundCenterPos);
+        shapeRenderer.line(plane.center, ground.position);
         shapeRenderer.setColor(1, 0, 0, 1);
-        shapeRenderer.line(plane.center, ceilingCenterPos);
+        shapeRenderer.line(plane.center, ceiling.position);
     }
 
 
@@ -352,19 +347,13 @@ public class AutoPilotTest extends ApplicationAdapter {
         private Body createBody()
         {
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(size.x, size.y);
+            shape.setAsBox(size.x/2, size.y/2);
 
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.position.set(PLANE_START_X, PLANE_START_Y);
             Body body = world.createBody(bodyDef);
-
-            FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.shape = shape;
-            fixtureDef.density = 1;
-            fixtureDef.friction = 0;
-            fixtureDef.restitution = 0;
-            body.createFixture(fixtureDef);
+            body.createFixture(shape, 1);
 
             shape.dispose();
             return body;
@@ -385,13 +374,24 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     private class Ground extends Sprite {
 
+        boolean invert;
+        Vector2 position;
+
         public Ground(boolean invert)
         {
             super(new Texture("assets/ground.png"));
+            this.invert = invert;
 
             if (invert) {
                 flip(true, true);
+                position = new Vector2(plane.center.x, MAX_HEIGHT - getHeight());
+            } else {
+                position = new Vector2(plane.center.x, getHeight());
             }
+        }
+
+        private void update() {
+            position.x = plane.center.x;
         }
 
     }
@@ -440,13 +440,7 @@ public class AutoPilotTest extends ApplicationAdapter {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.KinematicBody;
             Body body = world.createBody(bodyDef);
-
-            FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.shape = shape;
-            fixtureDef.density = 1f;
-            fixtureDef.friction = 0f;
-            fixtureDef.restitution = 0f;
-            body.createFixture(fixtureDef);
+            body.createFixture(shape, 1);
 
             shape.dispose();
             return body;
