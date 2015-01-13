@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
@@ -26,11 +25,12 @@ import com.badlogic.gdx.utils.Array;
  */
 public class AutoPilotTest extends ApplicationAdapter {
 
-    private static final float GRAVITY = -150;
+    private static final float GRAVITY_FORCE = 150;
     private static final float PLANE_START_X = 50;
     private static final float PLANE_START_Y = 240;
     private static final float PLANE_VELOCITY_X = 200;
     private static final float PLANE_JUMP_IMPULSE = 350;
+    private static final float METER_IN_PIXELS = 100f;
 
     private static final float MAX_WIDTH = 800;
     private static final float MAX_HEIGHT = 480;
@@ -58,30 +58,23 @@ public class AutoPilotTest extends ApplicationAdapter {
     private TextureRegion readyTR;
     private TextureRegion gameOverTR;
 
-    private BitmapFont font;
-    private Sound explodeSound;
     private Music music;
+    private Sound explode;
+    private BitmapFont font;
 
-    private int scores = 0;
-    private State state = State.START;
-    private boolean isDebug = true;
-
-    private float planeStateTime = 0;
-    private Rectangle planeBox = new Rectangle();
-    private Vector2 planePosition = new Vector2();
-    private Vector2 planeVelocity = new Vector2();
+    private int scores;
+    private State state;
+    private boolean isDebug;
 
     private Array<Rock> rocks = new Array<>();
-    private Rectangle rockBox = new Rectangle();
-
-    private int planeCW, planeCH;
-    private Vector2 planeCenterPos = new Vector2();
     private Vector2 groundCenterPos = new Vector2();
     private Vector2 ceilingCenterPos = new Vector2();
 
     @Override
     public void create()
     {
+        Gdx.input.setInputProcessor(new AutoPilotInputs());
+
         p1 = new Vector2();
         p2 = new Vector2();
         collision = new Vector2();
@@ -91,38 +84,20 @@ public class AutoPilotTest extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         debugRenderer = new Box2DDebugRenderer();
 
-        world = new World(new Vector2(0, GRAVITY), true);
-        background = new Texture("assets/background.png");
-
-        createCamera();
-        createBoundary();
-        createPlane();
-        createText();
-//        createMusic();
-        createSound();
-
-        Gdx.input.setInputProcessor(new AutoPilotInputs());
-        createBigBall();
-        createSmallBall();
-
-        reset();
-    }
-
-    private void createCamera() {
+        world = new World(new Vector2(0, 0), true);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, MAX_WIDTH, MAX_HEIGHT);
-    }
 
-    private void createBoundary() {
+        plane = new Plane();
         ground = new Ground(false);
         ceiling = new Ground(true);
-    }
+        background = new Texture("assets/background.png");
 
+        createText();
+//        createMusic();
+        explode = Gdx.audio.newSound(Gdx.files.internal("assets/explode.wav"));
 
-    private void createPlane() {
-        plane = new Plane();
-        planeCW = (int) (plane.size.x / 2);
-        planeCH = (int) (plane.size.y / 2);
+        reset();
     }
 
     private void createText() {
@@ -137,61 +112,14 @@ public class AutoPilotTest extends ApplicationAdapter {
         music.play();
     }
 
-    private void createSound() {
-        explodeSound = Gdx.audio.newSound(Gdx.files.internal("assets/explode.wav"));
-    }
-
-
-    private void createBigBall() {
-        createBall(PLANE_START_X, PLANE_START_Y, 2);
-    }
-
-    private void createSmallBall() {
-        createBall(PLANE_START_X, PLANE_START_Y + 50, 1);
-    }
-
-    private void createBall(float x, float y, float rate)
-    {
-        CircleShape circle = new CircleShape();
-        circle.setRadius(10 * rate);
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(x, y);
-        Body body = world.createBody(bodyDef);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = circle;
-        fixtureDef.density = 0.4f * rate;
-        fixtureDef.friction = 0.5f;
-        fixtureDef.restitution = 0.6f;
-        body.createFixture(fixtureDef);
-
-        circle.dispose();
-    }
-
-
-    private void createPolygon(float x, float y, float width, float height)
-    {
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width, height);
-
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(x, y);
-
-        Body body = world.createBody(bodyDef);
-        body.createFixture(shape, 1f);
-        shape.dispose();
-    }
-
 
     public void reset()
     {
         state = State.RUNNING;
         groundOffsetX = 0;
-        planePosition.set(PLANE_START_X, PLANE_START_Y);
-//        planeVelocity.set(200, 0);
         camera.position.x = WIDTH_CENTER;
+        plane.reset();
+        plane.body.setLinearVelocity(100, 0);
         createRocks();
     }
 
@@ -206,12 +134,11 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     private void gameOver()
     {
-        planeVelocity.x = 0;
-
-//        if (state != State.GAME_OVER) {
-//            explodeSound.play();
+//        if (!state.isGameOver()) {
+//            explode.play();
 //        }
         state = State.GAME_OVER;
+        plane.body.setLinearVelocity(0, 0);
     }
 
     @Override
@@ -222,41 +149,28 @@ public class AutoPilotTest extends ApplicationAdapter {
         world.step(1 / 60f, 6, 2);
         update();
         draw();
-
-        debugRenderer.render(world, camera.combined);
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(1, 0, 0, 1);
-        shapeRenderer.line(p1, p2);
-        shapeRenderer.setColor(0, 0, 1, 1);
-        shapeRenderer.line(collision, collisionNormal);
-        shapeRenderer.end();
     }
-
 
     private void update()
     {
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        planeStateTime += deltaTime;
-//        updateOnTouch();
+        plane.update();
 
-        planePosition.mulAdd(planeVelocity, deltaTime);
-        updateCenterPosition();
-
-        camera.position.x = planePosition.x + 350;
+        camera.position.x = plane.center.x + 350;
+        groundCenterPos.set(plane.center.x, ground.getY() + ground.getHeight());
+        ceilingCenterPos.set(plane.center.x, MAX_HEIGHT - ceiling.getHeight());
 
         if (camera.position.x - groundOffsetX > ground.getWidth() + WIDTH_CENTER) {
             groundOffsetX += ground.getWidth();
         }
 
-        if (planePosition.y < ground.getHeight() - 20 ||
-                planePosition.y + plane.size.y > MAX_HEIGHT - ground.getHeight() + 20) {
+        if (plane.center.y < groundCenterPos.y || plane.center.y > ceilingCenterPos.y) {
             gameOver();
         }
-        planeBox.set(planePosition.x + 20, planePosition.y, plane.size.x - 20, plane.size.y);
 
         updateRocks();
+//        updateOnTouch();
     }
+
 
     private void updateRocks()
     {
@@ -265,22 +179,15 @@ public class AutoPilotTest extends ApplicationAdapter {
             if (camera.position.x - rock.getX() > WIDTH_CENTER + rock.getWidth()) {
                 rock.update(rock.getX() + 5 * 200);
             }
-            rockBox.set(rock.getX() + (rock.getWidth() - 30) / 2 + 20, rock.getY(), 20, rock.getHeight() - 10);
 
-            if (planeBox.overlaps(rockBox)) {
-                gameOver();
-            }
-            if (rock.getX() < planePosition.x && !rock.counted) {
+//            if (planeBox.overlaps(rockBox)) {
+//                gameOver();
+//            }
+            if (rock.getX() < plane.center.x && !rock.counted) {
                 scores++;
                 rock.counted = true;
             }
         }
-    }
-
-    private void updateCenterPosition() {
-        planeCenterPos.set(planePosition.x + planeCW, planePosition.y + planeCH);
-        ceilingCenterPos.set(planeCenterPos.x, MAX_HEIGHT - ceiling.getHeight());
-        groundCenterPos.set(planeCenterPos.x, ground.getY() + ground.getHeight());
     }
 
     private void draw()
@@ -297,12 +204,14 @@ public class AutoPilotTest extends ApplicationAdapter {
         drawRocks();
         drawBoundary();
         drawText();
-        spriteBatch.draw(plane.animation.getKeyFrame(planeStateTime), planePosition.x, planePosition.y);
+        spriteBatch.draw(plane.getFrame(), plane.center.x - plane.size.x/2, plane.center.y - plane.size.y/2);
 
+        drawMouseLines();
         drawLinesToBoundary();
 
         spriteBatch.end();
         shapeRenderer.end();
+        debugRenderer.render(world, camera.combined);
     }
 
     private void drawRocks() {
@@ -334,28 +243,35 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
-
     private void drawLinesToBoundary()
     {
         if (isDebug) {
-            shapeRenderer.setColor(1, 0, 0, 1);
-            shapeRenderer.line(planeCenterPos, ceilingCenterPos);
             shapeRenderer.setColor(0, 0, 0, 1);
-            shapeRenderer.line(planeCenterPos, groundCenterPos);
+            shapeRenderer.line(plane.center, groundCenterPos);
+            shapeRenderer.setColor(1, 0, 0, 1);
+            shapeRenderer.line(plane.center, ceilingCenterPos);
         }
     }
 
-    private void drawLinesToRock(Rock r)
+
+    private void drawLinesToRock(Rock rock)
     {
         if (isDebug)
         {
-            if (r.isDown) {
+            if (rock.isDown) {
                 shapeRenderer.setColor(1, 0, 0, 1);
             } else {
                 shapeRenderer.setColor(0, 0, 1, 1);
             }
-            shapeRenderer.line(planeCenterPos.x, planeCenterPos.y, r.pickCenter.x, r.pickCenter.y);
+            shapeRenderer.line(plane.center, rock.pickCenter);
         }
+    }
+
+    private void drawMouseLines() {
+        shapeRenderer.setColor(1, 0, 0, 1);
+        shapeRenderer.line(p1, p2);
+        shapeRenderer.setColor(0, 0, 1, 1);
+        shapeRenderer.line(collision, collisionNormal);
     }
 
     @Override
@@ -407,12 +323,22 @@ public class AutoPilotTest extends ApplicationAdapter {
             return true;
         }
 
+        @Override
+        public boolean keyUp(int keycode)
+        {
+            if (keycode == Input.Keys.SPACE) {
+                isDebug = !isDebug;
+            }
+            return true;
+        }
     }
 
     private class Plane {
 
+        float time;
         Body body;
         Vector2 size;
+        Vector2 center;
         Animation animation;
 
         public Plane()
@@ -424,11 +350,12 @@ public class AutoPilotTest extends ApplicationAdapter {
             animation.setPlayMode(Animation.PlayMode.LOOP);
             size = new Vector2(frame1.getRegionWidth(), frame1.getRegionHeight());
             body = createBody();
-            body.applyLinearImpulse(new Vector2(1000, 0), body.getWorldCenter(), true);
+            center = body.getWorldCenter();
         }
 
         private void update() {
-
+            time += Gdx.graphics.getDeltaTime();
+            center = body.getWorldCenter();
         }
 
         private Body createBody()
@@ -439,18 +366,28 @@ public class AutoPilotTest extends ApplicationAdapter {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.position.set(PLANE_START_X, PLANE_START_Y);
-            bodyDef.linearVelocity.add(PLANE_VELOCITY_X*2, 0);
             Body body = world.createBody(bodyDef);
 
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
-            fixtureDef.density = 1f;
-            fixtureDef.friction = 0f;
-            fixtureDef.restitution = 0f;
+            fixtureDef.density = 1;
+            fixtureDef.friction = 0;
+            fixtureDef.restitution = 0;
             body.createFixture(fixtureDef);
 
             shape.dispose();
             return body;
+        }
+
+        private void reset() {
+//            sprite.setPosition(0f,0f);
+            body.setTransform(PLANE_START_X, PLANE_START_Y, 0);
+            body.setLinearVelocity(0, 0);
+            body.setAngularVelocity(0);
+        }
+
+        private TextureRegion getFrame() {
+            return animation.getKeyFrame(time);
         }
 
     }
@@ -542,6 +479,15 @@ public class AutoPilotTest extends ApplicationAdapter {
             return GAME_OVER.equals(this);
         }
     }
+
+    private static float toMeters(float pixels) {
+        return pixels / METER_IN_PIXELS;
+    }
+
+    private static float toPixels(float meters) {
+        return meters * METER_IN_PIXELS;
+    }
+
 
     public static void main(String[] args) {
         AutoPilotTest application = new AutoPilotTest();
