@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class AutoPilotTest extends ApplicationAdapter {
 
-    private static final float GRAVITY_FORCE = 150;
+    private static final float GRAVITY_FORCE = -150;
     private static final float PLANE_START_X = 50;
     private static final float PLANE_START_Y = 240;
     private static final float PLANE_VELOCITY_X = 200;
@@ -122,7 +122,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         groundOffsetX = 0;
         camera.position.x = WIDTH_CENTER;
         plane.reset();
-        plane.body.setLinearVelocity(100, 0);
+        plane.body.setLinearVelocity(PLANE_VELOCITY_X, GRAVITY_FORCE);
         createRocks();
     }
 
@@ -208,12 +208,17 @@ public class AutoPilotTest extends ApplicationAdapter {
         drawText();
         spriteBatch.draw(plane.getFrame(), plane.center.x - plane.size.x/2, plane.center.y - plane.size.y/2);
 
-        drawMouseLines();
-        drawLinesToBoundary();
+        if (isDebug) {
+            drawMouseLines();
+            drawLinesToBoundary();
+        }
 
         spriteBatch.end();
         shapeRenderer.end();
-        debugRenderer.render(world, camera.combined);
+
+        if (isDebug) {
+            debugRenderer.render(world, camera.combined);
+        }
     }
 
     private void drawRocks() {
@@ -245,14 +250,11 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
-    private void drawLinesToBoundary()
-    {
-        if (isDebug) {
-            shapeRenderer.setColor(0, 0, 0, 1);
-            shapeRenderer.line(plane.center, groundCenterPos);
-            shapeRenderer.setColor(1, 0, 0, 1);
-            shapeRenderer.line(plane.center, ceilingCenterPos);
-        }
+    private void drawLinesToBoundary() {
+        shapeRenderer.setColor(0, 0, 0, 1);
+        shapeRenderer.line(plane.center, groundCenterPos);
+        shapeRenderer.setColor(1, 0, 0, 1);
+        shapeRenderer.line(plane.center, ceilingCenterPos);
     }
 
 
