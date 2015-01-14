@@ -197,7 +197,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         for (Rock rock : rocks)
         {
             if (camera.position.x - rock.getX() > WIDTH_CENTER + rock.getWidth()) {
-                rock.update(rock.getX() + 5 * ROCK_SPACE);
+                rock.update(rock.getX() + rocks.size * ROCK_SPACE);
             }
 
             if (!rock.counted && plane.center.x > rock.pickCenter.x) {
