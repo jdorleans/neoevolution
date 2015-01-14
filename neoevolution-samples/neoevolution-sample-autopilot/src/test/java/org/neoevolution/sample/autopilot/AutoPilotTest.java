@@ -278,7 +278,7 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     private void drawMouseLines() {
         shapeRenderer.setColor(1, 0, 0, 1);
-        shapeRenderer.line(p1, p2);
+        shapeRenderer.line(toPixels(p1), toPixels(p2));
         shapeRenderer.setColor(0, 0, 1, 1);
         shapeRenderer.line(collision, collisionNormal);
     }
@@ -324,9 +324,9 @@ public class AutoPilotTest extends ApplicationAdapter {
             camera.unproject(screenPos);
 
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                p1.set(screenPos.x, screenPos.y);
+                p1 = toMeters(screenPos.x, screenPos.y);
             } else if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-                p2.set(screenPos.x, screenPos.y);
+                p2 = toMeters(screenPos.x, screenPos.y);
             }
             world.rayCast(rayCastCollision, p1, p2);
             return true;
