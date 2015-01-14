@@ -19,6 +19,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
+import org.neoevolution.core.activation.GenotypeActivation;
+import org.neoevolution.mvc.model.Genotype;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -26,6 +31,7 @@ import com.badlogic.gdx.utils.Array;
  */
 public class AutoPilotTest extends ApplicationAdapter {
 
+    private static final int MAX_SCORES = 20;
     private static final float GRAVITY_FORCE = -4f;
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
@@ -68,6 +74,9 @@ public class AutoPilotTest extends ApplicationAdapter {
     private int scores;
     private State state;
     private boolean isDebug = true;
+
+    private Genotype genotype;
+    private GenotypeActivation activation;
 
 
     @Override
@@ -123,6 +132,11 @@ public class AutoPilotTest extends ApplicationAdapter {
     }
 
 
+    public void run(Genotype genotype) {
+        this.genotype = genotype;
+        run();
+    }
+
     private void run() {
         state = State.RUNNING;
         world.setGravity(new Vector2(0, GRAVITY_FORCE));
@@ -172,7 +186,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         updateGameOver();
         updateCamera();
         updateRocks();
-//        updateOnTouch();
+        activate();
     }
 
     private void updateGameOver()
@@ -206,6 +220,33 @@ public class AutoPilotTest extends ApplicationAdapter {
                 rock.counted = true;
                 scores++;
             }
+        }
+    }
+
+    private void activate()
+    {
+        if (state.isRunning())
+        {
+            List<Double> inputs = new ArrayList<>(12);
+            double totalHeight = ceiling.getY() - ground.getY();
+            double distGround = Math.abs(plane.center.y - ground.position.y) / totalHeight;
+            double distCeiling = Math.abs(plane.center.y - ceiling.position.y) / totalHeight;
+            inputs.add(distGround);
+            inputs.add(distCeiling);
+
+            List<Double> outputs = activation.activate(genotype, inputs);
+
+            if (outputs.get(0) >= 0.5)
+            {
+                if (scores >= MAX_SCORES) {
+                    gameOver();
+                }
+                plane.jump();
+            }
+        }
+
+        if (state.isGameOver()) {
+            reset();
         }
     }
 
@@ -345,7 +386,7 @@ public class AutoPilotTest extends ApplicationAdapter {
                 } else if (state.isStart()) {
                     run();
                 } else {
-                    plane.body.applyLinearImpulse(new Vector2(0, PLANE_JUMP_IMPULSE), plane.body.getWorldCenter(), true);
+                    plane.jump();
                 }
             }
             return true;
@@ -410,6 +451,7 @@ public class AutoPilotTest extends ApplicationAdapter {
 
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.fixedRotation = true;
             Body body = world.createBody(bodyDef);
             body.createFixture(shape, 1);
 
@@ -420,6 +462,10 @@ public class AutoPilotTest extends ApplicationAdapter {
         private void reset() {
             body.setAngularVelocity(0);
             body.setTransform(toMeters(PLANE_START_X, PLANE_START_Y), 0);
+        }
+
+        private void jump() {
+            body.applyLinearImpulse(new Vector2(0, PLANE_JUMP_IMPULSE), body.getWorldCenter(), true);
         }
 
         private TextureRegion getFrame() {
