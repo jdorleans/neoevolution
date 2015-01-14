@@ -85,6 +85,8 @@ public class AutoPilotTest extends ApplicationAdapter {
         debugRenderer = new Box2DDebugRenderer();
 
         world = new World(new Vector2(0, 0), true);
+        world.setContactListener(new AutoPilotCollision());
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, MAX_WIDTH, MAX_HEIGHT);
 
@@ -135,8 +137,6 @@ public class AutoPilotTest extends ApplicationAdapter {
         plane.reset();
         resetRocks();
         camera.position.x = WIDTH_CENTER;
-        world.clearForces();
-        world.setGravity(new Vector2(0, 0));
     }
 
     private void resetRocks() {
@@ -151,6 +151,8 @@ public class AutoPilotTest extends ApplicationAdapter {
 //            explode.play();
 //        }
         state = State.GAME_OVER;
+        world.clearForces();
+        world.setGravity(new Vector2(0, 0));
         plane.body.setLinearVelocity(0, 0);
     }
 
@@ -350,6 +352,32 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
+
+    private class AutoPilotCollision implements ContactListener {
+
+        @Override
+        public void beginContact(Contact contact)
+        {
+            Body bodyA = contact.getFixtureA().getBody();
+            Body bodyB = contact.getFixtureB().getBody();
+
+            if ((bodyA == plane.body || bodyB == plane.body)) {
+                gameOver();
+            }
+        }
+
+        @Override
+        public void endContact(Contact contact) { }
+
+        @Override
+        public void preSolve(Contact contact, Manifold oldManifold) { }
+
+        @Override
+        public void postSolve(Contact contact, ContactImpulse impulse) { }
+
+    }
+
+
     private class Plane {
 
         float time;
@@ -378,7 +406,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         private Body createBody()
         {
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(toMeters(size.x/2), toMeters(size.y/2));
+            shape.setAsBox(toMeters((size.x-10)/2), toMeters((size.y-10)/2));
 
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
