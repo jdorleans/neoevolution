@@ -186,7 +186,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         updateGameOver();
         updateCamera();
         updateRocks();
-        activate();
+//        activate();
     }
 
     private void updateGameOver()
@@ -309,19 +309,19 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
-    private void drawLinesToBoundary() {
-        shapeRenderer.setColor(0, 0, 0, 1);
-        shapeRenderer.line(plane.center, ground.position);
-        shapeRenderer.setColor(1, 0, 0, 1);
-        shapeRenderer.line(plane.center, ceiling.position);
-    }
-
 
     private void drawMouseLines() {
         shapeRenderer.setColor(1, 0, 0, 1);
         shapeRenderer.line(toPixels(p1), toPixels(p2));
         shapeRenderer.setColor(0, 0, 1, 1);
         shapeRenderer.line(collision, collisionNormal);
+    }
+
+    private void drawLinesToBoundary() {
+        shapeRenderer.setColor(0, 0, 0, 1);
+        shapeRenderer.line(plane.center, ground.position);
+        shapeRenderer.setColor(1, 0, 0, 1);
+        shapeRenderer.line(plane.center, ceiling.position);
     }
 
     @Override
@@ -347,11 +347,12 @@ public class AutoPilotTest extends ApplicationAdapter {
     }
 
 
+    private RayCastCollision rayCastCollision;
+
     private class AutoPilotInputs extends InputAdapter {
 
         private Vector3 screenPos;
 
-        private RayCastCollision rayCastCollision;
 
         public AutoPilotInputs() {
             screenPos = new Vector3();
@@ -399,12 +400,32 @@ public class AutoPilotTest extends ApplicationAdapter {
         @Override
         public void beginContact(Contact contact)
         {
+            System.out.println();
+            System.out.println("CONTACT!");
+
             Body bodyA = contact.getFixtureA().getBody();
             Body bodyB = contact.getFixtureB().getBody();
 
-            if ((bodyA == plane.body || bodyB == plane.body)) {
-                gameOver();
+            WorldManifold wm = contact.getWorldManifold();
+            System.out.println("Normal: "+ wm.getNormal());
+            System.out.print("Points:");
+            for (Vector2 vector2 : wm.getPoints()) {
+                System.out.print(" " + vector2);
             }
+            System.out.println();
+
+            System.out.print("Separations:");
+            for (float value : wm.getSeparations()) {
+                System.out.print(" "+ value);
+            }
+            System.out.println();
+            System.out.println("Number of Points: "+ wm.getNumberOfContactPoints());
+
+            if ((bodyA == plane.body || bodyB == plane.body)) {
+//                gameOver();
+            }
+            plane.body.setLinearVelocity(0,0);
+            world.setGravity(Vector2.Zero);
         }
 
         @Override
@@ -426,6 +447,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         Vector2 size;
         Vector2 center;
         Animation animation;
+        List<Body> sensors;
 
         public Plane()
         {
@@ -437,7 +459,9 @@ public class AutoPilotTest extends ApplicationAdapter {
             size = new Vector2(frame1.getRegionWidth(), frame1.getRegionHeight());
             body = createBody();
             center = toPixels(body.getWorldCenter());
+            createSensors();
         }
+
 
         private void update() {
             time += Gdx.graphics.getDeltaTime();
@@ -446,8 +470,8 @@ public class AutoPilotTest extends ApplicationAdapter {
 
         private Body createBody()
         {
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(toMeters((size.x-10)/2), toMeters((size.y-10)/2));
+            CircleShape shape = new CircleShape();
+            shape.setRadius(toMeters(size.y)/2);
 
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -459,9 +483,32 @@ public class AutoPilotTest extends ApplicationAdapter {
             return body;
         }
 
-        private void reset() {
+        private void createSensors()
+        {
+            float maxX = size.x * 5;
+            float maxY = size.y;
+            sensors = new ArrayList<>();
+
+            for (int i = -2; i <= 2; i++)
+            {
+                EdgeShape shape = new EdgeShape();
+                shape.set(Vector2.Zero, toMeters(maxX, maxY * i));
+
+                body.createFixture(shape, 0).setSensor(true);
+                sensors.add(body);
+
+                shape.dispose();
+            }
+        }
+
+        private void reset()
+        {
             body.setAngularVelocity(0);
             body.setTransform(toMeters(PLANE_START_X, PLANE_START_Y), 0);
+
+            for (Body sensor : sensors) {
+                sensor.setTransform(body.getWorldCenter(), 0);
+            }
         }
 
         private void jump() {
@@ -540,7 +587,7 @@ public class AutoPilotTest extends ApplicationAdapter {
             shape.createChain(new Vector2[]{v1, v2, new Vector2(v1.x+width, v1.y)});
 
             BodyDef bodyDef = new BodyDef();
-            bodyDef.type = BodyDef.BodyType.KinematicBody;
+            bodyDef.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bodyDef);
             body.createFixture(shape, 1);
 
