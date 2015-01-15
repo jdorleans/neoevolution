@@ -36,7 +36,7 @@ public class AutoPilotTest extends ApplicationAdapter {
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
     private static final float PLANE_VELOCITY_X = 1.5f;
-    private static final float PLANE_JUMP_IMPULSE = 1.2f;
+    private static final float PLANE_JUMP_IMPULSE = 1f;
     private static final float METER_IN_PIXELS = 100f;
 
     private static final float MAX_WIDTH = 800;
@@ -45,6 +45,10 @@ public class AutoPilotTest extends ApplicationAdapter {
     private static final float HEIGHT_CENTER = MAX_HEIGHT / 2;
     private static final float ROCK_SPACE = 250;
     private static final float CAMERA_STEP = 300;
+
+    private static final short BIT_ROCK = 2;
+    private static final short BIT_PLANE = 4;
+    private static final short BIT_SENSOR = 8;
 
     private Vector2 p1;
     private Vector2 p2;
@@ -477,12 +481,14 @@ public class AutoPilotTest extends ApplicationAdapter {
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.fixedRotation = true;
             Body body = world.createBody(bodyDef);
-            body.createFixture(shape, 1);
+            Fixture fixture = body.createFixture(shape, 1);
+            createFilter(fixture, BIT_PLANE, BIT_ROCK);
 
             shape.dispose();
             return body;
         }
 
+        // FIXME - LINES AND CHAINS CANNOT COLLIDE!!!
         private void createSensors()
         {
             float maxX = size.x * 5;
@@ -493,8 +499,9 @@ public class AutoPilotTest extends ApplicationAdapter {
             {
                 EdgeShape shape = new EdgeShape();
                 shape.set(Vector2.Zero, toMeters(maxX, maxY * i));
-
-                body.createFixture(shape, 0).setSensor(true);
+                Fixture fixture = body.createFixture(shape, 1);
+                fixture.setSensor(true);
+                createFilter(fixture, BIT_SENSOR, BIT_ROCK);
                 sensors.add(body);
 
                 shape.dispose();
@@ -589,7 +596,8 @@ public class AutoPilotTest extends ApplicationAdapter {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bodyDef);
-            body.createFixture(shape, 1);
+            Fixture fixture = body.createFixture(shape, 0);
+            createFilter(fixture, BIT_ROCK, (short) (BIT_PLANE | BIT_SENSOR));
 
             shape.dispose();
             return body;
@@ -614,6 +622,13 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
+
+    private void createFilter(Fixture fixture, short category, short mask) {
+        Filter filter = new Filter();
+        filter.categoryBits = category;
+        filter.maskBits =  mask;
+        fixture.setFilterData(filter);
+    }
 
     private static float toMeters(float pixels) {
         return pixels / METER_IN_PIXELS;
