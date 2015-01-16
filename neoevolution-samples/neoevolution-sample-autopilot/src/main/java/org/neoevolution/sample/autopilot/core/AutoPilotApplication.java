@@ -32,7 +32,7 @@ import java.util.List;
 public class AutoPilotApplication extends ApplicationAdapter {
 
     private static final int MAX_SCORES = 20;
-    private static final float GRAVITY_FORCE = -5f;
+    private static final float GRAVITY_FORCE = -7f;
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
     private static final float PLANE_VELOCITY_X = 2.5f;
@@ -244,9 +244,9 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 gameOver();
             }
             List<Double> inputs = new ArrayList<>(12);
-            double totalHeight = ceiling.position.y - ground.position.y;
-            double distGround = Math.abs(plane.center.y - ground.position.y) / totalHeight;
-            double distCeiling = Math.abs(plane.center.y - ceiling.position.y) / totalHeight;
+            double totalHeight = ceiling.position.y - ground.position.y - plane.size.y;
+            double distGround = Math.abs(plane.center.y - (plane.size.y/2) - ground.position.y) / totalHeight;
+            double distCeiling = Math.abs(plane.center.y + (plane.size.y/2) - ceiling.position.y) / totalHeight;
             inputs.add(distGround);
             inputs.add(distCeiling);
 
@@ -544,14 +544,14 @@ public class AutoPilotApplication extends ApplicationAdapter {
         // NOTE: LINES AND CHAINS CANNOT COLLIDE!!!
         private void createSensors()
         {
-            float maxX = toMeters(size.x + (size.x/2));
+            float maxX = toMeters(size.x);
             float maxY = toMeters(size.y);
             sensors = new ArrayList<>();
 
             for (int i = -2; i <= 2; i++)
             {
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX, maxY * i), 0);
+                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX + (maxX/2), maxY * i), 0);
 
                 Fixture fixture = body.createFixture(shape, 0);
                 fixture.setUserData(SENSOR);
