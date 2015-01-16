@@ -32,7 +32,7 @@ import java.util.List;
 public class AutoPilotApplication extends ApplicationAdapter {
 
     private static final int MAX_SCORES = 20;
-    private static final float GRAVITY_FORCE = -7f;
+    private static final float GRAVITY_FORCE = -6f;
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
     private static final float PLANE_VELOCITY_X = 2.5f;
@@ -544,14 +544,14 @@ public class AutoPilotApplication extends ApplicationAdapter {
         // NOTE: LINES AND CHAINS CANNOT COLLIDE!!!
         private void createSensors()
         {
-            float maxX = toMeters(size.x);
+            float maxX = toMeters(size.x) / 2;
             float maxY = toMeters(size.y);
             sensors = new ArrayList<>();
 
             for (int i = -2; i <= 2; i++)
             {
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX + (maxX/2), maxY * i), 0);
+                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX * 4, maxY * i), 0);
 
                 Fixture fixture = body.createFixture(shape, 0);
                 fixture.setUserData(SENSOR);
