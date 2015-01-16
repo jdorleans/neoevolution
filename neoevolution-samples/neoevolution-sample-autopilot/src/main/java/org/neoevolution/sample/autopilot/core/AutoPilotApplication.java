@@ -31,7 +31,6 @@ import java.util.List;
  */
 public class AutoPilotApplication extends ApplicationAdapter {
 
-    private static final int MAX_SCORES = 2000;
     private static final float GRAVITY_FORCE = -6f;
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
@@ -45,6 +44,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private static final float HEIGHT_CENTER = MAX_HEIGHT / 2;
     private static final float ROCK_SPACE = 250;
     private static final float CAMERA_STEP = 300;
+    private static final float MAX_SCORES = MAX_WIDTH * 20;
 
     private static final short BIT_ROCK = 2;
     private static final short BIT_PLANE = 4;
@@ -236,7 +236,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
             if (!rock.counted && plane.center.x > rock.pickCenter.x) {
                 rock.counted = true;
-                scores++;
             }
         }
     }
@@ -245,6 +244,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
     {
         if (state.isRunning())
         {
+            genotype.setFitness((double) scores);
+
             if (scores >= MAX_SCORES) {
                 gameOver();
             }

@@ -31,8 +31,6 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
                 e.printStackTrace();
             }
         }
-        Integer scores = AutoPilotNeoEvolution.application.getScores();
-        genotype.setFitness(scores.doubleValue());
     }
 
 }
