@@ -157,8 +157,9 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
 
     public void reset() {
-        state = State.START;
         scores = 0;
+        genotype = null;
+        state = State.START;
         groundOffsetX = 0;
         plane.reset();
         resetRocks();
@@ -199,7 +200,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
         updateGameOver();
         updateCamera();
         updateRocks();
-        activate();
+
+        if (genotype != null) {
+            activate();
+        }
     }
 
     private void updateGameOver()
