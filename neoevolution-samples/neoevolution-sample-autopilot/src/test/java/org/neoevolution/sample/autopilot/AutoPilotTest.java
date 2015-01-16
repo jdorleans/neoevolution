@@ -50,6 +50,11 @@ public class AutoPilotTest extends ApplicationAdapter {
     private static final short BIT_PLANE = 4;
     private static final short BIT_SENSOR = 8;
 
+    private static final String ROCK = "ROCK";
+    private static final String PLANE = "PLANE";
+    private static final String SENSOR = "SENSOR";
+
+
     private Vector2 p1;
     private Vector2 p2;
     private Vector2 collision;
@@ -74,6 +79,7 @@ public class AutoPilotTest extends ApplicationAdapter {
     private BitmapFont font;
     private TextureRegion readyTR;
     private TextureRegion gameOverTR;
+    private List<Vector2> contacts;
 
     private int scores;
     private State state;
@@ -111,6 +117,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         createRocks();
 
         createText();
+        contacts = new ArrayList<>();
 //        createMusic();
         explode = Gdx.audio.newSound(Gdx.files.internal("assets/explode.wav"));
 
@@ -271,6 +278,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         spriteBatch.draw(plane.getFrame(), plane.center.x - plane.size.x / 2, plane.center.y - plane.size.y / 2);
 
         if (isDebug) {
+            drawContacts();
             drawMouseLines();
             drawLinesToBoundary();
         }
@@ -313,6 +321,13 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
+
+    private void drawContacts() {
+        if (!contacts.isEmpty()) {
+            shapeRenderer.setColor(0, 0, 1, 1);
+            shapeRenderer.line(toPixels(contacts.get(0)), toPixels(contacts.get(1)));
+        }
+    }
 
     private void drawMouseLines() {
         shapeRenderer.setColor(1, 0, 0, 1);
@@ -404,18 +419,18 @@ public class AutoPilotTest extends ApplicationAdapter {
         @Override
         public void beginContact(Contact contact)
         {
-            System.out.println();
-            System.out.println("CONTACT!");
-
-            Body bodyA = contact.getFixtureA().getBody();
-            Body bodyB = contact.getFixtureB().getBody();
-
+            Fixture fixtureA = contact.getFixtureA();
+            Fixture fixtureB = contact.getFixtureB();
             WorldManifold wm = contact.getWorldManifold();
-            System.out.println("Normal: "+ wm.getNormal());
+
+            Vector2 point = wm.getPoints()[0];
+            contacts.add(point);
+            contacts.add(wm.getNormal().add(point));
+
+            System.out.println();
+            System.out.println("Normal: " + wm.getNormal());
             System.out.print("Points:");
-            for (Vector2 vector2 : wm.getPoints()) {
-                System.out.print(" " + vector2);
-            }
+            System.out.print(" " + point);
             System.out.println();
 
             System.out.print("Separations:");
@@ -425,18 +440,26 @@ public class AutoPilotTest extends ApplicationAdapter {
             System.out.println();
             System.out.println("Number of Points: "+ wm.getNumberOfContactPoints());
 
-            if ((bodyA == plane.body || bodyB == plane.body)) {
-//                gameOver();
+            if (PLANE.equals(fixtureA.getUserData()) || PLANE.equals(fixtureB.getUserData())) {
+                gameOver();
             }
-            plane.body.setLinearVelocity(0,0);
-            world.setGravity(Vector2.Zero);
         }
 
         @Override
-        public void endContact(Contact contact) { }
+        public void endContact(Contact contact) {
+            contacts.clear();
+        }
 
         @Override
-        public void preSolve(Contact contact, Manifold oldManifold) { }
+        public void preSolve(Contact contact, Manifold oldManifold)
+        {
+            Fixture fixtureA = contact.getFixtureA();
+            Fixture fixtureB = contact.getFixtureB();
+
+            if (SENSOR.equals(fixtureA.getUserData()) || SENSOR.equals(fixtureB.getUserData())) {
+                contact.setEnabled(false); // avoid sensor knock
+            }
+        }
 
         @Override
         public void postSolve(Contact contact, ContactImpulse impulse) { }
@@ -482,28 +505,29 @@ public class AutoPilotTest extends ApplicationAdapter {
             bodyDef.fixedRotation = true;
             Body body = world.createBody(bodyDef);
             Fixture fixture = body.createFixture(shape, 1);
+            fixture.setUserData(PLANE);
             createFilter(fixture, BIT_PLANE, BIT_ROCK);
 
             shape.dispose();
             return body;
         }
 
-        // FIXME - LINES AND CHAINS CANNOT COLLIDE!!!
+        // NOTE: LINES AND CHAINS CANNOT COLLIDE!!!
         private void createSensors()
         {
-            float maxX = size.x * 5;
-            float maxY = size.y;
+            float maxX = toMeters(size.x);
+            float maxY = toMeters(size.y);
             sensors = new ArrayList<>();
 
             for (int i = -2; i <= 2; i++)
             {
-                EdgeShape shape = new EdgeShape();
-                shape.set(Vector2.Zero, toMeters(maxX, maxY * i));
-                Fixture fixture = body.createFixture(shape, 1);
-                fixture.setSensor(true);
+                PolygonShape shape = new PolygonShape();
+                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX, maxY * i), 0);
+
+                Fixture fixture = body.createFixture(shape, 0);
+                fixture.setUserData(SENSOR);
                 createFilter(fixture, BIT_SENSOR, BIT_ROCK);
                 sensors.add(body);
-
                 shape.dispose();
             }
         }
@@ -597,6 +621,7 @@ public class AutoPilotTest extends ApplicationAdapter {
             bodyDef.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bodyDef);
             Fixture fixture = body.createFixture(shape, 0);
+            fixture.setUserData(ROCK);
             createFilter(fixture, BIT_ROCK, (short) (BIT_PLANE | BIT_SENSOR));
 
             shape.dispose();
