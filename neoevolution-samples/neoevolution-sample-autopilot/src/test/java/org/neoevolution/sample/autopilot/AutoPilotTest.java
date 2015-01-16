@@ -79,7 +79,7 @@ public class AutoPilotTest extends ApplicationAdapter {
     private BitmapFont font;
     private TextureRegion readyTR;
     private TextureRegion gameOverTR;
-    private List<Vector2> contacts;
+    private List<Fixture> contacts;
 
     private int scores;
     private State state;
@@ -245,6 +245,15 @@ public class AutoPilotTest extends ApplicationAdapter {
             inputs.add(distGround);
             inputs.add(distCeiling);
 
+            for (Fixture sensor : plane.sensors)
+            {
+                double contain = 0;
+
+                if (contacts.contains(sensor)) {
+                    contain = 1;
+                }
+                inputs.add(contain);
+            }
             List<Double> outputs = activation.activate(genotype, inputs);
 
             if (outputs.get(0) >= 0.5)
@@ -278,7 +287,6 @@ public class AutoPilotTest extends ApplicationAdapter {
         spriteBatch.draw(plane.getFrame(), plane.center.x - plane.size.x / 2, plane.center.y - plane.size.y / 2);
 
         if (isDebug) {
-            drawContacts();
             drawMouseLines();
             drawLinesToBoundary();
         }
@@ -321,13 +329,6 @@ public class AutoPilotTest extends ApplicationAdapter {
         }
     }
 
-
-    private void drawContacts() {
-        if (!contacts.isEmpty()) {
-            shapeRenderer.setColor(0, 0, 1, 1);
-            shapeRenderer.line(toPixels(contacts.get(0)), toPixels(contacts.get(1)));
-        }
-    }
 
     private void drawMouseLines() {
         shapeRenderer.setColor(1, 0, 0, 1);
@@ -416,38 +417,50 @@ public class AutoPilotTest extends ApplicationAdapter {
 
     private class AutoPilotCollision implements ContactListener {
 
+        private Fixture getSensor(Fixture fixtureA, Fixture fixtureB)
+        {
+            if (SENSOR.equals(fixtureA.getUserData())) {
+                return fixtureA;
+            } else if (SENSOR.equals(fixtureB.getUserData())) {
+                return fixtureB;
+            }
+            return null;
+        }
+
         @Override
         public void beginContact(Contact contact)
         {
             Fixture fixtureA = contact.getFixtureA();
             Fixture fixtureB = contact.getFixtureB();
-            WorldManifold wm = contact.getWorldManifold();
-
-            Vector2 point = wm.getPoints()[0];
-            contacts.add(point);
-            contacts.add(wm.getNormal().add(point));
-
-            System.out.println();
-            System.out.println("Normal: " + wm.getNormal());
-            System.out.print("Points:");
-            System.out.print(" " + point);
-            System.out.println();
-
-            System.out.print("Separations:");
-            for (float value : wm.getSeparations()) {
-                System.out.print(" "+ value);
-            }
-            System.out.println();
-            System.out.println("Number of Points: "+ wm.getNumberOfContactPoints());
 
             if (PLANE.equals(fixtureA.getUserData()) || PLANE.equals(fixtureB.getUserData())) {
                 gameOver();
             }
+            else {
+                Fixture sensor = getSensor(fixtureA, fixtureB);
+
+                if (sensor != null && !contacts.contains(sensor)) {
+                    contacts.add(sensor);
+                }
+            }
         }
 
         @Override
-        public void endContact(Contact contact) {
-            contacts.clear();
+        public void endContact(Contact contact)
+        {
+            Fixture fixtureA = contact.getFixtureA();
+            Fixture fixtureB = contact.getFixtureB();
+
+            if (PLANE.equals(fixtureA.getUserData()) || PLANE.equals(fixtureB.getUserData())) {
+                gameOver();
+            }
+            else {
+                Fixture sensor = getSensor(fixtureA, fixtureB);
+
+                if (sensor != null) {
+                    contacts.remove(sensor);
+                }
+            }
         }
 
         @Override
@@ -474,7 +487,7 @@ public class AutoPilotTest extends ApplicationAdapter {
         Vector2 size;
         Vector2 center;
         Animation animation;
-        List<Body> sensors;
+        List<Fixture> sensors;
 
         public Plane()
         {
@@ -527,19 +540,14 @@ public class AutoPilotTest extends ApplicationAdapter {
                 Fixture fixture = body.createFixture(shape, 0);
                 fixture.setUserData(SENSOR);
                 createFilter(fixture, BIT_SENSOR, BIT_ROCK);
-                sensors.add(body);
+                sensors.add(fixture);
                 shape.dispose();
             }
         }
 
-        private void reset()
-        {
+        private void reset() {
             body.setAngularVelocity(0);
             body.setTransform(toMeters(PLANE_START_X, PLANE_START_Y), 0);
-
-            for (Body sensor : sensors) {
-                sensor.setTransform(body.getWorldCenter(), 0);
-            }
         }
 
         private void jump() {

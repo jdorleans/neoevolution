@@ -2,7 +2,6 @@ package org.neoevolution.sample.autopilot;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import org.neoevolution.core.activation.GenotypeActivation;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.sample.autopilot.core.AutoPilotApplication;
 
@@ -21,7 +20,7 @@ public class Application {
     public Application()
     {
         if (application == null) {
-            application = new AutoPilotApplication(new GenotypeActivation());
+            application = new AutoPilotApplication();
             config = new LwjglApplicationConfiguration();
             lwjglApplication = new LwjglApplication(application, config);
         }
@@ -31,16 +30,16 @@ public class Application {
         return application.isRunning();
     }
 
-    public void start(Genotype genotype) {
-        application.start(genotype);
+    public void run(Genotype genotype) {
+        application.run(genotype);
     }
 
-    public void resetWorld() {
-        application.resetWorld();
+    public void reset() {
+        application.reset();
     }
 
-    public int getScore() {
-        return application.getScore();
+    public int getScores() {
+        return application.getScores();
     }
 
 }

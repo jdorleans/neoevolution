@@ -15,14 +15,14 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
 
     @Override
     public void evaluate(Population population) {
-        AutoPilotNeoEvolution.application.resetWorld();
+        AutoPilotNeoEvolution.application.reset();
         super.evaluate(population);
     }
 
     @Override
     protected void evaluate(Genotype genotype)
     {
-        AutoPilotNeoEvolution.application.start(genotype);
+        AutoPilotNeoEvolution.application.run(genotype);
         long millis = 0;
 
         while (AutoPilotNeoEvolution.application.isRunning()) {
@@ -33,7 +33,7 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
                 e.printStackTrace();
             }
         }
-        String scores = AutoPilotNeoEvolution.application.getScore() +"."+ millis;
+        String scores = AutoPilotNeoEvolution.application.getScores() +"."+ millis;
         genotype.setFitness(Double.parseDouble(scores));
     }
 
