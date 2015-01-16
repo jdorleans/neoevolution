@@ -23,18 +23,16 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
     protected void evaluate(Genotype genotype)
     {
         AutoPilotNeoEvolution.application.run(genotype);
-        long millis = 0;
 
         while (AutoPilotNeoEvolution.application.isRunning()) {
             try {
                 Thread.sleep(100);
-                millis += 100;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        String scores = AutoPilotNeoEvolution.application.getScores() +"."+ millis;
-        genotype.setFitness(Double.parseDouble(scores));
+        Integer scores = AutoPilotNeoEvolution.application.getScores();
+        genotype.setFitness(scores.doubleValue());
     }
 
 }

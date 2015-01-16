@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class AutoPilotApplication extends ApplicationAdapter {
 
-    private static final int MAX_SCORES = 20;
+    private static final int MAX_SCORES = 2000;
     private static final float GRAVITY_FORCE = -6f;
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
@@ -204,6 +204,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         if (genotype != null) {
             activate();
         }
+        scores = (int) (plane.center.x - PLANE_START_X);
     }
 
     private void updateGameOver()
