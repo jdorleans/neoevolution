@@ -31,6 +31,7 @@ import java.util.List;
  */
 public class AutoPilotApplication extends ApplicationAdapter {
 
+    private static final float MAX_SCORES = 20;
     private static final float GRAVITY_FORCE = -6f;
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
@@ -44,7 +45,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private static final float HEIGHT_CENTER = MAX_HEIGHT / 2;
     private static final float ROCK_SPACE = 250;
     private static final float CAMERA_STEP = 300;
-    private static final float MAX_SCORES = MAX_WIDTH * 20;
 
     private static final short BIT_ROCK = 2;
     private static final short BIT_PLANE = 4;
@@ -81,8 +81,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private TextureRegion gameOverTR;
     private List<Fixture> contacts;
 
-    private int scores;
     private State state;
+    private int scores;
+    private int distance;
+    private Boolean isInverted;
     private boolean isDebug = true;
 
     private Genotype genotype;
@@ -156,9 +158,12 @@ public class AutoPilotApplication extends ApplicationAdapter {
     }
 
 
-    public void reset() {
+    public void reset()
+    {
         scores = 0;
+        distance = 0;
         genotype = null;
+        isInverted = null;
         state = State.START;
         groundOffsetX = 0;
         plane.reset();
@@ -204,7 +209,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         if (genotype != null) {
             activate();
         }
-        scores = (int) (plane.center.x - PLANE_START_X);
+        distance = (int) (plane.center.x - PLANE_START_X);
     }
 
     private void updateGameOver()
@@ -234,8 +239,15 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 rock.update(rock.getX() + rocks.size * ROCK_SPACE);
             }
 
-            if (!rock.counted && plane.center.x > rock.pickCenter.x) {
+            if (!rock.counted && plane.center.x > rock.pickCenter.x)
+            {
+                System.out.println("Inverted: "+ isInverted +" - "+ rock.invert);
+                if (isInverted != null && isInverted != rock.invert) {
+                    scores += 2;
+                }
+                scores++;
                 rock.counted = true;
+                isInverted = rock.invert;
             }
         }
     }
@@ -244,7 +256,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
     {
         if (state.isRunning())
         {
-            genotype.setFitness((double) scores);
+            String fitness = scores +"."+ distance;
+            genotype.setFitness(Double.parseDouble(fitness));
 
             if (scores >= MAX_SCORES) {
                 gameOver();
@@ -334,11 +347,11 @@ public class AutoPilotApplication extends ApplicationAdapter {
         else if (state.isRunning())
         {
             font.setScale(1);
-            font.draw(spriteBatch, "" + scores, camera.position.x, MAX_HEIGHT - 10);
+            font.draw(spriteBatch, scores +"."+ distance, camera.position.x - 10, MAX_HEIGHT - 10);
 
             if (genotype != null) {
                 font.setScale(0.5f);
-                font.draw(spriteBatch, "" + genotype.toString(), plane.center.x, 30);
+                font.draw(spriteBatch, genotype.toString(), plane.center.x, 30);
             }
         }
     }
@@ -557,7 +570,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
             for (int i = -2; i <= 2; i++)
             {
                 PolygonShape shape = new PolygonShape();
-                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX * 4, maxY * i), 0);
+                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX * 3, maxY * i), 0);
 
                 Fixture fixture = body.createFixture(shape, 0);
                 fixture.setUserData(SENSOR);
