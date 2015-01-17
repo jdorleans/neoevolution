@@ -242,7 +242,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
             if (!rock.counted && plane.center.x > rock.pickCenter.x)
             {
-                System.out.println("Inverted: "+ isInverted +" - "+ rock.invert);
                 if (isInverted != null && isInverted != rock.invert) {
                     scores += 2;
                 }
