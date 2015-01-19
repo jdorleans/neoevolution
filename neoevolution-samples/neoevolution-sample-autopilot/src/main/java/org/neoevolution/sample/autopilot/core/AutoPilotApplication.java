@@ -563,11 +563,11 @@ public class AutoPilotApplication extends ApplicationAdapter {
         // NOTE: LINES AND CHAINS CANNOT COLLIDE!!!
         private void createSensors()
         {
-            float maxX = toMeters(size.x);
-            float maxY = toMeters(size.y);
+            float maxX = toMeters(size.x + size.x / 2);
+            float maxY = toMeters(size.y / 2);
             sensors = new ArrayList<>();
 
-            for (int i = -2; i <= 2; i++)
+            for (int i = -6; i <= 6; i++)
             {
                 PolygonShape shape = new PolygonShape();
                 shape.setAsBox(maxX, 0.00001f, new Vector2(maxX, maxY * i), 0);
