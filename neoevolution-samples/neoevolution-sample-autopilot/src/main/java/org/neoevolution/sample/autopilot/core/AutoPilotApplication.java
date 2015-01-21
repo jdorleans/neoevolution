@@ -31,30 +31,22 @@ import java.util.List;
  */
 public class AutoPilotApplication extends ApplicationAdapter {
 
+    private static final float SPEED = 3;
     private static final float MAX_SCORES = 20;
     private static final float MAX_DISTANCE = 10000;
-    private static final float GRAVITY_FORCE = -10f;
+    private static final float GRAVITY_FORCE = -10f * SPEED;
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
-    private static final float PLANE_VELOCITY_X = 2.5f;
-    private static final float PLANE_JUMP_IMPULSE = 1f;
+    private static final float PLANE_VELOCITY_X = 2.5f * SPEED;
+    private static final float PLANE_JUMP_IMPULSE = 1f * SPEED;
     private static final float METER_IN_PIXELS = 100f;
 
     private static final float MAX_WIDTH = 800;
     private static final float MAX_HEIGHT = 480;
-    private static final float WIDTH_CENTER = MAX_WIDTH / 2;
-    private static final float HEIGHT_CENTER = MAX_HEIGHT / 2;
+    private static final float HALF_WIDTH = MAX_WIDTH / 2;
+    private static final float HALF_HEIGHT = MAX_HEIGHT / 2;
     private static final float ROCK_SPACE = 250;
     private static final float CAMERA_STEP = 300;
-
-    private static final short BIT_ROCK = 2;
-    private static final short BIT_PLANE = 4;
-    private static final short BIT_SENSOR = 8;
-
-    private static final String ROCK = "ROCK";
-    private static final String PLANE = "PLANE";
-    private static final String SENSOR = "SENSOR";
-
 
     private Vector2 p1;
     private Vector2 p2;
@@ -71,6 +63,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private Plane plane;
     private Ground ground;
     private Ground ceiling;
+    private Rock closestRock;
     private Array<Rock> rocks;
     private Texture background;
     private float groundOffsetX;
@@ -80,7 +73,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private BitmapFont font;
     private TextureRegion readyTR;
     private TextureRegion gameOverTR;
-    private List<Fixture> contacts;
 
     private State state;
     private int scores;
@@ -122,7 +114,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
         createText();
 //        createMusic();
         explode = Gdx.audio.newSound(Gdx.files.internal("assets/explode.wav"));
-        contacts = new ArrayList<>();
         activation = new GenotypeActivation();
 
         reset();
@@ -169,8 +160,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
         groundOffsetX = 0;
         plane.reset();
         resetRocks();
-        contacts.clear();
-        camera.position.x = WIDTH_CENTER;
+        font.setScale(0.5f);
+        camera.position.x = HALF_WIDTH;
     }
 
     private void resetRocks() {
@@ -191,11 +182,15 @@ public class AutoPilotApplication extends ApplicationAdapter {
     }
 
     @Override
-    public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        world.step(1 / 60f, 6, 2);
-        update();
-        draw();
+    public void render()
+    {
+        if (!state.isPause())
+        {
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            world.step(1 / 60f, 6, 2);
+            update();
+            draw();
+        }
     }
 
     private void update()
@@ -226,7 +221,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
     {
         camera.position.x = plane.center.x + CAMERA_STEP;
 
-        if (camera.position.x - groundOffsetX > ground.getWidth() + WIDTH_CENTER) {
+        if (camera.position.x - groundOffsetX > ground.getWidth() + HALF_WIDTH) {
             groundOffsetX += ground.getWidth();
         }
     }
@@ -234,13 +229,14 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private void updateRocks()
     {
+        updateRockPick();
+
         for (Rock rock : rocks)
         {
-            if (camera.position.x - rock.getX() > WIDTH_CENTER + rock.getWidth()) {
+            if (camera.position.x - rock.getX() > HALF_WIDTH + rock.getWidth()) {
                 rock.update(rock.getX() + rocks.size * ROCK_SPACE);
             }
-
-            if (!rock.counted && plane.center.x > rock.pickCenter.x)
+            else if (!rock.counted && plane.center.x > rock.pickCenter.x)
             {
                 if (isInverted != null && isInverted != rock.invert) {
                     scores += 2;
@@ -251,6 +247,24 @@ public class AutoPilotApplication extends ApplicationAdapter {
             }
         }
     }
+
+    private void updateRockPick()
+    {
+        closestRock = null;
+
+        for (Rock rock : rocks)
+        {
+            if (plane.center.x < rock.pickCenter.x)
+            {
+                if (closestRock == null) {
+                    closestRock = rock;
+                } else if (rock.pickCenter.x < closestRock.pickCenter.x) {
+                    closestRock = rock;
+                }
+            }
+        }
+    }
+
 
     private void activate()
     {
@@ -263,21 +277,19 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 gameOver();
             }
             List<Double> inputs = new ArrayList<>(12);
-            double totalHeight = ceiling.position.y - ground.position.y - plane.size.y;
-            double distGround = Math.abs(plane.center.y - (plane.size.y/2) - ground.position.y) / totalHeight;
-            double distCeiling = Math.abs(plane.center.y + (plane.size.y/2) - ceiling.position.y) / totalHeight;
+            double maxHeight = ceiling.position.y - ground.position.y - plane.size.y;
+            double distGround = Math.abs(plane.center.y - (plane.size.y/2) - ground.position.y) / maxHeight;
+            double distCeiling = Math.abs(plane.center.y + (plane.size.y/2) - ceiling.position.y) / maxHeight;
             inputs.add(distGround);
             inputs.add(distCeiling);
 
-            for (Fixture sensor : plane.sensors)
-            {
-                double contain = 0;
+//            double maxX = camera.position.x - plane.center.x;
+//            double distRock = Math.min(1d, (closestRock.pickCenter.x - plane.center.x) / maxX);
+//            double pickHeight = closestRock.pickCenter.y / maxHeight;
+//            inputs.add(distRock);
+//            inputs.add(pickHeight);
+            inputs.add(closestRock.invert ? 1d : 0d);
 
-                if (contacts.contains(sensor)) {
-                    contain = 1;
-                }
-                inputs.add(contain);
-            }
             List<Double> outputs = activation.activate(genotype, inputs);
 
             if (outputs.get(0) >= 0.5) {
@@ -307,6 +319,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
         spriteBatch.draw(plane.getFrame(), plane.center.x - plane.size.x / 2, plane.center.y - plane.size.y / 2);
 
         if (isDebug) {
+            shapeRenderer.setColor(0, 0, 1, 1);
+            shapeRenderer.line(plane.center, closestRock.pickCenter);
             drawMouseLines();
             drawLinesToBoundary();
         }
@@ -338,20 +352,18 @@ public class AutoPilotApplication extends ApplicationAdapter {
     {
         if (state.isStart()) {
             spriteBatch.draw(readyTR, camera.position.x - readyTR.getRegionWidth() / 2,
-                    HEIGHT_CENTER - readyTR.getRegionHeight() / 2);
+                    HALF_HEIGHT - readyTR.getRegionHeight() / 2);
         }
         else if (state.isGameOver()) {
             spriteBatch.draw(gameOverTR, camera.position.x - gameOverTR.getRegionWidth() / 2,
-                    HEIGHT_CENTER - gameOverTR.getRegionHeight() / 2);
+                    HALF_HEIGHT - gameOverTR.getRegionHeight() / 2);
         }
         else if (state.isRunning())
         {
-            font.setScale(1);
-            font.draw(spriteBatch, scores +"."+ distance, camera.position.x - 10, MAX_HEIGHT - 10);
-
             if (genotype != null) {
-                font.setScale(0.5f);
                 font.draw(spriteBatch, genotype.toString(), plane.center.x, 30);
+            } else {
+                font.draw(spriteBatch, scores +"."+ distance, plane.center.x, 30);
             }
         }
     }
@@ -445,6 +457,14 @@ public class AutoPilotApplication extends ApplicationAdapter {
                     plane.jump();
                 }
             }
+            else if (keycode == Input.Keys.P)
+            {
+                if (state.isPause()) {
+                    state = State.RUNNING;
+                } else if (state.isRunning()) {
+                    state = State.PAUSE;
+                }
+            }
             return true;
         }
     }
@@ -452,62 +472,16 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private class AutoPilotCollision implements ContactListener {
 
-        private Fixture getSensor(Fixture fixtureA, Fixture fixtureB)
-        {
-            if (SENSOR.equals(fixtureA.getUserData())) {
-                return fixtureA;
-            } else if (SENSOR.equals(fixtureB.getUserData())) {
-                return fixtureB;
-            }
-            return null;
+        @Override
+        public void beginContact(Contact contact) {
+            gameOver();
         }
 
         @Override
-        public void beginContact(Contact contact)
-        {
-            Fixture fixtureA = contact.getFixtureA();
-            Fixture fixtureB = contact.getFixtureB();
-
-            if (PLANE.equals(fixtureA.getUserData()) || PLANE.equals(fixtureB.getUserData())) {
-                gameOver();
-            }
-            else {
-                Fixture sensor = getSensor(fixtureA, fixtureB);
-
-                if (sensor != null && !contacts.contains(sensor)) {
-                    contacts.add(sensor);
-                }
-            }
-        }
+        public void endContact(Contact contact) { }
 
         @Override
-        public void endContact(Contact contact)
-        {
-            Fixture fixtureA = contact.getFixtureA();
-            Fixture fixtureB = contact.getFixtureB();
-
-            if (PLANE.equals(fixtureA.getUserData()) || PLANE.equals(fixtureB.getUserData())) {
-                gameOver();
-            }
-            else {
-                Fixture sensor = getSensor(fixtureA, fixtureB);
-
-                if (sensor != null) {
-                    contacts.remove(sensor);
-                }
-            }
-        }
-
-        @Override
-        public void preSolve(Contact contact, Manifold oldManifold)
-        {
-            Fixture fixtureA = contact.getFixtureA();
-            Fixture fixtureB = contact.getFixtureB();
-
-            if (SENSOR.equals(fixtureA.getUserData()) || SENSOR.equals(fixtureB.getUserData())) {
-                contact.setEnabled(false); // avoid sensor knock
-            }
-        }
+        public void preSolve(Contact contact, Manifold oldManifold) { }
 
         @Override
         public void postSolve(Contact contact, ContactImpulse impulse) { }
@@ -522,7 +496,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
         Vector2 size;
         Vector2 center;
         Animation animation;
-        List<Fixture> sensors;
 
         public Plane()
         {
@@ -534,7 +507,6 @@ public class AutoPilotApplication extends ApplicationAdapter {
             size = new Vector2(frame1.getRegionWidth(), frame1.getRegionHeight());
             body = createBody();
             center = toPixels(body.getWorldCenter());
-            createSensors();
         }
 
 
@@ -552,32 +524,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.fixedRotation = true;
             Body body = world.createBody(bodyDef);
-            Fixture fixture = body.createFixture(shape, 1);
-            fixture.setUserData(PLANE);
-            createFilter(fixture, BIT_PLANE, BIT_ROCK);
+            body.createFixture(shape, 1);
 
             shape.dispose();
             return body;
-        }
-
-        // NOTE: LINES AND CHAINS CANNOT COLLIDE!!!
-        private void createSensors()
-        {
-            float maxX = toMeters(size.x + size.x / 2);
-            float maxY = toMeters(size.y / 2);
-            sensors = new ArrayList<>();
-
-            for (int i = -6; i <= 6; i++)
-            {
-                PolygonShape shape = new PolygonShape();
-                shape.setAsBox(maxX, 0.00001f, new Vector2(maxX, maxY * i), 0);
-
-                Fixture fixture = body.createFixture(shape, 0);
-                fixture.setUserData(SENSOR);
-                createFilter(fixture, BIT_SENSOR, BIT_ROCK);
-                sensors.add(fixture);
-                shape.dispose();
-            }
         }
 
         private void reset() {
@@ -663,9 +613,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.StaticBody;
             Body body = world.createBody(bodyDef);
-            Fixture fixture = body.createFixture(shape, 0);
-            fixture.setUserData(ROCK);
-            createFilter(fixture, BIT_ROCK, (short) (BIT_PLANE | BIT_SENSOR));
+            body.createFixture(shape, 0);
 
             shape.dispose();
             return body;
@@ -675,7 +623,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private enum State
     {
-        START, RUNNING, GAME_OVER;
+        START, RUNNING, PAUSE, GAME_OVER;
 
         boolean isStart() {
             return START.equals(this);
@@ -685,18 +633,15 @@ public class AutoPilotApplication extends ApplicationAdapter {
             return RUNNING.equals(this);
         }
 
+        boolean isPause() {
+            return PAUSE.equals(this);
+        }
+
         boolean isGameOver() {
             return GAME_OVER.equals(this);
         }
     }
 
-
-    private void createFilter(Fixture fixture, short category, short mask) {
-        Filter filter = new Filter();
-        filter.categoryBits = category;
-        filter.maskBits =  mask;
-        fixture.setFilterData(filter);
-    }
 
     private static float toMeters(float pixels) {
         return pixels / METER_IN_PIXELS;
