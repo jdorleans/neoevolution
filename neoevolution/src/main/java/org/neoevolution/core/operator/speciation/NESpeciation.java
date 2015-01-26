@@ -19,8 +19,6 @@ public class NESpeciation implements Speciation {
 
     private double compatibilityRate;
 
-    private boolean updateCompatibility;
-
     private SpeciesFactory speciesFactory;
 
 
@@ -56,19 +54,12 @@ public class NESpeciation implements Speciation {
     private void updateCompatibilityThreshold(Population population)
     {
         int size = population.getSpecies().size();
+        double rate = threshold * compatibilityRate;
 
-        if (updateCompatibility)
-        {
-            double rate = threshold * compatibilityRate;
-
-            if (size > maxSpeciesSize) {
-                threshold += rate;
-            } else if (size < maxSpeciesSize) {
-                threshold -= rate;
-            }
-        }
-        else if (size >= maxSpeciesSize) {
-            updateCompatibility = true;
+        if (size > maxSpeciesSize) {
+            threshold += rate;
+        } else if (size < maxSpeciesSize) {
+            threshold -= rate;
         }
     }
 
@@ -128,7 +119,10 @@ public class NESpeciation implements Speciation {
                 weightDiff += Math.abs(s1.getWeight() - s2.getWeight());
             }
         }
-        return (weightFactor * (weightDiff / similar));
+        if (similar > 0) {
+            return (weightFactor * (weightDiff / similar));
+        }
+        return 0;
     }
 
 

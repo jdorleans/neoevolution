@@ -65,8 +65,12 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         return new Parents(g1, g2);
     }
 
-    private int calculateSize(Species specie, double totalFitness) {
-        return (int) ((specie.getFitness() / totalFitness) * populationSize);
+    private int calculateSize(Species species, double totalFitness)
+    {
+        if (totalFitness == 0) {
+            return species.getGenotypes().size();
+        }
+        return (int) ((species.getFitness() / totalFitness) * populationSize);
     }
 
     private int calculateBirths(int actualSize, int newSize)
