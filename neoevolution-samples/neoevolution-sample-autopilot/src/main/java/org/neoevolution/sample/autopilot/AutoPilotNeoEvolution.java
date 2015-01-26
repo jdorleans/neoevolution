@@ -1,6 +1,7 @@
 package org.neoevolution.sample.autopilot;
 
 import org.neoevolution.configuration.NeoEvolutionConfiguration;
+import org.neoevolution.sample.autopilot.core.AutoPilotApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,7 +22,7 @@ public class AutoPilotNeoEvolution extends AsyncConfigurerSupport {
 
     public static final int QUEUE_FACTOR = 10000;
 
-    public static final Application application = new Application();
+    public static final AutoPilotApplication application = new AutoPilotApplication();
 
     @Override
     public Executor getAsyncExecutor()
@@ -38,7 +39,7 @@ public class AutoPilotNeoEvolution extends AsyncConfigurerSupport {
         return executor;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication.run(AutoPilotNeoEvolution.class, args);
     }
 

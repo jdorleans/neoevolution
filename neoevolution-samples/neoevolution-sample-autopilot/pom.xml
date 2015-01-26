@@ -15,7 +15,7 @@
     <properties>
         <java.version>1.7</java.version>
         <libgdx.version>1.5.2</libgdx.version>
-        <start-class>org.neoevolution.org.neoevolution.sample.autopilot.AutoPilotNeoEvolution</start-class>
+        <start-class>org.neoevolution.sample.autopilot.AutoPilotNeoEvolution</start-class>
     </properties>
 
     <parent>

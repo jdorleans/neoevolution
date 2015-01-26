@@ -15,7 +15,6 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
 
     @Override
     public void evaluate(Population population) {
-        AutoPilotNeoEvolution.application.reset();
         super.evaluate(population);
     }
 
@@ -31,6 +30,7 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
                 e.printStackTrace();
             }
         }
+        genotype.setEvaluated(true);
     }
 
 }
