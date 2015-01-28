@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Jan 02 2015
+ * @since 1.0
  */
 public class DataSet<T> implements Iterable<T> {
 

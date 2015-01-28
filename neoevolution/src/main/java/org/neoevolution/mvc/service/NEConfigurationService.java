@@ -5,7 +5,7 @@ import org.neoevolution.mvc.repository.NEConfigurationRepository;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 14 2014
+ * @since 1.0
  */
 public abstract class NEConfigurationService<T extends NEConfiguration, R extends NEConfigurationRepository<T>>
         extends NNConfigurationService<T, R> {

@@ -15,7 +15,7 @@ import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 28 2014
+ * @since 1.0
  */
 public abstract class AbstractNNAlgorithmFactory<T extends AbstractNNAlgorithm<Eva, Sel, Spe, Sto>,
         Eva extends Evaluation, Sel extends Selection,

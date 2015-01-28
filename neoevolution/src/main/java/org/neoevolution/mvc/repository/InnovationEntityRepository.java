@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 28 2014
+ * @since 1.0
  */
 @NoRepositoryBean
 public interface InnovationEntityRepository<T extends AbstractInnovationEntity> extends GraphRepository<T> {

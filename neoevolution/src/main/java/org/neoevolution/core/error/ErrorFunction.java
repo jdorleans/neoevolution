@@ -2,7 +2,7 @@ package org.neoevolution.core.error;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 01/11/14.
+ * @since 1.0
  */
 public interface ErrorFunction extends Cloneable {
 

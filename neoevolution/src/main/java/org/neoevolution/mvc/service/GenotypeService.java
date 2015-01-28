@@ -16,7 +16,7 @@ import java.util.TreeSet;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 24/10/14.
+ * @since 1.0
  */
 @Service
 public class GenotypeService extends AbstractFitnessEntityService<Genotype, GenotypeRepository> {

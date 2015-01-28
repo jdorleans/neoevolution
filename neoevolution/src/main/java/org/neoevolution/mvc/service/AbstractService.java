@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 24/10/14.
+ * @since 1.0
  */
 public abstract class AbstractService<T extends AbstractEntity, R extends GraphRepository<T>> {
 

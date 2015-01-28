@@ -6,7 +6,7 @@ import org.neoevolution.mvc.repository.EvolutionRepository;
 
 /**
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
- * @since Dec 23 2014
+ * @since 1.0
  */
 public abstract class NEEvolutionService
         <T extends Evolution<C>, C extends NEConfiguration, R extends EvolutionRepository<T>>

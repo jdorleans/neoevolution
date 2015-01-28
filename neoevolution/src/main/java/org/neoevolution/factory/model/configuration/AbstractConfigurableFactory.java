@@ -2,7 +2,7 @@ package org.neoevolution.factory.model.configuration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 30 2014
+ * @since 1.0
  */
 public abstract class AbstractConfigurableFactory<T, C> implements ConfigurableFactory<T, C> {
 

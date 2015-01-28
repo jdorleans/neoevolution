@@ -6,7 +6,7 @@ import java.util.*;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 05/11/14.
+ * @since 1.0
  */
 public final class FitnessUtils {
 

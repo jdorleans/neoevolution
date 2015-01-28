@@ -3,6 +3,10 @@ package org.neoevolution.core.operator.mutation;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.util.Randomizer;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public abstract class AbstractMutation implements Mutation {
 
     public static final double RATE = 0.5;

@@ -5,7 +5,7 @@ import org.neoevolution.factory.model.configuration.ConfigurableFactory;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 30 2014
+ * @since 1.0
  */
 public interface EvaluationFactory<T extends Evaluation, C>
         extends ConfigurableFactory<T, C> {

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 28 2014
+ * @since 1.0
  */
 @RestController
 @RequestMapping("/population")

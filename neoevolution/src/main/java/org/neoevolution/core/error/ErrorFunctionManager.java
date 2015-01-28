@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Jan 07 2015
+ * @since 1.0
  */
 @Component
 public class ErrorFunctionManager {

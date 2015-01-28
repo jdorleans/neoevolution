@@ -5,7 +5,7 @@ import org.neoevolution.factory.model.configuration.ConfigurableFactory;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 18 2014
+ * @since 1.0
  */
 public interface StopConditionFactory<T extends StopCondition, C>
         extends ConfigurableFactory<T, C> {

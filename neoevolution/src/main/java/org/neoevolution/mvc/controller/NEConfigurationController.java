@@ -5,7 +5,7 @@ import org.neoevolution.mvc.service.NEConfigurationService;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 28 2014
+ * @since 1.0
  */
 public abstract class NEConfigurationController<T extends NEConfiguration, S extends NEConfigurationService<T, ?>>
         extends NNConfigurationController<T, S> {

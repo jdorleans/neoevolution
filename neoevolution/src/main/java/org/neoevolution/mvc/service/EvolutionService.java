@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
- * @since Dec 23 2014
+ * @since 1.0
  */
 public abstract class EvolutionService
         <T extends Evolution<C>, C extends NNConfiguration, R extends EvolutionRepository<T>>

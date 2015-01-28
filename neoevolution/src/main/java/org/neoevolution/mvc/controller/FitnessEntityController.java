@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 28 2014
+ * @since 1.0
  */
 public abstract class FitnessEntityController
         <T extends AbstractFitnessEntity, S extends AbstractFitnessEntityService<T, ?>>

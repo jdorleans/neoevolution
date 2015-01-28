@@ -7,6 +7,10 @@ import org.neoevolution.util.MapUtils;
 
 import java.util.*;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public class NESpeciation implements Speciation {
 
     private int maxSpeciesSize;

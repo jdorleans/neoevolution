@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 27 2014
+ * @since 1.0
  */
 @Aspect
 @Component

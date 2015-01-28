@@ -10,6 +10,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Map;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @Configuration
 @ComponentScan("org.neoevolution")
 @EnableAsync

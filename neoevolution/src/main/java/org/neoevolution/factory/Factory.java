@@ -2,7 +2,7 @@ package org.neoevolution.factory;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 30 2014
+ * @since 1.0
  */
 public interface Factory<T> {
 

@@ -7,7 +7,7 @@ import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 21 2014
+ * @since 1.0
  */
 public abstract class AbstractErrorFunctionFactory
         <T extends ErrorFunctionType, C extends ErrorConfiguration<T>>

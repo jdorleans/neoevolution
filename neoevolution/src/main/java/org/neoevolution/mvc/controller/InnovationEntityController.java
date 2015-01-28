@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 28 2014
+ * @since 1.0
  */
 public abstract class InnovationEntityController
         <T extends AbstractInnovationEntity, S extends AbstractInnovationEntityService<T, ?>>

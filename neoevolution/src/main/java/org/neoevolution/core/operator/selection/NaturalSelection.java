@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 18/10/14.
+ * @since 1.0
  */
 public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutation> {
 

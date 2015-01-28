@@ -7,7 +7,7 @@ import org.neoevolution.mvc.model.configuration.StopConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 25 2014
+ * @since 1.0
  */
 public class NEStopConditionFactory<C extends StopConfiguration>
         extends AbstractStopConditionFactory<ComposedStop, C> {

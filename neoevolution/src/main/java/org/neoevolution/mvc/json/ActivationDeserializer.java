@@ -15,7 +15,7 @@ import java.io.IOException;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 26 2014
+ * @since 1.0
  */
 @Component
 public class ActivationDeserializer extends JsonDeserializer<ActivationFunction> {

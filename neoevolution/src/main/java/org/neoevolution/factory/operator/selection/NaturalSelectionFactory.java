@@ -9,7 +9,7 @@ import org.neoevolution.mvc.model.configuration.NEConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 30 2014
+ * @since 1.0
  */
 public class NaturalSelectionFactory<C extends NEConfiguration>
         extends AbstractSelectionFactory<NaturalSelection, Crossover, ComposedMutation, C> {

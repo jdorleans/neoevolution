@@ -1,5 +1,9 @@
 package org.neoevolution.core.activation;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public class LinearFunction extends AbstractActivationFunction implements ActivationFunction {
 
     @Override

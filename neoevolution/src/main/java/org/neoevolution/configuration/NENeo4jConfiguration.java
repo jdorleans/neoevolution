@@ -19,6 +19,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @Configuration
 @PropertySource("classpath:neoevolution.properties")
 @EnableNeo4jRepositories("org.neoevolution.mvc.repository")

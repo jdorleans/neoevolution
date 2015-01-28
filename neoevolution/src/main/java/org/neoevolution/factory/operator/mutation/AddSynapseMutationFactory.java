@@ -7,7 +7,7 @@ import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 30 2014
+ * @since 1.0
  */
 public class AddSynapseMutationFactory<C extends NNConfiguration>
         extends AbstractConfigurableFactory<AddSynapseMutation, C>

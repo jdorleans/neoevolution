@@ -6,7 +6,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 30 2014
+ * @since 1.0
  */
 @NoRepositoryBean
 public interface InnovationRepository<T extends AbstractInnovation> extends GraphRepository<T> {

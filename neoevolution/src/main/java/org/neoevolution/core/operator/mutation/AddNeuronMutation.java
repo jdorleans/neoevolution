@@ -10,6 +10,10 @@ import org.neoevolution.util.Randomizer;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public class AddNeuronMutation extends AbstractMutation {
 
     public static final int MAX_HIDDEN = 10;

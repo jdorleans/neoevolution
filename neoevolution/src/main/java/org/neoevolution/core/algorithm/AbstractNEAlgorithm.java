@@ -7,7 +7,7 @@ import org.neoevolution.core.stop.StopCondition;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 20 2014
+ * @since 1.0
  */
 public abstract class AbstractNEAlgorithm<Eva extends Evaluation, Sto extends StopCondition>
         extends AbstractNNAlgorithm<Eva, NaturalSelection, NESpeciation, Sto> {

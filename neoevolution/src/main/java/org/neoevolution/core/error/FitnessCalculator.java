@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @Component
 public class FitnessCalculator {
 

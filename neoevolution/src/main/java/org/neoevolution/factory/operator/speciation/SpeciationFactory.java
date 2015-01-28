@@ -6,7 +6,7 @@ import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 17 2014
+ * @since 1.0
  */
 public interface SpeciationFactory<T extends Speciation, C extends NNConfiguration>
         extends ConfigurableFactory<T, C> {

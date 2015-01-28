@@ -6,6 +6,10 @@ import org.neoevolution.mvc.model.Species;
 
 import java.util.Set;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public abstract class AbstractEvaluation implements Evaluation {
 
     @Override

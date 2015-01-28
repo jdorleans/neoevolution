@@ -16,7 +16,7 @@ import java.util.SortedSet;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Oct 10 2014
+ * @since 1.0
  */
 public class GenotypeFactory<C extends NNConfiguration>
         extends AbstractConfigurableFactory<Genotype, C>

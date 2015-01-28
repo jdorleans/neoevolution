@@ -10,7 +10,7 @@ import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Oct 22 2014
+ * @since 1.0
  */
 public class PopulationFactory<C extends NNConfiguration>
         extends AbstractConfigurableFactory<Population, C> {

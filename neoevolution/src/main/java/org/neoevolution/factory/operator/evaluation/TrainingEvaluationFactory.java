@@ -7,7 +7,7 @@ import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 30 2014
+ * @since 1.0
  */
 public abstract class TrainingEvaluationFactory
         <T extends TrainingEvaluation, ET extends ErrorFunctionType, C extends ErrorConfiguration<ET>>

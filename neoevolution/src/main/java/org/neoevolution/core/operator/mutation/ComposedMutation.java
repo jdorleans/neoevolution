@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 25/10/14.
+ * @since 1.0
  */
 public class ComposedMutation implements Mutation {
 

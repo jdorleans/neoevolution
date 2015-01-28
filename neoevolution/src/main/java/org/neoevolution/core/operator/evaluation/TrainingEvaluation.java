@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Configurable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @Configurable
 public abstract class TrainingEvaluation extends AbstractEvaluation {
 

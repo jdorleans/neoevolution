@@ -9,6 +9,10 @@ import org.neoevolution.mvc.model.Population;
 
 import java.util.Set;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public abstract class AbstractNNAlgorithm
         <Eva extends Evaluation, Sel extends Selection, Spe extends Speciation, Sto extends StopCondition>
         implements NNAlgorithm {

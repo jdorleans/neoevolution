@@ -7,7 +7,7 @@ import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 17 2014
+ * @since 1.0
  */
 public interface Speciation {
 

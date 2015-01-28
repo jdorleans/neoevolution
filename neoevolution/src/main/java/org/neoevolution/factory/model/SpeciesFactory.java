@@ -8,7 +8,7 @@ import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Oct 10 2014
+ * @since 1.0
  */
 public class SpeciesFactory<C extends NNConfiguration>
         extends AbstractConfigurableFactory<Species, C>

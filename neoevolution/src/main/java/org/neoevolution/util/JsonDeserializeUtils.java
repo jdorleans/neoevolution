@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 28 2014
+ * @since 1.0
  */
 public final class JsonDeserializeUtils {
 

@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 28 2014
+ * @since 1.0
  */
 public final class InnovationUtils {
 

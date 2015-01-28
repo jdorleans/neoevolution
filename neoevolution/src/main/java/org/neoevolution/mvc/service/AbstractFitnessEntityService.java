@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 28 2014
+ * @since 1.0
  */
 public abstract class AbstractFitnessEntityService
         <T extends AbstractFitnessEntity, R extends FitnessEntityRepository<T>>

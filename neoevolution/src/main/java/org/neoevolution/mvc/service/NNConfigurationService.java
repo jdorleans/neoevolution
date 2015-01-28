@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 14 2014
+ * @since 1.0
  */
 public abstract class NNConfigurationService<T extends NNConfiguration, R extends NNConfigurationRepository<T>>
         extends AbstractService<T, R> {

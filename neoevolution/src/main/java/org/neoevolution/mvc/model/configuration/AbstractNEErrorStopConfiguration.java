@@ -4,7 +4,7 @@ import org.neoevolution.core.error.ErrorFunctionType;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 25 2014
+ * @since 1.0
  */
 public abstract class AbstractNEErrorStopConfiguration<T extends ErrorFunctionType>
         extends AbstractNEStopConfiguration

@@ -7,7 +7,7 @@ import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Jan 03 2015
+ * @since 1.0
  */
 public final class FutureUtils {
 

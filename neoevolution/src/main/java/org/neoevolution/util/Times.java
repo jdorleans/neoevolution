@@ -2,7 +2,7 @@ package org.neoevolution.util;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Nov 27 2014
+ * @since 1.0
  */
 public final class Times {
 

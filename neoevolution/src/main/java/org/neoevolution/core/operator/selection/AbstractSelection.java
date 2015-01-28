@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 20 2014
+ * @since 1.0
  */
 public abstract class AbstractSelection<R extends Reproduction, M extends Mutation> implements Selection {
 

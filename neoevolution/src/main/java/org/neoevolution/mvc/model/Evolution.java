@@ -8,7 +8,7 @@ import org.springframework.data.neo4j.annotation.RelatedTo;
 
 /**
 * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
-* @since Dec 21 2014
+* @since 1.0
 */
 public abstract class Evolution<C extends NNConfiguration> extends AbstractEntity {
 

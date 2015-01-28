@@ -5,7 +5,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 01 2014
+ * @since 1.0
  */
 @NoRepositoryBean
 public interface NEConfigurationRepository<T extends NEConfiguration> extends NNConfigurationRepository<T> {

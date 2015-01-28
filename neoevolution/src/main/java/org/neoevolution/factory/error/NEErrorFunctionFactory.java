@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dez 25 2014
+ * @since 1.0
  */
 @Configurable
 public class NEErrorFunctionFactory<C extends ErrorConfiguration<ErrorFunctionType>>

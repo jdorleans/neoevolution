@@ -4,7 +4,7 @@ import org.neoevolution.mvc.model.Genotype;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Oct 27 2014
+ * @since 1.0
  */
 public class Parents {
 

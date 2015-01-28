@@ -4,7 +4,7 @@ import org.neoevolution.mvc.model.Population;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 18 2014
+ * @since 1.0
  */
 public interface NNAlgorithm {
 

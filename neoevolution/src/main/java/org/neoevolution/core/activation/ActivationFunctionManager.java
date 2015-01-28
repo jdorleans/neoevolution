@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Map;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @org.springframework.beans.factory.annotation.Configurable
 public class ActivationFunctionManager implements Configurable<NNConfiguration> {
 

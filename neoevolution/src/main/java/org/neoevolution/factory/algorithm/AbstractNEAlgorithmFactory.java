@@ -11,7 +11,7 @@ import org.neoevolution.mvc.model.configuration.NEConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Dec 20 2014
+ * @since 1.0
  */
 public abstract class AbstractNEAlgorithmFactory<T extends AbstractNEAlgorithm<Eva, Sto>,
         Eva extends Evaluation, Sto extends StopCondition, C extends NEConfiguration>
