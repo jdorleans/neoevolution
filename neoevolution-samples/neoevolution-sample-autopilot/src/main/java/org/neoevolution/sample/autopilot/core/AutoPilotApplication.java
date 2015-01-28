@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Jan 11 2015
+ * @since 1.0
  */
 public class AutoPilotApplication extends ApplicationAdapter {
 
@@ -83,6 +83,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private float speed;
     private State state;
     private double scores;
+    private double maxScores;
     private int countRockUp;
     private int countRockDown;
     private boolean isDebug;
@@ -118,6 +119,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         camera.setToOrtho(false, MAX_WIDTH, MAX_HEIGHT);
 
         speed = 1;
+        maxScores = MAX_SCORES;
         plane = new Plane();
         rocks = new Array<>();
         ground = new Ground(false);
@@ -275,7 +277,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         {
             genotype.setFitness(scores);
 
-            if (scores >= MAX_SCORES) {
+            if (scores >= maxScores) {
                 gameOver();
             }
             List<Double> inputs = new ArrayList<>(5);
@@ -396,6 +398,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     public boolean isRunning() {
         return state.isRunning();
+    }
+
+    public void setMaxScores(Double fitness) {
+        this.maxScores = fitness;
     }
 
 

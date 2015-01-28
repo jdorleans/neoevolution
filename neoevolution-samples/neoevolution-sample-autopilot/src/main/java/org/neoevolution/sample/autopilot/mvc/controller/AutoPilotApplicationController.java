@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since Jan 26 2015
+ * @since 1.0
  */
 @Controller
 @RequestMapping("/autopilot/{id}/play")
