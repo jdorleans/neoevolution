@@ -2,6 +2,10 @@ package org.neoevolution.mvc.model;
 
 import org.springframework.data.neo4j.annotation.Indexed;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public abstract class AbstractInnovationEntity extends AbstractEntity {
 
     private static final long serialVersionUID = -5237757583908066829L;

@@ -8,6 +8,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.neoevolution.factory.model.NeuronFactory;
 import org.neoevolution.factory.model.SynapseFactory;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class AddNeuronMutationTest {
 

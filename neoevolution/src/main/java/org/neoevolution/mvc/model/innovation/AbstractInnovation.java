@@ -10,6 +10,10 @@ import org.neoevolution.mvc.model.Neuron;
 import org.springframework.data.neo4j.fieldaccess.DynamicProperties;
 import org.springframework.data.neo4j.fieldaccess.DynamicPropertiesContainer;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public abstract class AbstractInnovation extends AbstractEntity {
 
     private static final long serialVersionUID = -6763412711915520799L;

@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
- * @since 02/11/14.
+ * @since 1.0
  */
 public class TestSetMap {
 

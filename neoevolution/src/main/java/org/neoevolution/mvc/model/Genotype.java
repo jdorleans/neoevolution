@@ -11,6 +11,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @NodeEntity
 public class Genotype extends AbstractFitnessEntity {
 

@@ -15,6 +15,10 @@ import org.springframework.data.neo4j.annotation.RelatedToVia;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @NodeEntity
 @JsonIgnoreProperties("impulses")
 public class Neuron extends Gene {

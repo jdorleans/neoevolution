@@ -2,6 +2,10 @@ package org.neoevolution.util;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public final class Randomizer {
 
     private Randomizer() { }

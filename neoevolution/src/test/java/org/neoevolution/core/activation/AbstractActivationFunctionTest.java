@@ -6,6 +6,10 @@ import org.junit.Test;
 
 import java.util.List;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 public abstract class AbstractActivationFunctionTest {
 
     protected ActivationFunction function;

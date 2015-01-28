@@ -6,6 +6,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
+ * @since 1.0
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class LinearFunctionTest extends AbstractActivationFunctionTest {
 
