@@ -37,7 +37,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
     private static final float PLANE_VELOCITY_X = 2.5f;
-    private static final float PLANE_JUMP_IMPULSE = 1f;
+    private static final float PLANE_JUMP_IMPULSE = 1.2f;
     private static final float METER_IN_PIXELS = 100f;
 
     private static final float MAX_WIDTH = 800;
@@ -118,7 +118,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, MAX_WIDTH, MAX_HEIGHT);
 
-        speed = 1;
+        speed = 0;
         maxScores = MAX_SCORES;
         plane = new Plane();
         rocks = new Array<>();
@@ -166,8 +166,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
     }
 
     private void updatePhysics() {
-        world.setGravity(new Vector2(0, GRAVITY_FORCE * speed));
-        plane.body.setLinearVelocity(PLANE_VELOCITY_X * speed, 0);
+        world.setGravity(new Vector2(0, GRAVITY_FORCE));
+        plane.body.setLinearVelocity(PLANE_VELOCITY_X, 0);
     }
 
 
@@ -206,7 +206,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         if (!state.isPause())
         {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            world.step(1 / 60f, 6, 2);
+            world.step(1 / (60f - speed), 6, 2);
             update();
             draw();
         }
@@ -370,6 +370,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
             } else {
                 font.draw(spriteBatch, scores +"", plane.center.x, 30);
             }
+            font.draw(spriteBatch, "Speed: "+ (int) (speed+10) / 10, camera.position.x + 150, 30);
         }
     }
 
@@ -455,14 +456,11 @@ public class AutoPilotApplication extends ApplicationAdapter {
             else if (keycode == Input.Keys.P)
             {
                 if (state.isPause()) {
-                    speed = 1;
-                    updatePhysics();
                     state = State.RUNNING;
                 } else if (state.isRunning()) {
-                    speed = 0;
-                    updatePhysics();
                     state = State.PAUSE;
                 }
+                updatePhysics();
             }
             else if (keycode == Input.Keys.UP)
             {
@@ -475,10 +473,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 }
             }
             else if (keycode == Input.Keys.LEFT) {
-                speed--;
+                speed -= speed >= 10 ? 10 : 0;
                 updatePhysics();
             } else if (keycode == Input.Keys.RIGHT) {
-                speed++;
+                speed += speed <= 40 ? 10 : 0;
                 updatePhysics();
             }
             return true;
@@ -560,7 +558,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         }
 
         private void jump() {
-            body.applyLinearImpulse(new Vector2(0, PLANE_JUMP_IMPULSE * speed), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(0, PLANE_JUMP_IMPULSE), body.getWorldCenter(), true);
         }
 
         private TextureRegion getFrame() {
