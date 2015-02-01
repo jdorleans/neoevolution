@@ -37,7 +37,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private static final float PLANE_START_X = 100;
     private static final float PLANE_START_Y = 300;
     private static final float PLANE_VELOCITY_X = 2.5f;
-    private static final float PLANE_JUMP_IMPULSE = 1.2f;
+    private static final float PLANE_JUMP_IMPULSE = 1f;
     private static final float METER_IN_PIXELS = 100f;
 
     private static final float MAX_WIDTH = 800;
@@ -80,7 +80,8 @@ public class AutoPilotApplication extends ApplicationAdapter {
     private TextureRegion readyTR;
     private TextureRegion gameOverTR;
 
-    private float speed;
+    private int jump;
+    private int speed;
     private State state;
     private double scores;
     private double maxScores;
@@ -118,6 +119,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, MAX_WIDTH, MAX_HEIGHT);
 
+        jump = 0;
         speed = 0;
         maxScores = MAX_SCORES;
         plane = new Plane();
@@ -206,7 +208,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         if (!state.isPause())
         {
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            world.step(1 / (60f - speed), 6, 2);
+            world.step(1 / (60f - (10 * speed)), 6, 2);
             update();
             draw();
         }
@@ -214,15 +216,21 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private void update()
     {
-        plane.update();
-        ground.update();
-        ceiling.update();
-        updateGameOver();
-        updateCamera();
-        updateRocks();
+        if (!state.isGameOver())
+        {
+            plane.update();
+            ground.update();
+            ceiling.update();
+            updateCamera();
+            updateRocks();
 
-        if (genotype != null) {
-            activate();
+            if (genotype != null && state.isRunning()) {
+                activate();
+            }
+            updateGameOver();
+        }
+        else if (genotype != null) {
+            reset();
         }
     }
 
@@ -231,6 +239,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
         float hh = plane.size.y / 2;
 
         if (plane.center.y - hh < ground.position.y || plane.center.y + hh > ceiling.position.y) {
+            gameOver();
+        }
+
+        if (scores >= maxScores) {
             gameOver();
         }
     }
@@ -273,39 +285,43 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private void activate()
     {
-        if (state.isRunning())
-        {
-            genotype.setFitness(scores);
+        List<Double> inputs = new ArrayList<>(5);
+        calculateHeight(inputs);
+        calculateVelocity(inputs);
+        inputs.add(closestRock.invert ? 1d : 0d);
+        jump(inputs);
+        genotype.setFitness(scores);
+    }
 
-            if (scores >= maxScores) {
-                gameOver();
-            }
-            List<Double> inputs = new ArrayList<>(5);
-            double maxHeight = ceiling.position.y - ground.position.y - plane.size.y;
-            double distGround = Math.abs(plane.center.y - (plane.size.y/2) - ground.position.y) / maxHeight;
-            double distCeiling = Math.abs(plane.center.y + (plane.size.y/2) - ceiling.position.y) / maxHeight;
-            inputs.add(distGround);
-            inputs.add(distCeiling);
-            double verticalVelocity = plane.body.getLinearVelocity().y / -GRAVITY_FORCE;
+    private void jump(List<Double> inputs)
+    {
+        Double jump = activation.activate(genotype, inputs).get(0);
 
-            if (verticalVelocity >= 0) {
-                inputs.add(verticalVelocity);
-                inputs.add(0d);
-            } else {
-                inputs.add(0d);
-                inputs.add(-verticalVelocity);
-            }
-            inputs.add(closestRock.invert ? 1d : 0d);
-
-            List<Double> outputs = activation.activate(genotype, inputs);
-
-            if (outputs.get(0) >= 0.5) {
-                plane.jump();
-            }
+        if (jump >= 0.5) {
+            plane.jump();
         }
+    }
 
-        if (state.isGameOver()) {
-            reset();
+    private void calculateHeight(List<Double> inputs)
+    {
+        double planeHalfY = plane.size.y / 2;
+        double maxHeight = ceiling.position.y - ground.position.y - plane.size.y;
+        double distGround = Math.abs(plane.center.y - planeHalfY - ground.position.y) / maxHeight;
+        double distCeiling = Math.abs(plane.center.y + planeHalfY - ceiling.position.y) / maxHeight;
+        inputs.add(distGround);
+        inputs.add(distCeiling);
+    }
+
+    private void calculateVelocity(List<Double> inputs)
+    {
+        double verticalVelocity = plane.body.getLinearVelocity().y / -GRAVITY_FORCE;
+
+        if (verticalVelocity >= 0) {
+            inputs.add(verticalVelocity);
+            inputs.add(0d);
+        } else {
+            inputs.add(0d);
+            inputs.add(-verticalVelocity);
         }
     }
 
@@ -368,9 +384,10 @@ public class AutoPilotApplication extends ApplicationAdapter {
             if (genotype != null) {
                 font.draw(spriteBatch, genotype.toString(), plane.center.x, 30);
             } else {
-                font.draw(spriteBatch, scores +"", plane.center.x, 30);
+                font.draw(spriteBatch, "Scores: "+ scores, plane.center.x, 30);
             }
-            font.draw(spriteBatch, "Speed: "+ (int) (speed+10) / 10, camera.position.x + 150, 30);
+            font.draw(spriteBatch, "Speed: "+ (speed+1), camera.position.x + 60, 30);
+            font.draw(spriteBatch, "Jump: "+ (jump+1), camera.position.x + 180, 30);
         }
     }
 
@@ -462,7 +479,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 }
                 updatePhysics();
             }
-            else if (keycode == Input.Keys.UP)
+            else if (keycode == Input.Keys.SPACE)
             {
                 if (state.isGameOver()) {
                     reset();
@@ -473,13 +490,26 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 }
             }
             else if (keycode == Input.Keys.LEFT) {
-                speed -= speed >= 10 ? 10 : 0;
+                speed -= decrease(speed, 0);
                 updatePhysics();
             } else if (keycode == Input.Keys.RIGHT) {
-                speed += speed <= 40 ? 10 : 0;
+                speed += increase(speed, 5);
                 updatePhysics();
             }
+            else if (keycode == Input.Keys.UP) {
+                jump -= decrease(jump, 0);
+            } else if (keycode == Input.Keys.DOWN) {
+                jump += increase(jump, 5);
+            }
             return true;
+        }
+
+        private int decrease(int value, int min) {
+            return value > min ? 1 : 0;
+        }
+
+        private int increase(int value, int max) {
+            return value < max ? 1 : 0;
         }
     }
 
@@ -558,7 +588,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
         }
 
         private void jump() {
-            body.applyLinearImpulse(new Vector2(0, PLANE_JUMP_IMPULSE), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(0, PLANE_JUMP_IMPULSE + (jump*0.1f)), body.getWorldCenter(), true);
         }
 
         private TextureRegion getFrame() {
