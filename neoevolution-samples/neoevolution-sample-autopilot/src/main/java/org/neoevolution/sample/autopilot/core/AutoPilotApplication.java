@@ -270,10 +270,11 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 scores++;
                 rock.counted = true;
             }
+            float planeX = plane.center.x - (plane.size.x/2);
 
-            if (plane.center.x < rock.pickCenter.x)
+            if (planeX < rock.pickCenter.x)
             {
-                float d = rock.pickCenter.x - plane.center.x;
+                float d = rock.pickCenter.x - planeX;
 
                 if (d < dist) {
                     dist = d;
