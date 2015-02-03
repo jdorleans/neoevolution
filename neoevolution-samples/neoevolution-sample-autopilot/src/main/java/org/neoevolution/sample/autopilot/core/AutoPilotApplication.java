@@ -497,9 +497,9 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 speed += increase(speed, 5);
                 updatePhysics();
             }
-            else if (keycode == Input.Keys.UP) {
+            else if (keycode == Input.Keys.DOWN) {
                 jump -= decrease(jump, 0);
-            } else if (keycode == Input.Keys.DOWN) {
+            } else if (keycode == Input.Keys.UP) {
                 jump += increase(jump, 5);
             }
             return true;
