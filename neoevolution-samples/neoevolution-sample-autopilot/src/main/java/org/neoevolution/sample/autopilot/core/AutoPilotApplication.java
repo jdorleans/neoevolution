@@ -82,6 +82,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private int jump;
     private int speed;
+    private int rockDistance;
     private State state;
     private double scores;
     private double maxScores;
@@ -121,6 +122,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
         jump = 0;
         speed = 0;
+        rockDistance = 0;
         maxScores = MAX_SCORES;
         plane = new Plane();
         rocks = new Array<>();
@@ -180,15 +182,30 @@ public class AutoPilotApplication extends ApplicationAdapter {
         groundOffsetX = 0;
         plane.reset();
         resetRocks();
-        font.setScale(0.5f);
+        font.setScale(0.4f);
         camera.position.x = HALF_WIDTH;
         state = State.START;
     }
 
-    private void resetRocks() {
-        for (int i = 0; i < MAX_ROCKS; i++) {
-            rocks.get(i).update(700 + i * ROCK_SPACE);
+    private void resetRocks()
+    {
+        float pos = rockNextPosition(0);
+
+        for (Rock rock : rocks) {
+            float nextPos = rockNextPosition(pos);
+            rock.update(nextPos);
+            pos = nextPos;
         }
+    }
+
+    private float rockNextPosition(float pos)
+    {
+        int distance = rockDistance;
+
+        if (rockDistance == 5) {
+            distance = Randomizer.randomIntInclusive(0, 4);
+        }
+        return pos + ROCK_SPACE + (distance * ROCK_SPACE / 10);
     }
 
     private void gameOver()
@@ -260,11 +277,20 @@ public class AutoPilotApplication extends ApplicationAdapter {
     {
         closestRock = null;
         double dist = Double.MAX_VALUE;
+        float pos = 0;
+
+        for (Rock rock : rocks) {
+            if (rock.getX() > pos) {
+                pos = rock.getX();
+            }
+        }
 
         for (Rock rock : rocks)
         {
             if (camera.position.x - rock.getX() > HALF_WIDTH + rock.getWidth()) {
-                rock.update(rock.getX() + rocks.size * ROCK_SPACE);
+                float nextPos = rockNextPosition(pos);
+                rock.update(nextPos);
+                pos = nextPos;
             }
             else if (!rock.counted && plane.center.x > rock.pickCenter.x) {
                 scores++;
@@ -382,13 +408,22 @@ public class AutoPilotApplication extends ApplicationAdapter {
         }
         else if (state.isRunning())
         {
+            float y = 25f;
+            float camX = camera.position.x;
+
             if (genotype != null) {
-                font.draw(spriteBatch, genotype.toString(), plane.center.x, 30);
+                font.draw(spriteBatch, genotype.toString(), camX - 350, y);
             } else {
-                font.draw(spriteBatch, "Scores: "+ scores, plane.center.x, 30);
+                font.draw(spriteBatch, "Scores: "+ scores, camX - 350, y);
             }
-            font.draw(spriteBatch, "Speed: "+ (speed+1), camera.position.x + 60, 30);
-            font.draw(spriteBatch, "Jump: "+ (jump+1), camera.position.x + 180, 30);
+
+            if (rockDistance == 5) {
+                font.draw(spriteBatch, "Distance: Random", camX - 60, y);
+            } else {
+                font.draw(spriteBatch, "Distance: "+ (rockDistance+1), camX, y);
+            }
+            font.draw(spriteBatch, "Speed: "+ (speed+1), camX + 150, y);
+            font.draw(spriteBatch, "Jump: "+ (jump+1), camX + 270, y);
         }
     }
 
@@ -501,6 +536,11 @@ public class AutoPilotApplication extends ApplicationAdapter {
                 jump -= decrease(jump, 0);
             } else if (keycode == Input.Keys.UP) {
                 jump += increase(jump, 5);
+            }
+            else if (keycode == Input.Keys.MINUS) {
+                rockDistance -= decrease(rockDistance, 0);
+            } else if (keycode == Input.Keys.PLUS) {
+                rockDistance += increase(rockDistance, 5);
             }
             return true;
         }
