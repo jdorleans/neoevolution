@@ -5,4 +5,4 @@ Neo Evolution is an Evolutionary Artificial Neural Network framework. It is comp
 This page is divided into sections:
 
 1. [neoevolution](https://github.com/jdorleans/neoevolution/tree/master/neoevolution) contains framework and algorithm source code
-2. [neoevolution-samples](https://github.com/jdorleans/neoevolution/tree/master/neoevolution-samples) contains examples and pratical use of the Neo Evolution framework
+2. [neoevolution-samples](https://github.com/jdorleans/neoevolution/tree/master/neoevolution-samples) contains examples and practical use of the Neo Evolution framework
