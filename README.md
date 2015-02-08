@@ -1,12 +1,8 @@
-NeoEvolution
-============
+#Neo Evolution
 
-NeoEvolution is an Evolutionary Artificial Neural Network framework based on NEAT.
+Neo Evolution is an Evolutionary Artificial Neural Network framework. It is composed by an EANN algorithm based on [NEAT](http://en.wikipedia.org/wiki/Neuroevolution_of_augmenting_topologies). It was created on top of [Spring Boot MVC](http://projects.spring.io/spring-boot/) and [Neo4j](http://neo4j.com/).
 
-Autopilot is a modified version of the game: The Plane That Couldn't Fly from BadLogic (https://github.com/badlogic/theplanethatcouldntflygood). It is based on the famous game called Flappy Bird.
+This page is divided into sections:
 
-The following video shows the best solution found by NeoEvolution algorithm for solving the Autopilot problem. The plane is capable of flying and avoiding the rocks even when the speed of the game increases.
-
-https://www.youtube.com/watch?v=VrXD3A0AMDA
-
-More information about the NeoEvolution framework is coming soon.
+1. [neoevolution](https://github.com/jdorleans/neoevolution/tree/master/neoevolution) contains framework and algorithm source code
+2. [neoevolution-samples](https://github.com/jdorleans/neoevolution/tree/master/neoevolution-samples) contains examples of use cases and pratical use of the NeoEvolution framework
