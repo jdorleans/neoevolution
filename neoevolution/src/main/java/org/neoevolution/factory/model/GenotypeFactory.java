@@ -8,9 +8,13 @@ import org.neoevolution.factory.operator.mutation.AddNeuronMutationFactory;
 import org.neoevolution.factory.operator.mutation.AddSynapseMutationFactory;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
+import org.neoevolution.mvc.model.configuration.ConnectionStrategy;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.util.MapUtils;
+import org.neoevolution.util.Randomizer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -79,11 +83,18 @@ public class GenotypeFactory<C extends NNConfiguration>
     public Genotype create(Long generation)
     {
         Genotype genotype = createEmpty(generation);
+        ConnectionStrategy connectionStrategy = configuration.getConnectionStrategy();
 
-        if (configuration.isFullyConnected()) {
-            connectAll(genotype);
+        if (ConnectionStrategy.isIndexRelated(connectionStrategy)) {
+            connectRelated(genotype);
+        }
+        else if (ConnectionStrategy.isRandomOne(connectionStrategy)) {
+            connectRandom(genotype, false);
+        }
+        else if (ConnectionStrategy.isRandomAll(connectionStrategy)) {
+            connectRandom(genotype, true);
         } else {
-            connectRandom(genotype);
+            connectAll(genotype);
         }
         return genotype;
     }
@@ -101,10 +112,35 @@ public class GenotypeFactory<C extends NNConfiguration>
         }
     }
 
-    private void connectRandom(Genotype genotype)
+    private void connectRelated(Genotype genotype)
+    {
+        int idx = 0;
+        List<Neuron> outputs = new ArrayList<>(genotype.getOutputs());
+        int outputSize = outputs.size();
+
+        for (Neuron input : genotype.getInputs())
+        {
+            int pos = idx;
+
+            if (idx >= outputSize) {
+                pos = Randomizer.randomInt(outputSize);
+            }
+            genotype.addSynapse(synapseFactory.create(input, outputs.get(pos)));
+            idx++;
+        }
+
+        for (int i = 0; i < configuration.getHiddenMinSize(); i++) {
+            addNeuronMutation.mutate(genotype);
+        }
+    }
+
+    private void connectRandom(Genotype genotype, boolean all)
     {
         Integer hiddenMinSize = configuration.getHiddenMinSize();
-        addSynapseMutation.mutate(genotype);
+
+        do {
+            addSynapseMutation.mutate(genotype);
+        } while (all && genotype.getSynapsesSize() < genotype.getInputsSize());
 
         if (hiddenMinSize > 0)
         {
@@ -118,6 +154,7 @@ public class GenotypeFactory<C extends NNConfiguration>
             addSynapseMutation.setRate(1d);
         }
     }
+
 
     public Set<Genotype> createList(Integer size) {
         return createList(size, 1l);

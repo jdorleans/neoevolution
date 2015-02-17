@@ -40,7 +40,7 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected Integer hiddenMaxSize;
 
-    protected Boolean fullyConnected;
+    protected ConnectionStrategy connectionStrategy;
 
     protected Double weightRange;
 
@@ -169,11 +169,11 @@ public abstract class NNConfiguration extends AbstractEntity {
         this.hiddenMaxSize = hiddenMaxSize;
     }
 
-    public Boolean isFullyConnected() {
-        return fullyConnected;
+    public ConnectionStrategy getConnectionStrategy() {
+        return connectionStrategy;
     }
-    public void setFullyConnected(Boolean fullyConnected) {
-        this.fullyConnected = fullyConnected;
+    public void setConnectionStrategy(ConnectionStrategy connectionStrategy) {
+        this.connectionStrategy = connectionStrategy;
     }
 
     public Double getAddNeuronRate() {

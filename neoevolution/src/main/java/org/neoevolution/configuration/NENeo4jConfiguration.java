@@ -19,7 +19,6 @@ import org.springframework.data.neo4j.rest.SpringRestGraphDatabase;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -68,11 +67,11 @@ public class NENeo4jConfiguration extends Neo4jConfiguration {
             setGraphDatabaseService(new SpringRestGraphDatabase(address));
         }
         else {
-            File file = new ClassPathResource("neo4j.properties").getFile();
+            ClassPathResource resource = new ClassPathResource("neo4j.properties");
             GraphDatabaseBuilder dbBuilder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(address);
 
-            if (file.exists()) {
-                dbBuilder = dbBuilder.loadPropertiesFromFile(file.getAbsolutePath());
+            if (resource.exists()) {
+                dbBuilder = dbBuilder.loadPropertiesFromFile(resource.getFile().getAbsolutePath());
             }
             setGraphDatabaseService(dbBuilder.newGraphDatabase());
         }

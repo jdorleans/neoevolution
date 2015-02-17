@@ -55,8 +55,8 @@ public class Genotype extends AbstractFitnessEntity {
         this.adjustedFitness = 0d;
         this.inputs = inputs;
         this.outputs = outputs;
-        int size = MapUtils.getSize(getInputsSize() + getOutputsSize());
-        this.synapses = new HashSet<>(size*size);
+        int size = (int) (MapUtils.getSize(getInputsSize() + getOutputsSize()) * 1.2);
+        this.synapses = new HashSet<>(size);
         initNeurons(size);
     }
 

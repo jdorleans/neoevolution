@@ -29,13 +29,19 @@ public class NESpeciation implements Speciation {
     @Override
     public void speciate(Population population, Set<Genotype> genotypes)
     {
+        int size = population.getSpecies().size();
         Long generation = population.getGeneration();
 
         for (Genotype genotype : genotypes)
         {
-            if (!speciate(genotype, population)) {
+            if (size >= maxSpeciesSize) {
+                while (!speciate(genotype, population)) {
+                    updateCompatibilityThreshold(size);
+                }
+            }
+            else if (!speciate(genotype, population)) {
+                size++;
                 population.addSpecies(speciesFactory.create(genotype, generation));
-                updateCompatibilityThreshold(population);
             }
         }
     }
@@ -55,37 +61,43 @@ public class NESpeciation implements Speciation {
         return false;
     }
 
-    private void updateCompatibilityThreshold(Population population)
+    private void updateCompatibilityThreshold(int size)
     {
-        int size = population.getSpecies().size();
-        double rate = threshold * compatibilityRate;
+        double rate = calculateCompatibilityRate();
 
-        if (size > maxSpeciesSize) {
+        if (size >= maxSpeciesSize) {
             threshold += rate;
-        } else if (size < maxSpeciesSize) {
+            threshold = Math.min(1, threshold);
+        } else {
             threshold -= rate;
+            threshold = Math.max(0.01, threshold);
         }
+    }
+
+    private double calculateCompatibilityRate()
+    {
+        double rate = threshold * compatibilityRate;
+        rate = Math.min(0.1, rate);
+        rate = Math.max(0.001, rate);
+        return rate;
     }
 
     private boolean isCompatible(Genotype g1, Genotype g2)  {
         double distance = calculateDistance(g1, g2);
-        return (distance < threshold);
+        return (distance <= threshold);
     }
 
     private double calculateDistance(Genotype g1, Genotype g2) {
         double excess = calculateExcess(g1, g2);
         double weight = calculateWeight(g1.getSynapses(), g2.getSynapses());
-        return (excess + weight);
+        return Math.min(1, excess + weight);
     }
 
     // Calculate Excess and Disjoint
-    private double calculateExcess(Genotype g1, Genotype g2)
-    {
+    private double calculateExcess(Genotype g1, Genotype g2) {
         double excess = calculateExcess(g1.getNeurons(), g2.getNeurons());
         excess += calculateExcess(g1.getSynapses(), g2.getSynapses());
-        excess = excessFactor * excess;
-//        excess = (configuration.getExcessFactor() * excess) / calculateTotalGenes(g1, g2); // TODO - SHOULD DIVIDE?
-        return excess;
+        return (excessFactor * excess) / calculateTotalGenes(g1, g2);
     }
 
     // Calculate Excess and Disjoint
