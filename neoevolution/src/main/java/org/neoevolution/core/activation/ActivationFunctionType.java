@@ -8,19 +8,19 @@ public enum ActivationFunctionType {
 
     BINARY, LINEAR, SIGMOID, TANH;
 
-    public static boolean isBINARY(ActivationFunctionType type) {
+    public static boolean isBinary(ActivationFunctionType type) {
         return BINARY.equals(type);
     }
 
-    public static boolean isLINEAR(ActivationFunctionType type) {
+    public static boolean isLinear(ActivationFunctionType type) {
         return LINEAR.equals(type);
     }
 
-    public static boolean isSIGMOID(ActivationFunctionType type) {
+    public static boolean isSigmoid(ActivationFunctionType type) {
         return SIGMOID.equals(type);
     }
 
-    public static boolean isTANH(ActivationFunctionType type) {
+    public static boolean isTanh(ActivationFunctionType type) {
         return TANH.equals(type);
     }
 

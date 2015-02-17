@@ -1,6 +1,7 @@
 package org.neoevolution.mvc.model.configuration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.neoevolution.core.ConnectionStrategy;
 import org.neoevolution.core.activation.ActivationFunctionType;
 import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;

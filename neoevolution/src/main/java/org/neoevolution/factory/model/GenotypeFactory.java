@@ -8,7 +8,7 @@ import org.neoevolution.factory.operator.mutation.AddNeuronMutationFactory;
 import org.neoevolution.factory.operator.mutation.AddSynapseMutationFactory;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
-import org.neoevolution.mvc.model.configuration.ConnectionStrategy;
+import org.neoevolution.core.ConnectionStrategy;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
