@@ -2,6 +2,7 @@ package org.neoevolution.sample.soundfilter.core;
 
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 import org.neoevolution.mvc.dataset.SampleData;
+import org.neoevolution.mvc.model.Species;
 import org.neoevolution.sample.soundfilter.util.WavFile;
 import org.neoevolution.sample.soundfilter.util.WavFileException;
 import org.neoevolution.util.Randomizer;
@@ -20,6 +21,7 @@ public class SFEvaluation extends TrainingEvaluation {
     public static final String INPUT_FILE = "sound/mix-cello-piano.wav";
     public static final String OUTPUT_FILE = "sound/piano.wav";
     public static final int TIME_FRAME = 21;
+    public static final int FRAME_SECOND = 44100;
 
     public SFEvaluation() {
         super();
@@ -67,7 +69,7 @@ public class SFEvaluation extends TrainingEvaluation {
     private void initData(List<Double> inputs, List<Double> outputs)
     {
         int size = inputs.size();
-        int frames = size / TIME_FRAME;
+        int frames = calculateFrames(size);
         int inputRange = size - TIME_FRAME;
         List<Integer> indexes = new ArrayList<>(size);
 
@@ -87,6 +89,22 @@ public class SFEvaluation extends TrainingEvaluation {
             }
             data.add(sample);
         }
+    }
+
+    private int calculateFrames(int size)
+    {
+        int s = size;
+
+        if (size >= FRAME_SECOND) {
+            s = FRAME_SECOND;
+        }
+        return s / TIME_FRAME;
+    }
+
+
+    @Override
+    protected double evaluate(Species species) {
+        return super.evaluateAsync(species);
     }
 
 }
