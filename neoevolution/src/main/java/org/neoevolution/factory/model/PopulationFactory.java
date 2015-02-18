@@ -2,11 +2,8 @@ package org.neoevolution.factory.model;
 
 import org.neoevolution.core.operator.speciation.Speciation;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
-import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
-
-import java.util.Set;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -40,8 +37,7 @@ public class PopulationFactory<C extends NNConfiguration>
     @Override
     public Population create() {
         Population population = new Population(configuration.nextPopulationInnovation(), configuration.getMaxSpeciesSize());
-        Set<Genotype> offsprings = genotypeFactory.createList(configuration.getPopulationSize());
-        speciation.speciate(population, offsprings);
+        speciation.speciate(population, genotypeFactory.createList(configuration.getPopulationSize()));
         return population;
     }
 

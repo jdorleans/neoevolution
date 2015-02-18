@@ -12,12 +12,11 @@ import java.util.concurrent.Future;
  * @since 1.0
  */
 @Component
-public class AsyncTrainingEvaluation {
+public class TrainingEvaluationAsyncMethod {
 
     @Async
     public Future<Genotype> evaluate(Genotype genotype, TrainingEvaluation evaluation) {
-        evaluation.evaluate(genotype);
-        return new AsyncResult<>(genotype);
+        return new AsyncResult<>(evaluation.evaluation(genotype));
     }
 
 }

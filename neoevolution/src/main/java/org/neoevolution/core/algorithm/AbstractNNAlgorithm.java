@@ -7,7 +7,7 @@ import org.neoevolution.core.stop.StopCondition;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -45,7 +45,7 @@ public abstract class AbstractNNAlgorithm
     protected void evolution() {
         evaluation.evaluate(population);
         population.nextGeneration();
-        Set<Genotype> offsprings = selection.select(population);
+        List<Genotype> offsprings = selection.select(population);
         speciation.speciate(population, offsprings);
     }
 

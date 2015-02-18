@@ -3,7 +3,7 @@ package org.neoevolution.core.operator.selection;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -11,6 +11,6 @@ import java.util.Set;
  */
 public interface Selection {
 
-    Set<Genotype> select(Population population);
+    List<Genotype> select(Population population);
 
 }

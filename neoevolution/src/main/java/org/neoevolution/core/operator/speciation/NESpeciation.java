@@ -27,7 +27,7 @@ public class NESpeciation implements Speciation {
 
 
     @Override
-    public void speciate(Population population, Set<Genotype> genotypes)
+    public void speciate(Population population, List<Genotype> genotypes)
     {
         int size = population.getSpecies().size();
         Long generation = population.getGeneration();

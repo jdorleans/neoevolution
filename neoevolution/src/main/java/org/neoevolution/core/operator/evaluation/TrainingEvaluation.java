@@ -30,7 +30,7 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
     protected FitnessCalculator fitnessCalculator;
 
     @Autowired
-    protected AsyncTrainingEvaluation asyncEvaluation;
+    protected TrainingEvaluationAsyncMethod asyncEvaluation;
 
 
     protected TrainingEvaluation() {
@@ -44,7 +44,11 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
 
 
     @Override
-    protected void evaluate(Genotype genotype)
+    protected Future<Genotype> evaluate(Genotype genotype) {
+        return asyncEvaluation.evaluate(genotype, this);
+    }
+
+    protected Genotype evaluation(Genotype genotype)
     {
         double fitness = 0d;
         int evaluations = data.size();
@@ -54,12 +58,9 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
         }
         genotype.setFitness(fitness / evaluations);
         genotype.setEvaluated(true);
+        return genotype;
     }
 
-    @Override
-    protected Future<Genotype> evaluateAsync(Genotype genotype) {
-        return asyncEvaluation.evaluate(genotype, this);
-    }
 
     public Double getMaxFitness() {
         return maxFitness;

@@ -1,5 +1,6 @@
 package org.neoevolution.factory.model;
 
+import org.neoevolution.core.ConnectionStrategy;
 import org.neoevolution.core.operator.mutation.AddNeuronMutation;
 import org.neoevolution.core.operator.mutation.AddSynapseMutation;
 import org.neoevolution.factory.model.configuration.AbstractConfigurableFactory;
@@ -8,14 +9,11 @@ import org.neoevolution.factory.operator.mutation.AddNeuronMutationFactory;
 import org.neoevolution.factory.operator.mutation.AddSynapseMutationFactory;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
-import org.neoevolution.core.ConnectionStrategy;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 
 /**
@@ -156,13 +154,13 @@ public class GenotypeFactory<C extends NNConfiguration>
     }
 
 
-    public Set<Genotype> createList(Integer size) {
+    public List<Genotype> createList(Integer size) {
         return createList(size, 1l);
     }
 
-    public Set<Genotype> createList(Integer size, Long generation)
+    public List<Genotype> createList(Integer size, Long generation)
     {
-        Set<Genotype> genotypes = MapUtils.createHashSet(size);
+        List<Genotype> genotypes = new ArrayList<>(size);
 
         for (int i = 0; i < size; i++) {
             genotypes.add(create(generation));

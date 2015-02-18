@@ -33,30 +33,12 @@ public abstract class AbstractEvaluation implements Evaluation {
         double fitness = 0d;
         Set<Genotype> genotypes = species.getGenotypes();
         int size = genotypes.size();
-
-        for (Genotype genotype : genotypes)
-        {
-            if (!genotype.isEvaluated()) {
-                evaluate(genotype);
-            }
-            species.updateBestGenotype(genotype);
-            fitness += adjustFitness(genotype, size);
-        }
-        species.setFitness(fitness);
-        return fitness;
-    }
-
-    protected double evaluateAsync(Species species)
-    {
-        double fitness = 0d;
-        Set<Genotype> genotypes = species.getGenotypes();
-        int size = genotypes.size();
         List<Future<Genotype>> futureGenotypes = new ArrayList<>(size);
 
         for (Genotype genotype : genotypes)
         {
             if (!genotype.isEvaluated()) {
-                futureGenotypes.add(evaluateAsync(genotype));
+                futureGenotypes.add(evaluate(genotype));
             } else {
                 species.updateBestGenotype(genotype);
                 fitness += adjustFitness(genotype, size);
@@ -77,11 +59,7 @@ public abstract class AbstractEvaluation implements Evaluation {
         return fitness;
     }
 
-
-    protected abstract void evaluate(Genotype genotype);
-
-    protected abstract Future<Genotype> evaluateAsync(Genotype genotype);
-
+    protected abstract Future<Genotype> evaluate(Genotype genotype);
 
     protected double adjustFitness(Genotype genotype, int size) {
         double adjustedFitness = genotype.getFitness() / size;

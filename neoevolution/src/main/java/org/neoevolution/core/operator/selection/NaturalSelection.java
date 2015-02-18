@@ -8,23 +8,33 @@ import org.neoevolution.mvc.model.Species;
 import org.neoevolution.util.FitnessUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
+@Configurable
 public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutation> {
 
-    private double survivalRate;
+    protected double survivalRate;
 
-    private double elitismRate;
+    protected double elitismRate;
+
+    @Autowired
+    protected NaturalSelectionAsyncMethod asyncSelection;
 
 
     @Override
-    protected Species selection(Species specie, Long generation, Double totalFitness, Set<Genotype> offsprings)
+    protected Future<Species> select(Species specie, Long generation, Double totalFitness, List<Genotype> offsprings) {
+        return asyncSelection.select(specie, generation, totalFitness, offsprings, this);
+    }
+
+    protected Species selection(Species specie, Long generation, Double totalFitness, List<Genotype> offsprings)
     {
         Species species = null;
         int newSize = calculateSize(specie, totalFitness);
@@ -42,7 +52,7 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         return species;
     }
 
-    private void kill(int survivals, int actualSize, List<Genotype> bestFirst, Species species)
+    protected void kill(int survivals, int actualSize, List<Genotype> bestFirst, Species species)
     {
         if (survivals < actualSize)
         {
@@ -55,6 +65,7 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         }
     }
 
+    @Override
     protected Parents selectParents(List<Genotype> genotypes)
     {
         int size = calculateParents(genotypes.size());
@@ -65,7 +76,7 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         return new Parents(g1, g2);
     }
 
-    private int calculateSize(Species species, double totalFitness)
+    protected int calculateSize(Species species, double totalFitness)
     {
         if (totalFitness == 0) {
             return species.getGenotypes().size();
@@ -73,7 +84,7 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         return (int) ((species.getFitness() / totalFitness) * populationSize);
     }
 
-    private int calculateBirths(int actualSize, int newSize)
+    protected int calculateBirths(int actualSize, int newSize)
     {
         if (actualSize < newSize) {
             return newSize - actualSize;
@@ -82,11 +93,11 @@ public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutat
         }
     }
 
-    private int calculateSurvivals(int size) {
+    protected int calculateSurvivals(int size) {
         return (int) Math.round(size * survivalRate);
     }
 
-    private int calculateParents(int size) {
+    protected int calculateParents(int size) {
         return Math.max(1, (int) Math.round(size * elitismRate));
     }
 
