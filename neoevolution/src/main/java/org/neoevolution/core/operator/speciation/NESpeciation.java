@@ -13,17 +13,17 @@ import java.util.*;
  */
 public class NESpeciation implements Speciation {
 
-    private int maxSpeciesSize;
+    protected int maxSpeciesSize;
 
-    private double threshold;
+    protected double threshold;
 
-    private double excessFactor;
+    protected double excessFactor;
 
-    private double weightFactor;
+    protected double weightFactor;
 
-    private double compatibilityRate;
+    protected double compatibilityRate;
 
-    private SpeciesFactory speciesFactory;
+    protected SpeciesFactory speciesFactory;
 
 
     @Override
@@ -47,7 +47,7 @@ public class NESpeciation implements Speciation {
         }
     }
 
-    private boolean speciate(Genotype genotype, Population population)
+    protected boolean speciate(Genotype genotype, Population population)
     {
         List<Species> species = new ArrayList<>(population.getSpecies());
         Collections.shuffle(species);
@@ -62,7 +62,7 @@ public class NESpeciation implements Speciation {
         return false;
     }
 
-    private void updateCompatibilityThreshold(int size)
+    protected void updateCompatibilityThreshold(int size)
     {
         double rate = calculateCompatibilityRate();
 
@@ -75,7 +75,7 @@ public class NESpeciation implements Speciation {
         }
     }
 
-    private double calculateCompatibilityRate()
+    protected double calculateCompatibilityRate()
     {
         double rate = threshold * compatibilityRate;
         rate = Math.min(0.1, rate);
@@ -83,26 +83,26 @@ public class NESpeciation implements Speciation {
         return rate;
     }
 
-    private boolean isCompatible(Genotype g1, Genotype g2)  {
+    protected boolean isCompatible(Genotype g1, Genotype g2)  {
         double distance = calculateDistance(g1, g2);
         return (distance <= threshold);
     }
 
-    private double calculateDistance(Genotype g1, Genotype g2) {
+    protected double calculateDistance(Genotype g1, Genotype g2) {
         double excess = calculateExcess(g1, g2);
         double weight = calculateWeight(g1.getSynapses(), g2.getSynapses());
         return Math.min(1, excess + weight);
     }
 
     // Calculate Excess and Disjoint
-    private double calculateExcess(Genotype g1, Genotype g2) {
+    protected double calculateExcess(Genotype g1, Genotype g2) {
         double excess = calculateExcess(g1.getNeurons(), g2.getNeurons());
         excess += calculateExcess(g1.getSynapses(), g2.getSynapses());
         return (excessFactor * excess) / calculateTotalGenes(g1, g2);
     }
 
     // Calculate Excess and Disjoint
-    private int calculateExcess(Set<? extends Gene> g1, Set<? extends Gene> g2)
+    protected int calculateExcess(Set<? extends Gene> g1, Set<? extends Gene> g2)
     {
         int total = MapUtils.getSize(g1.size() + g2.size());
         Set<Long> innovations = new HashSet<>(total);
@@ -117,11 +117,11 @@ public class NESpeciation implements Speciation {
         return ((total - g1.size()) + (total - g2.size()));
     }
 
-    private int calculateTotalGenes(Genotype g1, Genotype g2)  {
+    protected int calculateTotalGenes(Genotype g1, Genotype g2)  {
         return Math.max(g1.getGenesSize(), g2.getGenesSize());
     }
 
-    private double calculateWeight(Set<Synapse> synapse1, Set<Synapse> synapse2)
+    protected double calculateWeight(Set<Synapse> synapse1, Set<Synapse> synapse2)
     {
         int similar = 0;
         double weightDiff = 0;

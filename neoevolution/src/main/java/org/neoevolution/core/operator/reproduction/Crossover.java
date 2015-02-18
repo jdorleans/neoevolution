@@ -17,11 +17,11 @@ import java.util.Set;
  */
 public class Crossover implements Reproduction {
 
-    private double enableSynapseRate;
+    protected double enableSynapseRate;
 
-    private double enableSynapsePenalty;
+    protected double enableSynapsePenalty;
 
-    private GenotypeFactory genotypeFactory;
+    protected GenotypeFactory genotypeFactory;
 
 
     @Override
@@ -36,7 +36,7 @@ public class Crossover implements Reproduction {
         return offspring;
     }
 
-    private Map<Long, Synapse> cloneDominantGenes(Parents parents, Genotype offspring, Map<Long, Neuron> neurons)
+    protected Map<Long, Synapse> cloneDominantGenes(Parents parents, Genotype offspring, Map<Long, Neuron> neurons)
     {
         Map<Long, Synapse> recessiveSynapses = createSynapsesMap(parents.getRecessive().getSynapses());
 
@@ -57,7 +57,7 @@ public class Crossover implements Reproduction {
         return recessiveSynapses;
     }
 
-    private double calculateRate(Synapse s1, Synapse s2)
+    protected double calculateRate(Synapse s1, Synapse s2)
     {
         if (!s1.isEnabled() && !s2.isEnabled()) {
             return enableSynapseRate / enableSynapsePenalty;
@@ -65,7 +65,7 @@ public class Crossover implements Reproduction {
         return enableSynapseRate;
     }
 
-    private void cloneRecessiveGenes(Parents parents, Genotype offspring, Map<Long, Synapse> synapses, Map<Long, Neuron> neurons)
+    protected void cloneRecessiveGenes(Parents parents, Genotype offspring, Map<Long, Synapse> synapses, Map<Long, Neuron> neurons)
     {
         if (!parents.isEquals() && !parents.getHasDominant()) {
             for (Synapse s2 : synapses.values()) {
@@ -74,7 +74,7 @@ public class Crossover implements Reproduction {
         }
     }
 
-    private Synapse clone(Synapse synapse, Map<Long, Neuron> neurons, Genotype offspring, double enableRate)
+    protected Synapse clone(Synapse synapse, Map<Long, Neuron> neurons, Genotype offspring, double enableRate)
     {
         Synapse s = new Synapse(synapse);
         Neuron neuron = clone(synapse.getStart(), neurons, offspring);
@@ -92,7 +92,7 @@ public class Crossover implements Reproduction {
         return s;
     }
 
-    private Neuron clone(Neuron neuron, Map<Long, Neuron> neurons, Genotype offspring)
+    protected Neuron clone(Neuron neuron, Map<Long, Neuron> neurons, Genotype offspring)
     {
         Long innovation = neuron.getInnovation();
         Neuron n = neurons.get(innovation);
@@ -106,7 +106,7 @@ public class Crossover implements Reproduction {
     }
 
 
-    private Map<Long, Neuron> createNeuronsMap(Genotype offspring, int size)
+    protected Map<Long, Neuron> createNeuronsMap(Genotype offspring, int size)
     {
         Map<Long, Neuron> neurons = MapUtils.createHashMap(size);
         InnovationUtils.putMap(offspring.getInputs(), neurons);
@@ -114,7 +114,7 @@ public class Crossover implements Reproduction {
         return neurons;
     }
 
-    private Map<Long, Synapse> createSynapsesMap(Set<Synapse> synapses) {
+    protected Map<Long, Synapse> createSynapsesMap(Set<Synapse> synapses) {
         return InnovationUtils.createHashMap(synapses);
     }
 
