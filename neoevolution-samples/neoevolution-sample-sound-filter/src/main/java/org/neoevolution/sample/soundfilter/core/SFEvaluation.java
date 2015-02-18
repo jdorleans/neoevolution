@@ -2,7 +2,6 @@ package org.neoevolution.sample.soundfilter.core;
 
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 import org.neoevolution.mvc.dataset.SampleData;
-import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.sample.soundfilter.util.WavFile;
 import org.neoevolution.sample.soundfilter.util.WavFileException;
 import org.neoevolution.util.Randomizer;
@@ -20,11 +19,7 @@ public class SFEvaluation extends TrainingEvaluation {
 
     public static final String INPUT_FILE = "sound/mix-cello-piano.wav";
     public static final String OUTPUT_FILE = "sound/piano.wav";
-    public static final int TIME_FRAME = 441;
-
-    private List<Double> inputs;
-    private List<Double> outputs;
-
+    public static final int TIME_FRAME = 21;
 
     public SFEvaluation() {
         super();
@@ -33,8 +28,8 @@ public class SFEvaluation extends TrainingEvaluation {
 
     private void initSamples()
     {
-        inputs = new ArrayList<>();
-        outputs = new ArrayList<>();
+        List<Double> inputs = new ArrayList<>();
+        List<Double> outputs = new ArrayList<>();
 
         try {
             String inPath = getClass().getClassLoader().getResource(INPUT_FILE).getPath();
@@ -51,48 +46,37 @@ public class SFEvaluation extends TrainingEvaluation {
                 inFrames = inFile.readFrames(inBuffer, timeFrame);
                 outFrames = outFile.readFrames(outBuffer, timeFrame);
 
-                if (inFrames % timeFrame == 0 && outFrames % timeFrame == 0)
-                {
-//                    SampleData sample = new SampleData(timeFrame, timeFrame);
-
+                if (inFrames % timeFrame == 0 && outFrames % timeFrame == 0) {
                     for (int i = 0; i < inFrames && i < outFrames; i++) {
-//                        sample.addInput(inBuffer[i]);
-//                        sample.addOutput(outBuffer[i]);
                         inputs.add(inBuffer[i]);
                         outputs.add(outBuffer[i]);
                     }
-//                    data.add(sample);
                 }
             }
             while (inFrames % timeFrame == 0 && outFrames % timeFrame == 0);
 
             inFile.close();
             outFile.close();
+            initData(inputs, outputs);
         }
         catch (WavFileException | IOException e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    protected void evaluate(Genotype genotype) {
-        initData();
-        super.evaluate(genotype);
-    }
-
-    private void initData()
+    private void initData(List<Double> inputs, List<Double> outputs)
     {
-        data.clear();
+        int size = inputs.size();
+        int frames = size / TIME_FRAME;
+        int inputRange = size - TIME_FRAME;
+        List<Integer> indexes = new ArrayList<>(size);
 
-        int size = 100;
-        List<Integer> indexes = new ArrayList<>();
-
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < frames; j++)
         {
-            int start = Randomizer.randomInt(0, inputs.size() - TIME_FRAME);
+            int start = Randomizer.randomInt(0, inputRange);
 
             while (indexes.contains(start)) {
-                start = Randomizer.randomInt(0, inputs.size() - TIME_FRAME);
+                start = Randomizer.randomInt(0, inputRange);
             }
             SampleData sample = new SampleData(TIME_FRAME, TIME_FRAME);
 

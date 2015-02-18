@@ -23,9 +23,9 @@ import java.util.List;
 @RequestMapping("/validation/{id}")
 public class SFValidationController {
 
-    public static final String INPUT_FILE = "sound/mix-cello-piano.wav";
-    public static final String OUTPUT_FILE = "sound/output.wav";
-    public static final int TIME_FRAME = 441;
+    public static final String INPUT_FILE1 = "sound/mix-cello-piano";
+    public static final String INPUT_FILE2 = "sound/mix-female-piano";
+    public static final int TIME_FRAME = 21;
 
     @Autowired
     private GenotypeService service;
@@ -35,13 +35,18 @@ public class SFValidationController {
 
 
     @RequestMapping(value = "/validate")
-    public void validate(@PathVariable Long id)
+    public void validate(@PathVariable Long id) {
+        read(id, INPUT_FILE1);
+        read(id, INPUT_FILE2);
+    }
+
+    private void read(Long id, String inputName)
     {
         Genotype genotype = service.find(id);
         List<Double> outputs = new ArrayList<>();
 
         try {
-            String inPath = getClass().getClassLoader().getResource(INPUT_FILE).getPath();
+            String inPath = getClass().getClassLoader().getResource(inputName +".wav").getPath();
             WavFile inFile = WavFile.openWavFile(new File(inPath));
 
             int inFrames;
@@ -71,15 +76,15 @@ public class SFValidationController {
 
 
         if (!outputs.isEmpty()) {
-            write(outputs);
+            write(outputs, inputName);
         }
     }
 
 
-    private void write(List<Double> outputs)
+    private void write(List<Double> outputs, String outputName)
     {
         try {
-            String outPath = getClass().getClassLoader().getResource("").getPath() + OUTPUT_FILE;
+            String outPath = getClass().getClassLoader().getResource("").getPath() + outputName +"-out.wav";
 
             int sampleRate = 44100;		// Samples per second
             int size = outputs.size();
