@@ -2,7 +2,6 @@ package org.neoevolution.sample.soundfilter.core;
 
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 import org.neoevolution.mvc.dataset.SampleData;
-import org.neoevolution.mvc.model.Species;
 import org.neoevolution.sample.soundfilter.util.WavFile;
 import org.neoevolution.sample.soundfilter.util.WavFileException;
 import org.neoevolution.util.Randomizer;
@@ -99,12 +98,6 @@ public class SFEvaluation extends TrainingEvaluation {
             s = FRAME_SECOND;
         }
         return s / TIME_FRAME;
-    }
-
-
-    @Override
-    protected double evaluate(Species species) {
-        return super.evaluateAsync(species);
     }
 
 }
