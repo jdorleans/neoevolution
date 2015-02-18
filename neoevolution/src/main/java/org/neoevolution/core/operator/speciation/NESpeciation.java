@@ -42,6 +42,7 @@ public class NESpeciation implements Speciation {
             else if (!speciate(genotype, population)) {
                 size++;
                 population.addSpecies(speciesFactory.create(genotype, generation));
+                updateCompatibilityThreshold(size);
             }
         }
     }
