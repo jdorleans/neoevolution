@@ -4,7 +4,11 @@ import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
 import org.neoevolution.mvc.model.Species;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -42,7 +46,41 @@ public abstract class AbstractEvaluation implements Evaluation {
         return fitness;
     }
 
+    protected double evaluateAsync(Species species)
+    {
+        double fitness = 0d;
+        Set<Genotype> genotypes = species.getGenotypes();
+        int size = genotypes.size();
+        List<Future<Genotype>> futureGenotypes = new ArrayList<>(size);
+
+        for (Genotype genotype : genotypes)
+        {
+            if (!genotype.isEvaluated()) {
+                futureGenotypes.add(evaluateAsync(genotype));
+            } else {
+                species.updateBestGenotype(genotype);
+                fitness += adjustFitness(genotype, size);
+            }
+        }
+
+        for (Future<Genotype> futureGenotype : futureGenotypes)
+        {
+            try {
+                Genotype genotype = futureGenotype.get();
+                species.updateBestGenotype(genotype);
+                fitness += adjustFitness(genotype, size);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        species.setFitness(fitness);
+        return fitness;
+    }
+
+
     protected abstract void evaluate(Genotype genotype);
+
+    protected abstract Future<Genotype> evaluateAsync(Genotype genotype);
 
 
     protected double adjustFitness(Genotype genotype, int size) {

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -27,6 +28,9 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
 
     @Autowired
     protected FitnessCalculator fitnessCalculator;
+
+    @Autowired
+    protected AsyncTrainingEvaluation asyncEvaluation;
 
 
     protected TrainingEvaluation() {
@@ -52,6 +56,10 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
         genotype.setEvaluated(true);
     }
 
+    @Override
+    protected Future<Genotype> evaluateAsync(Genotype genotype) {
+        return asyncEvaluation.evaluate(genotype, this);
+    }
 
     public Double getMaxFitness() {
         return maxFitness;
