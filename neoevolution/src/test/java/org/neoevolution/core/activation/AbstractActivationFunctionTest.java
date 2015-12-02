@@ -1,6 +1,6 @@
 package org.neoevolution.core.activation;
 
-import org.fest.assertions.api.Assertions;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,37 +40,37 @@ public abstract class AbstractActivationFunctionTest {
 
     @Test
     public void testGetType() throws Exception {
-        Assertions.assertThat(function.getType()).isEqualTo(getType());
+        Assert.assertEquals(function.getType(), getType());
     }
 
     @Test
     public void testGetMinimum() throws Exception {
-        Assertions.assertThat(function.getMinimum()).isEqualTo(getMinimum());
+        Assert.assertEquals(function.getMinimum(), getMinimum(), 0);
     }
 
     @Test
     public void testGetMaximum() throws Exception {
-        Assertions.assertThat(function.getMaximum()).isEqualTo(getMaximum());
+        Assert.assertEquals(function.getMaximum(), getMaximum(), 0);
     }
 
     @Test
     public void testCalculateWithMinimum() throws Exception {
         for (Double value : getMinimumValues()) {
-            Assertions.assertThat(function.calculate(value)).isEqualTo(getMinimum());
+            Assert.assertEquals(function.calculate(value), getMinimum(), 0);
         }
     }
 
     @Test
     public void testCalculateWithMaximum() throws Exception {
         for (Double value : getMaximumValues()) {
-            Assertions.assertThat(function.calculate(value)).isEqualTo(getMaximum());
+            Assert.assertEquals(function.calculate(value), getMaximum(), 0);
         }
     }
 
     @Test
     public void testCalculateWithHalf() throws Exception {
         for (Double value : getHalfValues()) {
-            Assertions.assertThat(function.calculate(value)).isEqualTo(getHalf());
+            Assert.assertEquals(function.calculate(value), getHalf(), 0);
         }
     }
 
