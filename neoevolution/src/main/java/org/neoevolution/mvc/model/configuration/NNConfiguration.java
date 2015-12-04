@@ -24,9 +24,11 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected Long genotypeInnovation;
 
+    @JsonIgnore
     @Relationship(type="NI")
     protected NeuronInnovation neuronInnovation;
 
+    @JsonIgnore
     @Relationship(type="SI")
     protected SynapseInnovation synapseInnovation;
 

@@ -6,13 +6,11 @@ import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
 import org.neoevolution.mvc.service.EvolutionService;
-import org.neoevolution.util.FutureUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -33,7 +31,7 @@ public abstract class EvolutionController
                     @RequestParam(required = false) Boolean create,
                     @RequestParam(required = false) boolean project)
             throws ExecutionException, InterruptedException {
-        return projection(service.evolve(configuration, create).get(), project);
+        return projection(service.evolve(configuration, create), project);
     }
 
     @RequestMapping(value = "/evolve/batch", method = RequestMethod.POST)
@@ -42,12 +40,7 @@ public abstract class EvolutionController
                           @RequestParam(required = false) boolean project)
             throws ExecutionException, InterruptedException
     {
-        List<Future<T>> futureEvolutions = new ArrayList<>(configurations.size());
-
-        for (C configuration : configurations) {
-            futureEvolutions.add(service.evolve(configuration, create));
-        }
-        return projection(FutureUtils.getResults(futureEvolutions), project);
+        return projection(service.evolve(configurations, create), project);
     }
 
     @RequestMapping(value = "/evolve/{runs}", method = RequestMethod.POST)
@@ -68,7 +61,7 @@ public abstract class EvolutionController
             config.setSynapseInnovation(new SynapseInnovation());
             long start = System.currentTimeMillis();
             System.out.println("Running: " + (i + 1));
-            evolutions.add(service.evolve(config, create).get());
+            evolutions.add(service.evolve(config, create));
             long end = System.currentTimeMillis() - start;
             total += end;
             System.out.println("Finished in: " + end);

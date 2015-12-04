@@ -4,18 +4,14 @@ import org.neoevolution.core.error.ErrorFunctionType;
 import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.mvc.dataset.SampleData;
 import org.neoevolution.mvc.model.Genotype;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-@Configurable
 public abstract class TrainingEvaluation extends AbstractEvaluation {
 
     public static final double MAX_FITNESS = 1d;
@@ -26,11 +22,7 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
 
     protected ErrorFunctionType errorType;
 
-    @Autowired
     protected FitnessCalculator fitnessCalculator;
-
-    @Autowired
-    protected TrainingEvaluationAsyncMethod asyncEvaluation;
 
 
     protected TrainingEvaluation() {
@@ -44,11 +36,7 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
 
 
     @Override
-    protected Future<Genotype> evaluate(Genotype genotype) {
-        return asyncEvaluation.evaluate(genotype, this);
-    }
-
-    protected Genotype evaluation(Genotype genotype)
+    protected void evaluate(Genotype genotype)
     {
         double fitness = 0d;
         int evaluations = data.size();
@@ -58,7 +46,6 @@ public abstract class TrainingEvaluation extends AbstractEvaluation {
         }
         genotype.setFitness(fitness / evaluations);
         genotype.setEvaluated(true);
-        return genotype;
     }
 
 

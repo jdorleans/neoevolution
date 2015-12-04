@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -38,58 +38,42 @@ public abstract class AbstractSelection<R extends Reproduction, M extends Mutati
         Set<Species> species = population.getSpecies();
         reset(population);
 
-        int totalSize = 0;
-        List<Genotype> bestGenotypes = new ArrayList<>(species.size());
-        List<Future<Species>> futureSpecies = new ArrayList<>(species.size());
-        List<Genotype> offsprings = Collections.synchronizedList(new ArrayList<Genotype>(populationSize));
+        final AtomicInteger totalSize = new AtomicInteger(0);
+        List<Species> survivals = Collections.synchronizedList(new ArrayList<>(maxSpeciesSize));
+        List<Genotype> offsprings = Collections.synchronizedList(new ArrayList<>(populationSize));
+        List<Genotype> bestGenotypes = Collections.synchronizedList(new ArrayList<>(maxSpeciesSize));
 
-        for (Species specie : species) {
-            futureSpecies.add(select(specie, generation, totalFitness, offsprings));
-        }
+        species.parallelStream().forEach(specie -> {
+            Species survival = select(specie, generation, totalFitness, offsprings);
+            bestGenotypes.add(survival.getBestGenotype());
+            totalSize.addAndGet(survival.getGenotypes().size());
+            survivals.add(survival);
+        });
+        survivals.forEach(population::addSpecies);
 
-        for (Future<Species> specie : futureSpecies)
-        {
-            try {
-                Species s = specie.get();
-
-                if (s != null) {
-                    population.addSpecies(s);
-                    bestGenotypes.add(s.getBestGenotype());
-                    totalSize += s.getGenotypes().size();
-                }
-            }
-            catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-        }
-        totalSize += offsprings.size();
-        createMissingOffsprings(generation, totalSize, bestGenotypes, offsprings);
+        totalSize.addAndGet(offsprings.size());
+        int births = populationSize - totalSize.get();
+        reproduce(generation, births, bestGenotypes, offsprings);
         return offsprings;
     }
 
     protected void reset(Population population) {
-        int size = maxSpeciesSize * 2;
-        population.setSpecies(MapUtils.<Species>createHashSet(size));
+        population.setSpecies(MapUtils.<Species>createHashSet(maxSpeciesSize));
         population.setBestSpecies(null);
         population.setBestGenotype(null);
     }
 
-    protected abstract Future<Species> select(Species specie, Long generation, Double totalFitness, List<Genotype> offsprings);
+    protected abstract Species select(Species specie, Long generation, Double totalFitness, List<Genotype> offsprings);
 
 
     protected void reproduce(Long generation, int births, List<Genotype> genotypes, List<Genotype> offsprings)
     {
-        for (int i = 0; i < births; i++) {
+        IntStream.of(births).parallel().forEach(i -> {
             Parents parents = selectParents(genotypes);
             Genotype offspring = reproduction.reproduce(parents, generation);
             mutation.mutate(offspring);
             offsprings.add(offspring);
-        }
-    }
-
-    protected void createMissingOffsprings(long generation, int totalSize, List<Genotype> genotypes, List<Genotype> offsprings) {
-        int births = populationSize - totalSize;
-        reproduce(generation, births, genotypes, offsprings);
+        });
     }
 
     protected abstract Parents selectParents(List<Genotype> genotypes);

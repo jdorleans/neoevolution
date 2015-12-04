@@ -22,7 +22,7 @@ public class FitnessDataSet extends SampleDataSet {
     }
 
     public FitnessDataSet(int size) {
-        this(new ArrayList<SampleData>(size));
+        this(new ArrayList<>(size));
     }
 
     public FitnessDataSet(List<SampleData> data) {

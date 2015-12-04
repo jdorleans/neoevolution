@@ -75,7 +75,7 @@ public class GenotypeFactory<C extends NNConfiguration>
 
     @Override
     public Genotype create() {
-        return create(1l);
+        return create(1L);
     }
 
     public Genotype create(Long generation)
@@ -155,7 +155,7 @@ public class GenotypeFactory<C extends NNConfiguration>
 
 
     public List<Genotype> createList(Integer size) {
-        return createList(size, 1l);
+        return createList(size, 1L);
     }
 
     public List<Genotype> createList(Integer size, Long generation)

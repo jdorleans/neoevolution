@@ -4,11 +4,7 @@ import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
 import org.neoevolution.mvc.model.Species;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -33,38 +29,26 @@ public abstract class AbstractEvaluation implements Evaluation {
         double fitness = 0d;
         Set<Genotype> genotypes = species.getGenotypes();
         int size = genotypes.size();
-        List<Future<Genotype>> futureGenotypes = new ArrayList<>(size);
 
-        for (Genotype genotype : genotypes)
-        {
+        genotypes.parallelStream().forEach(genotype -> {
             if (!genotype.isEvaluated()) {
-                futureGenotypes.add(evaluate(genotype));
-            } else {
-                species.updateBestGenotype(genotype);
-                fitness += adjustFitness(genotype, size);
+                evaluate(genotype);
             }
-        }
+            adjustFitness(genotype, size);
+        });
 
-        for (Future<Genotype> futureGenotype : futureGenotypes)
-        {
-            try {
-                Genotype genotype = futureGenotype.get();
-                species.updateBestGenotype(genotype);
-                fitness += adjustFitness(genotype, size);
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+        for (Genotype genotype : genotypes) {
+            species.updateBestGenotype(genotype);
+            fitness += genotype.getAdjustedFitness();
         }
         species.setFitness(fitness);
         return fitness;
     }
 
-    protected abstract Future<Genotype> evaluate(Genotype genotype);
+    protected abstract void evaluate(Genotype genotype);
 
-    protected double adjustFitness(Genotype genotype, int size) {
-        double adjustedFitness = genotype.getFitness() / size;
-        genotype.setAdjustedFitness(adjustedFitness);
-        return adjustedFitness;
+    protected void adjustFitness(Genotype genotype, int size) {
+        genotype.setAdjustedFitness(genotype.getFitness() / size);
     }
 
 }

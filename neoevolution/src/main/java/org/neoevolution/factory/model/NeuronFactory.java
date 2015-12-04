@@ -1,16 +1,14 @@
 package org.neoevolution.factory.model;
 
-import org.neoevolution.core.activation.ActivationFunctionManager;
+import org.neoevolution.core.activation.ActivationFunction;
 import org.neoevolution.factory.model.configuration.ConfigurableFactory;
 import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.NeuronType;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
+import org.neoevolution.util.MapUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -24,19 +22,26 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
 
     private NeuronInnovation innovation;
 
-    private ActivationFunctionManager functionManager;
+    private Map<NeuronType, ActivationFunction> functions;
 
 
     public NeuronFactory() {
-        this.functionManager = new ActivationFunctionManager();
+        functions = MapUtils.createHashMap(4);
     }
 
 
     @Override
     public void configure(C configuration) {
+        initFunctions(configuration);
         innovation = configuration.getNeuronInnovation();
-        functionManager.configure(configuration);
         initNeurons(configuration.getInputSize(), configuration.getOutputSize());
+    }
+
+    private void initFunctions(C configuration) {
+        functions.put(NeuronType.BIAS, configuration.getActivationBias());
+        functions.put(NeuronType.INPUT, configuration.getActivationInput());
+        functions.put(NeuronType.HIDDEN, configuration.getActivationHidden());
+        functions.put(NeuronType.OUTPUT, configuration.getActivationOutput());
     }
 
     private void initNeurons(int inputSize, int outputSize)
@@ -48,6 +53,7 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
         createNeurons(outputSize, outputs, NeuronType.OUTPUT);
     }
 
+
     private void createNeurons(int size, List<Neuron> neurons, NeuronType type) {
         for (int i = 0; i < size; i++) {
             neurons.add(create(type));
@@ -56,7 +62,7 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
 
     private Neuron create(NeuronType type) {
         int idx = inputs.size() + outputs.size() + 1;
-        Neuron neuron = new Neuron(type, functionManager.get(type));
+        Neuron neuron = new Neuron(type, functions.get(type));
         innovation.innovate(idx, neuron);
         return neuron;
     }
@@ -69,7 +75,7 @@ public class NeuronFactory<C extends NNConfiguration> implements ConfigurableFac
 
     public Neuron createHidden(Neuron from, Neuron to) {
         NeuronType type = NeuronType.HIDDEN;
-        Neuron neuron = new Neuron(type, functionManager.get(type));
+        Neuron neuron = new Neuron(type, functions.get(type));
         innovation.innovate(neuron, from, to);
         return neuron;
     }

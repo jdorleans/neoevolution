@@ -7,14 +7,11 @@ import org.neoevolution.mvc.dataset.SampleData;
 import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Neuron;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -23,21 +20,15 @@ import java.util.concurrent.Future;
 @Component
 public class FitnessCalculator {
 
-    @Autowired
     protected GenotypeActivation activation;
 
-    @Autowired
     protected ErrorFunctionManager errorManager;
 
 
-    @Async
-    public Future<EntityDataSet> calculateEntityAsync(Genotype genotype, FitnessDataSet dataSet) {
-        return new AsyncResult<>(calculateEntity(genotype, dataSet));
-    }
-
-    @Async
-    public Future<List<Double>> calculateAsync(Genotype genotype, FitnessDataSet dataSet) {
-        return new AsyncResult<>(calculate(genotype, dataSet));
+    @Autowired
+    public FitnessCalculator(GenotypeActivation activation, ErrorFunctionManager errorManager) {
+        this.activation = activation;
+        this.errorManager = errorManager;
     }
 
 

@@ -6,10 +6,10 @@ import org.neoevolution.mvc.model.Evolution;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.repository.EvolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 
-import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
@@ -31,13 +31,21 @@ public abstract class EvolutionService
     }
 
 
-    @Async
-    public Future<T> evolve(C configuration) {
+    public T evolve(C configuration) {
         return evolve(configuration, true);
     }
 
-    @Async
-    public Future<T> evolve(C configuration, Boolean create)
+    public List<T> evolve(List<C> configurations, Boolean create)
+    {
+        List<T> evolutions = Collections.synchronizedList(new ArrayList<>(configurations.size()));
+
+        configurations.parallelStream().forEach(c -> {
+            evolutions.add(evolve(c, create));
+        });
+        return evolutions;
+    }
+
+    public T evolve(C configuration, Boolean create)
     {
         T evolution = createEvolution(configuration);
         create(evolution, create);
@@ -47,7 +55,7 @@ public abstract class EvolutionService
 
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
-        return new AsyncResult<>(create(evolution, create));
+        return create(evolution, create);
     }
 
     private NNAlgorithm createAlgorithm(C configuration) {

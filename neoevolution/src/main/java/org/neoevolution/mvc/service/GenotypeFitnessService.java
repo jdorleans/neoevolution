@@ -4,13 +4,11 @@ import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.mvc.dataset.EntityDataSet;
 import org.neoevolution.mvc.dataset.FitnessDataSet;
 import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.util.FutureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -35,35 +33,17 @@ public class GenotypeFitnessService {
     }
 
 
-    public List<EntityDataSet> calculate(List<Long> ids, FitnessDataSet dataSet)
-    {
-        List<Future<EntityDataSet>> futures = new ArrayList<>(ids.size());
-
-        for (Long id : ids) {
-            futures.add(activation.calculateEntityAsync(service.find(id), dataSet));
-        }
-        return FutureUtils.getResults(futures);
+    public List<EntityDataSet> calculate(List<Long> ids, FitnessDataSet dataSet) {
+        return ids.parallelStream().map(id -> activation.calculateEntity(service.find(id), dataSet)).collect(Collectors.toList());
     }
 
-    public List<EntityDataSet> calculate(List<FitnessDataSet> dataSets)
-    {
-        List<Future<EntityDataSet>> futures = new ArrayList<>(dataSets.size());
-
-        for (FitnessDataSet data : dataSets) {
-            futures.add(activation.calculateEntityAsync(service.find(data.getId()), data));
-        }
-        return FutureUtils.getResults(futures);
+    public List<EntityDataSet> calculate(List<FitnessDataSet> dataSets) {
+        return dataSets.parallelStream().map(dataSet -> activation.calculateEntity(service.find(dataSet.getId()), dataSet)).collect(Collectors.toList());
     }
 
-    public List<EntityDataSet> calculateAll(FitnessDataSet dataSet)
-    {
+    public List<EntityDataSet> calculateAll(FitnessDataSet dataSet) {
         List<Genotype> genotypes = service.findAll();
-        List<Future<EntityDataSet>> futures = new ArrayList<>(genotypes.size());
-
-        for (Genotype genotype : genotypes) {
-            futures.add(activation.calculateEntityAsync(genotype, dataSet));
-        }
-        return FutureUtils.getResults(futures);
+        return genotypes.parallelStream().map(genotype -> activation.calculateEntity(genotype, dataSet)).collect(Collectors.toList());
     }
 
 }

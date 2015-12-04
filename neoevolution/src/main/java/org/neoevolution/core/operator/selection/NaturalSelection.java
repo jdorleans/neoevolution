@@ -8,33 +8,21 @@ import org.neoevolution.mvc.model.Species;
 import org.neoevolution.util.FitnessUtils;
 import org.neoevolution.util.MapUtils;
 import org.neoevolution.util.Randomizer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.util.List;
-import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-@Configurable
 public class NaturalSelection extends AbstractSelection<Crossover, ComposedMutation> {
 
     protected double survivalRate;
 
     protected double elitismRate;
 
-    @Autowired
-    protected NaturalSelectionAsyncMethod asyncSelection;
-
-
     @Override
-    protected Future<Species> select(Species specie, Long generation, Double totalFitness, List<Genotype> offsprings) {
-        return asyncSelection.select(specie, generation, totalFitness, offsprings, this);
-    }
-
-    protected Species selection(Species specie, Long generation, Double totalFitness, List<Genotype> offsprings)
+    protected Species select(Species specie, Long generation, Double totalFitness, List<Genotype> offsprings)
     {
         Species species = null;
         int newSize = calculateSize(specie, totalFitness);

@@ -6,14 +6,11 @@ import org.neoevolution.mvc.model.Neuron;
 import org.neoevolution.mvc.model.NeuronType;
 import org.neoevolution.mvc.model.Synapse;
 import org.neoevolution.util.MapUtils;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -21,17 +18,6 @@ import java.util.concurrent.Future;
  */
 @Component
 public class GenotypeActivation {
-
-    @Async
-    public Future<ListDataSet> activateAsync(Genotype genotype, ListDataSet inputSet) {
-        return new AsyncResult<>(activate(genotype, inputSet));
-    }
-
-    @Async
-    public Future<List<Double>> activateAsync(Genotype genotype, List<Double> inputSet) {
-        return new AsyncResult<>(activate(genotype, inputSet));
-    }
-
 
     public ListDataSet activate(Genotype genotype, ListDataSet inputSet)
     {

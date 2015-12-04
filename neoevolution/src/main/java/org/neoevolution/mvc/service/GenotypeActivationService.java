@@ -3,13 +3,11 @@ package org.neoevolution.mvc.service;
 import org.neoevolution.core.activation.GenotypeActivation;
 import org.neoevolution.mvc.dataset.ListDataSet;
 import org.neoevolution.mvc.model.Genotype;
-import org.neoevolution.util.FutureUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -34,35 +32,17 @@ public class GenotypeActivationService {
     }
 
 
-    public List<ListDataSet> activate(List<Long> ids, ListDataSet inputSet)
-    {
-        List<Future<ListDataSet>> futures = new ArrayList<>(ids.size());
-
-        for (Long id : ids) {
-            futures.add(activation.activateAsync(service.find(id), inputSet));
-        }
-        return FutureUtils.getResults(futures);
+    public List<ListDataSet> activate(List<Long> ids, ListDataSet inputSet) {
+        return ids.parallelStream().map(id -> activation.activate(service.find(id), inputSet)).collect(Collectors.toList());
     }
 
-    public List<ListDataSet> activate(List<ListDataSet> inputSets)
-    {
-        List<Future<ListDataSet>> futures = new ArrayList<>(inputSets.size());
-
-        for (ListDataSet inputSet : inputSets) {
-            futures.add(activation.activateAsync(service.find(inputSet.getId()), inputSet));
-        }
-        return FutureUtils.getResults(futures);
+    public List<ListDataSet> activate(List<ListDataSet> inputSets) {
+        return inputSets.parallelStream().map(inputSet -> activation.activate(service.find(inputSet.getId()), inputSet)).collect(Collectors.toList());
     }
 
-    public List<ListDataSet> activateAll(ListDataSet inputSet)
-    {
+    public List<ListDataSet> activateAll(ListDataSet inputSet) {
         List<Genotype> genotypes = service.findAll();
-        List<Future<ListDataSet>> futures = new ArrayList<>(genotypes.size());
-
-        for (Genotype genotype : genotypes) {
-            futures.add(activation.activateAsync(genotype, inputSet));
-        }
-        return FutureUtils.getResults(futures);
+        return genotypes.parallelStream().map(genotype -> activation.activate(genotype, inputSet)).collect(Collectors.toList());
     }
 
 }
