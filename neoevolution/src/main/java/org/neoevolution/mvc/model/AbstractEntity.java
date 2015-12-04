@@ -1,6 +1,6 @@
 package org.neoevolution.mvc.model;
 
-import org.springframework.data.neo4j.annotation.GraphId;
+import org.neo4j.ogm.annotation.GraphId;
 
 import java.io.Serializable;
 

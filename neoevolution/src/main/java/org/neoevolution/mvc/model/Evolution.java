@@ -1,10 +1,9 @@
 package org.neoevolution.mvc.model;
 
-import org.neo4j.graphdb.Direction;
+import org.neo4j.ogm.annotation.Relationship;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.Indexed;
-import org.springframework.data.neo4j.annotation.RelatedTo;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
 
 /**
 * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -14,15 +13,12 @@ public abstract class Evolution<C extends NNConfiguration> extends AbstractEntit
 
     private static final long serialVersionUID = 3480233611246056557L;
 
-    @Fetch
-    @RelatedTo(type="EVOLVES")
+    @Relationship(type="EVOLVES")
     protected Population population;
 
-    @Fetch
-    @RelatedTo(type="CONFIGURES", direction = Direction.INCOMING)
+    @Relationship(type="CONFIG", direction = INCOMING)
     protected C configuration;
 
-    @Indexed(level = Indexed.Level.INSTANCE)
     protected Boolean finished;
 
 

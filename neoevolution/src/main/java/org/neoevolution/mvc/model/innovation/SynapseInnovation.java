@@ -1,6 +1,7 @@
 package org.neoevolution.mvc.model.innovation;
 
-import org.springframework.data.neo4j.annotation.NodeEntity;
+
+import org.neo4j.ogm.annotation.NodeEntity;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

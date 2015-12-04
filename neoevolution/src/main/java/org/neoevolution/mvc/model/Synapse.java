@@ -1,11 +1,10 @@
 package org.neoevolution.mvc.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.RelationshipEntity;
+import org.neo4j.ogm.annotation.StartNode;
 import org.neoevolution.mvc.json.InnovationSerializer;
-import org.springframework.data.neo4j.annotation.EndNode;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.RelationshipEntity;
-import org.springframework.data.neo4j.annotation.StartNode;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -16,12 +15,10 @@ public class Synapse extends Gene {
 
     private static final long serialVersionUID = -9200265923058182225L;
 
-    @Fetch
     @StartNode
     @JsonSerialize(using = InnovationSerializer.class)
     private Neuron start;
 
-    @Fetch
     @EndNode
     @JsonSerialize(using = InnovationSerializer.class)
     private Neuron end;

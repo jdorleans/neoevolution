@@ -1,11 +1,10 @@
 package org.neoevolution.mvc.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
 import org.neoevolution.mvc.json.InnovationSerializer;
 import org.neoevolution.util.MapUtils;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
 import java.util.Set;
 
@@ -18,18 +17,16 @@ public class Species extends AbstractFitnessEntity {
 
     private static final long serialVersionUID = -2774570149581847246L;
 
-    @Fetch
-    @RelatedTo(type="BEST")
+    @Relationship(type="BEST")
     @JsonSerialize(using = InnovationSerializer.class)
     private Genotype bestGenotype;
 
-    @Fetch
-    @RelatedTo(type="GENOTYPE")
+    @Relationship(type="GENOTYPE")
     private Set<Genotype> genotypes;
 
 
     public Species() {
-        this(1l, 1l, 100);
+        this(1L, 1L, 100);
     }
 
     public Species(Long innovation, Long generation, Integer size) {

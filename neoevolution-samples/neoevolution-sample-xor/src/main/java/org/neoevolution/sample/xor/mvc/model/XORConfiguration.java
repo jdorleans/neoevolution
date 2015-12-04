@@ -1,8 +1,8 @@
 package org.neoevolution.sample.xor.mvc.model;
 
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neoevolution.core.error.ErrorFunctionType;
 import org.neoevolution.mvc.model.configuration.AbstractNEErrorStopConfiguration;
-import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>

@@ -1,7 +1,5 @@
 package org.neoevolution.mvc.model;
 
-import org.springframework.data.neo4j.annotation.Indexed;
-
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
@@ -10,14 +8,13 @@ public abstract class AbstractFitnessEntity extends AbstractInnovationEntity {
 
     private static final long serialVersionUID = 3287349315995923916L;
 
-    @Indexed(level = Indexed.Level.INSTANCE)
     protected Long generation;
 
     protected Double fitness;
 
 
     protected AbstractFitnessEntity() {
-        this(1l, 1l);
+        this(1L, 1L);
     }
 
     protected AbstractFitnessEntity(Long innovation, Long generation) {

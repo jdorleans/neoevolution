@@ -1,21 +1,16 @@
 package org.neoevolution.configuration;
 
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.factory.GraphDatabaseBuilder;
-import org.neo4j.graphdb.factory.GraphDatabaseFactory;
-import org.neoevolution.mvc.converter.ActivationToStringConverter;
-import org.neoevolution.mvc.converter.StringToActivationConverter;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.neo4j.ogm.session.Session;
+import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.converter.ConverterRegistry;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.neo4j.config.EnableNeo4jRepositories;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
-import org.springframework.data.neo4j.rest.SpringRestGraphDatabase;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
+import org.springframework.data.neo4j.server.Neo4jServer;
+import org.springframework.data.neo4j.server.RemoteServer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.PostConstruct;
@@ -34,60 +29,39 @@ public class NENeo4jConfiguration extends Neo4jConfiguration {
 
     private static final String MODEL_PACKAGE = "org.neoevolution.mvc.model";
 
-    @Value("${neoevolution.neo4j.rest}")
-    private Boolean isRest;
+    @Value("${neoevolution.neo4j.login}")
+    private String login;
 
-    @Value("${neoevolution.neo4j.address}")
-    private String address;
+    @Value("${neoevolution.neo4j.password}")
+    private String password;
+
+    @Value("${neoevolution.neo4j.url}")
+    private String url;
 
     @Value("#{'${neoevolution.neo4j.packages}'.replaceAll('\\s*', '').split(',')}")
     private List<String> packages;
 
-    @Autowired
-    private StringToActivationConverter stringToActivationConverter;
-
-    @Autowired
-    private ActivationToStringConverter activationToStringConverter;
-
 
     @PostConstruct
     private void init() throws IOException {
-        configurePackages();
-        configureDatabase();
-    }
-
-    private void configurePackages() {
         packages.add(MODEL_PACKAGE);
-        setBasePackage(packages.toArray(new String[packages.size()]));
     }
 
-    private void configureDatabase() throws IOException
-    {
-        if (isRest) {
-            setGraphDatabaseService(new SpringRestGraphDatabase(address));
-        }
-        else {
-            ClassPathResource resource = new ClassPathResource("neo4j.properties");
-            GraphDatabaseBuilder dbBuilder = new GraphDatabaseFactory().newEmbeddedDatabaseBuilder(address);
 
-            if (resource.exists()) {
-                dbBuilder = dbBuilder.loadPropertiesFromFile(resource.getFile().getAbsolutePath());
-            }
-            setGraphDatabaseService(dbBuilder.newGraphDatabase());
-        }
-    }
-
-    @Bean
-    public GraphDatabaseService graphDatabaseService() {
-        return super.getGraphDatabaseService();
+    @Override
+    public Neo4jServer neo4jServer() {
+        return new RemoteServer(url, login, password);
     }
 
     @Override
-    protected ConversionService neo4jConversionService() throws Exception {
-        ConverterRegistry converterRegistry = (ConverterRegistry) super.neo4jConversionService();
-        converterRegistry.addConverter(stringToActivationConverter);
-        converterRegistry.addConverter(activationToStringConverter);
-        return (ConversionService) converterRegistry;
+    public SessionFactory getSessionFactory() {
+        return new SessionFactory(packages.toArray(new String[packages.size()]));
+    }
+
+    @Override
+    @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+    public Session getSession() throws Exception {
+        return super.getSession();
     }
 
 }

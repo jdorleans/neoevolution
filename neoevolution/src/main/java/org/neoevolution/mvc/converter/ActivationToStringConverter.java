@@ -1,7 +1,8 @@
 package org.neoevolution.mvc.converter;
 
+import org.neo4j.ogm.typeconversion.AttributeConverter;
 import org.neoevolution.core.activation.ActivationFunction;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -9,11 +10,18 @@ import org.springframework.stereotype.Component;
  * @since 1.0
  */
 @Component
-public class ActivationToStringConverter implements Converter<ActivationFunction, String> {
+public class ActivationToStringConverter implements AttributeConverter<ActivationFunction, String> {
 
-    @Override
-    public String convert(ActivationFunction source) {
-        return source.getType().name();
-    }
+	@Autowired
+	private ActivationTypeToActivationConverter converter;
 
+	@Override
+	public String toGraphProperty(ActivationFunction value) {
+		return value.getType().name();
+	}
+
+	@Override
+	public ActivationFunction toEntityAttribute(String value) {
+		return converter.convert(value);
+	}
 }

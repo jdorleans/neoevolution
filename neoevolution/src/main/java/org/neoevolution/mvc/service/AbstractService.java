@@ -1,9 +1,7 @@
 package org.neoevolution.mvc.service;
 
 import org.neoevolution.mvc.model.AbstractEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.repository.GraphRepository;
-import org.springframework.data.neo4j.support.Neo4jTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -18,9 +16,6 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
     protected int CAPACITY = 100;
 
     protected R repository;
-
-    @Autowired
-    protected Neo4jTemplate template;
 
 
     protected AbstractService(R repository) {
@@ -60,10 +55,6 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
 
     public T find(T entity) {
         return (entity != null ? repository.findOne(entity.getId()) : null);
-    }
-
-    public T findByProperty(String property, Object value) {
-        return repository.findBySchemaPropertyValue(property, value);
     }
 
     @Transactional(readOnly = true)

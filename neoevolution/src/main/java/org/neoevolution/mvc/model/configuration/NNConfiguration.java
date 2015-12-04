@@ -1,13 +1,12 @@
 package org.neoevolution.mvc.model.configuration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.neo4j.ogm.annotation.Relationship;
 import org.neoevolution.core.ConnectionStrategy;
 import org.neoevolution.core.activation.ActivationFunctionType;
 import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.RelatedTo;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -23,12 +22,10 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected Long genotypeInnovation;
 
-    @Fetch
-    @RelatedTo(type="NI")
+    @Relationship(type="NI")
     protected NeuronInnovation neuronInnovation;
 
-    @Fetch
-    @RelatedTo(type="SI")
+    @Relationship(type="SI")
     protected SynapseInnovation synapseInnovation;
 
     protected Integer populationSize;
@@ -66,9 +63,9 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected NNConfiguration() {
         super();
-        populationInnovation = 0l;
-        speciesInnovation = 0l;
-        genotypeInnovation = 0l;
+        populationInnovation = 0L;
+        speciesInnovation = 0L;
+        genotypeInnovation = 0L;
         neuronInnovation = new NeuronInnovation();
         synapseInnovation = new SynapseInnovation();
     }

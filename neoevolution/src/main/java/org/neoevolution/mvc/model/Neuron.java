@@ -3,17 +3,19 @@ package org.neoevolution.mvc.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.neo4j.graphdb.Direction;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.neoevolution.core.activation.ActivationFunction;
+import org.neoevolution.mvc.converter.ActivationToStringConverter;
 import org.neoevolution.mvc.json.ActivationDeserializer;
 import org.neoevolution.mvc.json.InnovationArraySerializer;
-import org.springframework.data.neo4j.annotation.Fetch;
-import org.springframework.data.neo4j.annotation.GraphProperty;
-import org.springframework.data.neo4j.annotation.NodeEntity;
-import org.springframework.data.neo4j.annotation.RelatedToVia;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import static org.neo4j.ogm.annotation.Relationship.INCOMING;
+import static org.neo4j.ogm.annotation.Relationship.OUTGOING;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -29,17 +31,15 @@ public class Neuron extends Gene {
 
     private transient Double impulses;
 
-    @GraphProperty(propertyType = String.class)
+    @Convert(ActivationToStringConverter.class)
     @JsonDeserialize(using = ActivationDeserializer.class)
     private ActivationFunction function;
 
-    @Fetch
-    @RelatedToVia(direction = Direction.INCOMING)
+    @Relationship(direction = INCOMING)
     @JsonSerialize(using = InnovationArraySerializer.class)
     private Set<Synapse> inputs;
 
-    @Fetch
-    @RelatedToVia(direction = Direction.OUTGOING)
+    @Relationship(direction = OUTGOING)
     @JsonSerialize(using = InnovationArraySerializer.class)
     private Set<Synapse> outputs;
 

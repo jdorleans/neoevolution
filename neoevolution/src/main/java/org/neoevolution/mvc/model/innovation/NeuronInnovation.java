@@ -1,7 +1,8 @@
 package org.neoevolution.mvc.model.innovation;
 
+
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neoevolution.mvc.model.Neuron;
-import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -25,7 +26,7 @@ public class NeuronInnovation extends AbstractInnovation {
 
 
     private String key(int idx) {
-        return idx+"";
+        return Integer.toString(idx);
     }
 
     public void innovate(int idx, Neuron neuron) {

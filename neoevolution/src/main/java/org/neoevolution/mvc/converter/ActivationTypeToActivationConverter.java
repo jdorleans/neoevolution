@@ -23,4 +23,8 @@ public class ActivationTypeToActivationConverter implements Converter<Activation
         return activationFunctions.get(source);
     }
 
+    public ActivationFunction convert(String source) {
+        return activationFunctions.get(ActivationFunctionType.valueOf(source));
+    }
+
 }

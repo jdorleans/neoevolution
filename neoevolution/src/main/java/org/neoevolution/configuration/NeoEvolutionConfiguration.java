@@ -3,8 +3,10 @@ package org.neoevolution.configuration;
 import org.neoevolution.core.activation.*;
 import org.neoevolution.core.error.*;
 import org.neoevolution.util.MapUtils;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.*;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.scheduling.annotation.EnableAsync;
 
@@ -14,12 +16,11 @@ import java.util.Map;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-@Configuration
-@ComponentScan("org.neoevolution")
 @EnableAsync
 @EnableSpringConfigured
-@EnableAutoConfiguration
+//@EnableAspectJAutoProxy
 @Import(NENeo4jConfiguration.class)
+@SpringBootApplication(scanBasePackages = "org.neoevolution")
 public class NeoEvolutionConfiguration {
 
     @Bean
