@@ -10,6 +10,8 @@ import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
@@ -18,11 +20,11 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     private static final long serialVersionUID = -2459309402975620977L;
 
-    protected Long populationInnovation;
+    protected AtomicLong populationInnovation;
 
-    protected Long speciesInnovation;
+    protected AtomicLong speciesInnovation;
 
-    protected Long genotypeInnovation;
+    protected AtomicLong genotypeInnovation;
 
     @JsonIgnore
     @Relationship(type="NI")
@@ -71,9 +73,9 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected NNConfiguration() {
         super();
-        populationInnovation = 0L;
-        speciesInnovation = 0L;
-        genotypeInnovation = 0L;
+        populationInnovation = new AtomicLong(0);
+        speciesInnovation = new AtomicLong(0);
+        genotypeInnovation = new AtomicLong(0);
         neuronInnovation = new NeuronInnovation();
         synapseInnovation = new SynapseInnovation();
     }
@@ -94,36 +96,36 @@ public abstract class NNConfiguration extends AbstractEntity {
 
 
     public Long nextPopulationInnovation() {
-        return ++populationInnovation;
+        return populationInnovation.incrementAndGet();
     }
 
     public Long nextSpeciesInnovation() {
-        return ++speciesInnovation;
+        return speciesInnovation.incrementAndGet();
     }
 
     public Long nextGenotypeInnovation() {
-        return ++genotypeInnovation;
+        return genotypeInnovation.incrementAndGet();
     }
 
     public Long getPopulationInnovation() {
-        return populationInnovation;
+        return populationInnovation.get();
     }
     public void setPopulationInnovation(Long populationInnovation) {
-        this.populationInnovation = populationInnovation;
+        this.populationInnovation = new AtomicLong(populationInnovation);
     }
 
     public Long getSpeciesInnovation() {
-        return speciesInnovation;
+        return speciesInnovation.get();
     }
     public void setSpeciesInnovation(Long speciesInnovation) {
-        this.speciesInnovation = speciesInnovation;
+        this.speciesInnovation = new AtomicLong(speciesInnovation);
     }
 
     public Long getGenotypeInnovation() {
-        return genotypeInnovation;
+        return genotypeInnovation.get();
     }
     public void setGenotypeInnovation(Long genotypeInnovation) {
-        this.genotypeInnovation = genotypeInnovation;
+        this.genotypeInnovation = new AtomicLong(genotypeInnovation);
     }
 
     public NeuronInnovation getNeuronInnovation() {

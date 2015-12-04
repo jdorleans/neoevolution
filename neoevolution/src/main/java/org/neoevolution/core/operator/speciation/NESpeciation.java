@@ -6,6 +6,8 @@ import org.neoevolution.util.InnovationUtils;
 import org.neoevolution.util.MapUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.DoubleAdder;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -68,19 +70,13 @@ public class NESpeciation implements Speciation {
 
         if (size >= maxSpeciesSize) {
             threshold += rate;
-            threshold = Math.min(1, threshold);
         } else {
             threshold -= rate;
-            threshold = Math.max(0.01, threshold);
         }
     }
 
-    protected double calculateCompatibilityRate()
-    {
-        double rate = threshold * compatibilityRate;
-        rate = Math.min(0.1, rate);
-        rate = Math.max(0.001, rate);
-        return rate;
+    protected double calculateCompatibilityRate() {
+        return threshold * compatibilityRate;
     }
 
     protected boolean isCompatible(Genotype g1, Genotype g2)  {
@@ -91,7 +87,7 @@ public class NESpeciation implements Speciation {
     protected double calculateDistance(Genotype g1, Genotype g2) {
         double excess = calculateExcess(g1, g2);
         double weight = calculateWeight(g1.getSynapses(), g2.getSynapses());
-        return Math.min(1, excess + weight);
+        return (excess + weight);
     }
 
     // Calculate Excess and Disjoint
@@ -123,21 +119,22 @@ public class NESpeciation implements Speciation {
 
     protected double calculateWeight(Set<Synapse> synapse1, Set<Synapse> synapse2)
     {
-        int similar = 0;
-        double weightDiff = 0;
+        AtomicInteger similar = new AtomicInteger(0);
+        DoubleAdder weightDiff = new DoubleAdder();
         Map<Long, Synapse> synapses = InnovationUtils.createHashMap(synapse1);
 
-        for (Synapse s2 : synapse2)
+        synapse2.parallelStream().forEach(s2 ->
         {
             Synapse s1 = synapses.get(s2.getInnovation());
 
             if (s1 != null) {
-                similar++;
-                weightDiff += Math.abs(s1.getWeight() - s2.getWeight());
+                similar.incrementAndGet();
+                weightDiff.add(Math.abs(s1.getWeight() - s2.getWeight()));
             }
-        }
-        if (similar > 0) {
-            return (weightFactor * (weightDiff / similar));
+        });
+
+        if (similar.get() > 0) {
+            return (weightFactor * (weightDiff.sum() / similar.get()));
         }
         return 0;
     }

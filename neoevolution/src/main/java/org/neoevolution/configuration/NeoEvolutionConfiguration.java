@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,8 +17,6 @@ import java.util.Map;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-@EnableAsync
-@EnableSpringConfigured
 @EnableAspectJAutoProxy
 @Import(NENeo4jConfiguration.class)
 @SpringBootApplication(scanBasePackages = "org.neoevolution")

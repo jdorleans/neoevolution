@@ -34,7 +34,7 @@ public class SpeciesFactory<C extends NNConfiguration>
     }
 
     public Species create(int size) {
-        return create(size, 1l);
+        return create(size, 1L);
     }
 
     public Species create(int size, Long generation)
