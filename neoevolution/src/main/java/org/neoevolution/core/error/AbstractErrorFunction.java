@@ -4,7 +4,7 @@ package org.neoevolution.core.error;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public abstract class AbstractErrorFunction implements ErrorFunction {
+public abstract class AbstractErrorFunction<T extends ErrorFunctionType> implements ErrorFunction<T> {
 
     protected int size;
 

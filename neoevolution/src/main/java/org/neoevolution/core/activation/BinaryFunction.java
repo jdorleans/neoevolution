@@ -1,14 +1,17 @@
 package org.neoevolution.core.activation;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public class BinaryFunction extends AbstractActivationFunction implements ActivationFunction {
+@Component
+public class BinaryFunction extends AbstractActivationFunction {
 
     @Override
-    public ActivationFunctionType getType() {
-        return ActivationFunctionType.BINARY;
+    public NEActivationFunctionType getType() {
+        return NEActivationFunctionType.BINARY;
     }
 
     @Override

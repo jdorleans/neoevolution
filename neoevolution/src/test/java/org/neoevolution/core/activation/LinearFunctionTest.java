@@ -19,8 +19,8 @@ public class LinearFunctionTest extends AbstractActivationFunctionTest {
     }
 
     @Override
-    protected ActivationFunctionType getType() {
-        return ActivationFunctionType.LINEAR;
+    protected NEActivationFunctionType getType() {
+        return NEActivationFunctionType.LINEAR;
     }
 
     @Override

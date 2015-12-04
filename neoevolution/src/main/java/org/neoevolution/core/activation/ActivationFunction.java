@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public interface ActivationFunction {
+public interface ActivationFunction<T extends ActivationFunctionType> {
 
-    ActivationFunctionType getType();
+    T getType();
 
     double calculate(double input);
 

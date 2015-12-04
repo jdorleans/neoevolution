@@ -1,15 +1,18 @@
 package org.neoevolution.configuration;
 
-import org.neoevolution.core.activation.*;
-import org.neoevolution.core.error.*;
+import org.neoevolution.core.activation.ActivationFunction;
+import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.util.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,29 +21,29 @@ import java.util.Map;
  */
 @EnableAsync
 @EnableSpringConfigured
-//@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy
 @Import(NENeo4jConfiguration.class)
 @SpringBootApplication(scanBasePackages = "org.neoevolution")
 public class NeoEvolutionConfiguration {
 
     @Bean
-    @Scope("prototype")
-    public Map<ActivationFunctionType, ActivationFunction> activationFunctions() {
-        Map<ActivationFunctionType, ActivationFunction> functions = MapUtils.createHashMap(4);
-        functions.put(ActivationFunctionType.BINARY, new BinaryFunction());
-        functions.put(ActivationFunctionType.LINEAR, new LinearFunction());
-        functions.put(ActivationFunctionType.SIGMOID, new SigmoidFunction());
-        functions.put(ActivationFunctionType.TANH, new TanhFunction());
+    @Autowired
+    public Map<String, ActivationFunction> activationFunctions(List<ActivationFunction> activations)
+    {
+        Map<String, ActivationFunction> functions = new HashMap<>(activations.size());
+        for (ActivationFunction activation : activations) {
+            functions.put(activation.getType().getName(), activation);
+        }
         return functions;
     }
 
     @Bean
-    @Scope("prototype")
-    public Map<ErrorFunctionType, ErrorFunction> errorFunctions() {
-        Map<ErrorFunctionType, ErrorFunction> functions = MapUtils.createHashMap(3);
-        functions.put(ErrorFunctionType.DE, new DEFunction());
-        functions.put(ErrorFunctionType.MSE, new MSEFunction());
-        functions.put(ErrorFunctionType.RMSE, new RMSEFunction());
+    public Map<String, ErrorFunction> errorFunctions(List<ErrorFunction> errors)
+    {
+        Map<String, ErrorFunction> functions = MapUtils.createHashMap(errors.size());
+        for (ErrorFunction error : errors) {
+            functions.put(error.getType().getName(), error);
+        }
         return functions;
     }
 

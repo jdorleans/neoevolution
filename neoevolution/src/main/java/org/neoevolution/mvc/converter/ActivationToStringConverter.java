@@ -17,7 +17,7 @@ public class ActivationToStringConverter implements AttributeConverter<Activatio
 
 	@Override
 	public String toGraphProperty(ActivationFunction value) {
-		return value.getType().name();
+		return value.getType().getName();
 	}
 
 	@Override

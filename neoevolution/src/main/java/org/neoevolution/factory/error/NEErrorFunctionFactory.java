@@ -1,26 +1,18 @@
 package org.neoevolution.factory.error;
 
-import org.neoevolution.core.error.ErrorFunction;
 import org.neoevolution.core.error.ErrorFunctionManager;
-import org.neoevolution.core.error.ErrorFunctionType;
+import org.neoevolution.core.error.NEErrorFunctionType;
 import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-@Configurable
-public class NEErrorFunctionFactory<C extends ErrorConfiguration<ErrorFunctionType>>
-        extends AbstractErrorFunctionFactory<ErrorFunctionType, C> {
+public class NEErrorFunctionFactory<C extends ErrorConfiguration<NEErrorFunctionType>>
+        extends AbstractErrorFunctionFactory<NEErrorFunctionType, C> {
 
-    @Autowired
-    private ErrorFunctionManager errorFunctionManager;
-
-    @Override
-    public ErrorFunction create() {
-        return errorFunctionManager.get(configuration.getErrorFunctionType());
+    public NEErrorFunctionFactory(ErrorFunctionManager errorFunctionManager) {
+        super(errorFunctionManager);
     }
 
 }

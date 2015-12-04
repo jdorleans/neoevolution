@@ -26,10 +26,10 @@ public class ActivationFunctionManager implements Configurable<NNConfiguration> 
     @Override
     public void configure(NNConfiguration configuration) {
         functions = MapUtils.createHashMap(4);
-        functions.put(NeuronType.BIAS, converter.convert(configuration.getActivationBias()));
-        functions.put(NeuronType.INPUT, converter.convert(configuration.getActivationInput()));
-        functions.put(NeuronType.HIDDEN, converter.convert(configuration.getActivationHidden()));
-        functions.put(NeuronType.OUTPUT, converter.convert(configuration.getActivationOutput()));
+        functions.put(NeuronType.BIAS, configuration.getActivationBias());
+        functions.put(NeuronType.INPUT, configuration.getActivationInput());
+        functions.put(NeuronType.HIDDEN, configuration.getActivationHidden());
+        functions.put(NeuronType.OUTPUT, configuration.getActivationOutput());
     }
 
 

@@ -1,14 +1,17 @@
 package org.neoevolution.core.activation;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public class TanhFunction extends AbstractActivationFunction implements ActivationFunction {
+@Component
+public class TanhFunction extends AbstractActivationFunction<NEActivationFunctionType> {
 
     @Override
-    public ActivationFunctionType getType() {
-        return ActivationFunctionType.TANH;
+    public NEActivationFunctionType getType() {
+        return NEActivationFunctionType.TANH;
     }
 
     @Override

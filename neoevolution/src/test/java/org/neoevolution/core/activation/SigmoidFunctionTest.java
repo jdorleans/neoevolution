@@ -19,8 +19,8 @@ public class SigmoidFunctionTest extends AbstractActivationFunctionTest {
     }
 
     @Override
-    protected ActivationFunctionType getType() {
-        return ActivationFunctionType.SIGMOID;
+    protected NEActivationFunctionType getType() {
+        return NEActivationFunctionType.SIGMOID;
     }
 
     @Override

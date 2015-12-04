@@ -1,14 +1,17 @@
 package org.neoevolution.core.error;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public class DEFunction extends AbstractErrorFunction {
+@Component
+public class DEFunction extends AbstractErrorFunction<NEErrorFunctionType> {
 
     @Override
-    public ErrorFunctionType getType() {
-        return ErrorFunctionType.DE;
+    public NEErrorFunctionType getType() {
+        return NEErrorFunctionType.DE;
     }
 
     @Override

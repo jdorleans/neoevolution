@@ -1,9 +1,11 @@
 package org.neoevolution.mvc.model.configuration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.neo4j.ogm.annotation.Relationship;
 import org.neoevolution.core.ConnectionStrategy;
-import org.neoevolution.core.activation.ActivationFunctionType;
+import org.neoevolution.core.activation.ActivationFunction;
+import org.neoevolution.mvc.json.ActivationDeserializer;
 import org.neoevolution.mvc.model.AbstractEntity;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
 import org.neoevolution.mvc.model.innovation.SynapseInnovation;
@@ -52,13 +54,17 @@ public abstract class NNConfiguration extends AbstractEntity {
 
     protected Double speciesSizeRate;
 
-    protected ActivationFunctionType activationBias;
+    @JsonDeserialize(using = ActivationDeserializer.class)
+    protected ActivationFunction activationBias;
 
-    protected ActivationFunctionType activationInput;
+    @JsonDeserialize(using = ActivationDeserializer.class)
+    protected ActivationFunction activationInput;
 
-    protected ActivationFunctionType activationHidden;
+    @JsonDeserialize(using = ActivationDeserializer.class)
+    protected ActivationFunction activationHidden;
 
-    protected ActivationFunctionType activationOutput;
+    @JsonDeserialize(using = ActivationDeserializer.class)
+    protected ActivationFunction activationOutput;
 
 
     protected NNConfiguration() {
@@ -216,31 +222,31 @@ public abstract class NNConfiguration extends AbstractEntity {
         this.speciesSizeRate = speciesSizeRate;
     }
 
-    public ActivationFunctionType getActivationBias() {
+    public ActivationFunction getActivationBias() {
         return activationBias;
     }
-    public void setActivationBias(ActivationFunctionType activationBias) {
+    public void setActivationBias(ActivationFunction activationBias) {
         this.activationBias = activationBias;
     }
 
-    public ActivationFunctionType getActivationInput() {
+    public ActivationFunction getActivationInput() {
         return activationInput;
     }
-    public void setActivationInput(ActivationFunctionType activationInput) {
+    public void setActivationInput(ActivationFunction activationInput) {
         this.activationInput = activationInput;
     }
 
-    public ActivationFunctionType getActivationHidden() {
+    public ActivationFunction getActivationHidden() {
         return activationHidden;
     }
-    public void setActivationHidden(ActivationFunctionType activationHidden) {
+    public void setActivationHidden(ActivationFunction activationHidden) {
         this.activationHidden = activationHidden;
     }
 
-    public ActivationFunctionType getActivationOutput() {
+    public ActivationFunction getActivationOutput() {
         return activationOutput;
     }
-    public void setActivationOutput(ActivationFunctionType activationOutput) {
+    public void setActivationOutput(ActivationFunction activationOutput) {
         this.activationOutput = activationOutput;
     }
 

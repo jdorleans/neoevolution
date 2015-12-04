@@ -1,6 +1,7 @@
 package org.neoevolution.mvc.dataset;
 
 import org.neoevolution.core.error.ErrorFunctionType;
+import org.neoevolution.core.error.NEErrorFunctionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class FitnessDataSet extends SampleDataSet {
     }
 
     public FitnessDataSet(List<SampleData> data) {
-        this(data, 1d, ErrorFunctionType.MSE);
+        this(data, 1d, NEErrorFunctionType.MSE);
     }
 
     public FitnessDataSet(List<SampleData> data, Double maxFitness, ErrorFunctionType type) {

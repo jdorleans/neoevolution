@@ -13,18 +13,17 @@ import java.util.Map;
 public class ErrorFunctionManager {
 
     @Resource
-    private Map<ErrorFunctionType, ErrorFunction> errorFunctions;
+    private Map<String, ErrorFunction> errorFunctions;
 
 
     public ErrorFunction get(ErrorFunctionType type)
     {
         try {
-            return errorFunctions.get(type).clone();
+            return errorFunctions.get(type.getName()).clone();
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
         return null;
     }
-
 
 }

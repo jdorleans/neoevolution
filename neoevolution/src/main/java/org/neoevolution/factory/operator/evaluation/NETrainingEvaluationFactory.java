@@ -1,6 +1,6 @@
 package org.neoevolution.factory.operator.evaluation;
 
-import org.neoevolution.core.error.ErrorFunctionType;
+import org.neoevolution.core.error.NEErrorFunctionType;
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
 
@@ -9,8 +9,8 @@ import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
  * @since 1.0
  */
 public abstract class NETrainingEvaluationFactory
-        <T extends TrainingEvaluation, C extends ErrorConfiguration<ErrorFunctionType>>
-        extends TrainingEvaluationFactory<T, ErrorFunctionType, C> {
+        <T extends TrainingEvaluation, C extends ErrorConfiguration<NEErrorFunctionType>>
+        extends TrainingEvaluationFactory<T, NEErrorFunctionType, C> {
 
 
 }

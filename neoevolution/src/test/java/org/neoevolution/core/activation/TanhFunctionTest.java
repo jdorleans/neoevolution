@@ -19,8 +19,8 @@ public class TanhFunctionTest extends AbstractActivationFunctionTest {
     }
 
     @Override
-    protected ActivationFunctionType getType() {
-        return ActivationFunctionType.TANH;
+    protected NEActivationFunctionType getType() {
+        return NEActivationFunctionType.TANH;
     }
 
     @Override

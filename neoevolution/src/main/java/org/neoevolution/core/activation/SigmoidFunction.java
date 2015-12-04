@@ -1,14 +1,17 @@
 package org.neoevolution.core.activation;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public class SigmoidFunction extends AbstractActivationFunction implements ActivationFunction {
+@Component
+public class SigmoidFunction extends AbstractActivationFunction<NEActivationFunctionType> {
 
     @Override
-    public ActivationFunctionType getType() {
-        return ActivationFunctionType.SIGMOID;
+    public NEActivationFunctionType getType() {
+        return NEActivationFunctionType.SIGMOID;
     }
 
     @Override
