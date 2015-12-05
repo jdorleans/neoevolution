@@ -312,7 +312,7 @@ public class AutoPilotApplication extends ApplicationAdapter {
 
     private void activate()
     {
-        List<Double> inputs = new ArrayList<>(5);
+        List<Double> inputs = new ArrayList<>(4);
         calculateHeight(inputs);
         calculateVelocity(inputs);
         inputs.add(closestRock.invert ? 1d : 0d);
