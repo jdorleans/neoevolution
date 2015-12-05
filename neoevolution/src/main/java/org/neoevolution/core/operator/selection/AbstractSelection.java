@@ -43,11 +43,15 @@ public abstract class AbstractSelection<R extends Reproduction, M extends Mutati
         List<Genotype> offsprings = Collections.synchronizedList(new ArrayList<>(populationSize));
         List<Genotype> bestGenotypes = Collections.synchronizedList(new ArrayList<>(maxSpeciesSize));
 
-        species.parallelStream().forEach(specie -> {
+        species.parallelStream().forEach(specie ->
+        {
             Species survival = select(specie, generation, totalFitness, offsprings);
-            bestGenotypes.add(survival.getBestGenotype());
-            totalSize.addAndGet(survival.getGenotypes().size());
-            survivals.add(survival);
+
+            if (survival != null) {
+                bestGenotypes.add(survival.getBestGenotype());
+                totalSize.addAndGet(survival.getGenotypes().size());
+                survivals.add(survival);
+            }
         });
         survivals.forEach(population::addSpecies);
 
@@ -68,7 +72,7 @@ public abstract class AbstractSelection<R extends Reproduction, M extends Mutati
 
     protected void reproduce(Long generation, int births, List<Genotype> genotypes, List<Genotype> offsprings)
     {
-        IntStream.of(births).parallel().forEach(i -> {
+        IntStream.range(0, births).parallel().forEach(i -> {
             Parents parents = selectParents(genotypes);
             Genotype offspring = reproduction.reproduce(parents, generation);
             mutation.mutate(offspring);
