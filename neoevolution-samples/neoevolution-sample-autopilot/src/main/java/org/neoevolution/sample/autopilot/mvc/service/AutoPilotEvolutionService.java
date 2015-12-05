@@ -9,14 +9,13 @@ import org.neoevolution.sample.autopilot.mvc.repository.AutoPilotEvolutionReposi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.Future;
-
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
 @Service
-public class AutoPilotEvolutionService extends NEEvolutionService<AutoPilotEvolution, AutoPilotConfiguration, AutoPilotEvolutionRepository> {
+public class AutoPilotEvolutionService extends NEEvolutionService
+        <AutoPilotEvolution, AutoPilotConfiguration, AutoPilotEvolutionRepository, AutoPilotAlgorithmFactory> {
 
     @Autowired
     protected AutoPilotEvolutionService(AutoPilotEvolutionRepository repository, AutoPilotConfigurationService configurationService) {
@@ -24,8 +23,8 @@ public class AutoPilotEvolutionService extends NEEvolutionService<AutoPilotEvolu
     }
 
     @Override
-    public Future<AutoPilotEvolution> evolve(AutoPilotConfiguration configuration, Boolean create) {
-        AutoPilotNeoEvolution.application.setMaxScores(configuration.getFitness());
+    public AutoPilotEvolution evolve(AutoPilotConfiguration configuration, Boolean create) {
+        AutoPilotNeoEvolution.application.setMaxScores(configuration.getBestFitness());
         return super.evolve(configuration, create);
     }
 

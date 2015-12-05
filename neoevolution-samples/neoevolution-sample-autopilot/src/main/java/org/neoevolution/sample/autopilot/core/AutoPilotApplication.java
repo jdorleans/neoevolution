@@ -339,17 +339,9 @@ public class AutoPilotApplication extends ApplicationAdapter {
         inputs.add(distCeiling);
     }
 
-    private void calculateVelocity(List<Double> inputs)
-    {
+    private void calculateVelocity(List<Double> inputs) {
         double verticalVelocity = plane.body.getLinearVelocity().y / -GRAVITY_FORCE;
-
-        if (verticalVelocity >= 0) {
-            inputs.add(verticalVelocity);
-            inputs.add(0d);
-        } else {
-            inputs.add(0d);
-            inputs.add(-verticalVelocity);
-        }
+        inputs.add(verticalVelocity);
     }
 
     private void draw()

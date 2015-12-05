@@ -5,9 +5,6 @@ import org.neoevolution.mvc.model.Genotype;
 import org.neoevolution.mvc.model.Population;
 import org.neoevolution.sample.autopilot.AutoPilotNeoEvolution;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.scheduling.annotation.AsyncResult;
-
-import java.util.concurrent.Future;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -22,7 +19,7 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
     }
 
     @Override
-    protected Future<Genotype> evaluate(Genotype genotype)
+    protected synchronized void evaluate(Genotype genotype)
     {
         AutoPilotNeoEvolution.application.run(genotype);
 
@@ -34,7 +31,6 @@ public class AutoPilotEvaluation extends AbstractEvaluation {
             }
         }
         genotype.setEvaluated(true);
-        return new AsyncResult<>(genotype);
     }
 
 }
