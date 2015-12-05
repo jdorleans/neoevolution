@@ -15,8 +15,8 @@ import java.util.List;
  * @author Jonathan D'Orleans <jdorleans@sagaranatech.com>
  * @since 1.0
  */
-public abstract class EvolutionService
-        <T extends Evolution<C>, C extends NNConfiguration, R extends EvolutionRepository<T>>
+public abstract class EvolutionService<T extends Evolution<C>, C extends NNConfiguration,
+        R extends EvolutionRepository<T>, F extends NNAlgorithmFactory<? extends NNAlgorithm, C>>
         extends AbstractService<T, R> {
 
     @Autowired
@@ -59,7 +59,7 @@ public abstract class EvolutionService
     }
 
     private NNAlgorithm createAlgorithm(C configuration) {
-        NNAlgorithmFactory<NNAlgorithm, C> factory = createFactory();
+        F factory = createFactory();
         factory.configure(configuration);
         return factory.create();
     }
@@ -92,6 +92,6 @@ public abstract class EvolutionService
 
     protected abstract T create();
 
-    protected abstract <F extends NNAlgorithmFactory> F createFactory();
+    protected abstract F createFactory();
 
 }

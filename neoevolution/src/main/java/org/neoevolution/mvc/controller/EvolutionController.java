@@ -1,6 +1,5 @@
 package org.neoevolution.mvc.controller;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.neoevolution.mvc.model.Evolution;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 import org.neoevolution.mvc.model.innovation.NeuronInnovation;
@@ -17,7 +16,7 @@ import java.util.concurrent.ExecutionException;
  * @since 1.0
  */
 public abstract class EvolutionController
-        <T extends Evolution<C>, S extends EvolutionService<T, C, ?>, C extends NNConfiguration>
+        <T extends Evolution<C>, S extends EvolutionService<T, C, ?, ?>, C extends NNConfiguration>
         extends AbstractController<T, S> {
 
 
@@ -38,8 +37,7 @@ public abstract class EvolutionController
     public List<T> evolve(@RequestBody List<C> configurations,
                           @RequestParam(required = false) Boolean create,
                           @RequestParam(required = false) boolean project)
-            throws ExecutionException, InterruptedException
-    {
+            throws ExecutionException, InterruptedException {
         return projection(service.evolve(configurations, create), project);
     }
 
@@ -47,16 +45,14 @@ public abstract class EvolutionController
     public List<T> evolve(@RequestBody C configuration, @PathVariable int runs,
                           @RequestParam(required = false) Boolean create,
                           @RequestParam(required = false) boolean project)
-            throws ExecutionException, InterruptedException
+            throws ExecutionException, InterruptedException, CloneNotSupportedException
     {
         long total = 0;
         List<T> evolutions = new ArrayList<>(runs);
-        configuration.setNeuronInnovation(null);
-        configuration.setSynapseInnovation(null);
 
         for (int i = 0; i < runs; i++)
         {
-            C config = SerializationUtils.clone(configuration);
+            C config = (C) configuration.clone();
             config.setNeuronInnovation(new NeuronInnovation());
             config.setSynapseInnovation(new SynapseInnovation());
             long start = System.currentTimeMillis();

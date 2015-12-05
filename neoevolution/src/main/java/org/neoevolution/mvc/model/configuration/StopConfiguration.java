@@ -6,7 +6,7 @@ package org.neoevolution.mvc.model.configuration;
  */
 public interface StopConfiguration {
 
-    Double getFitness();
+    Double getBestFitness();
 
     Integer getMaxGeneration();
 

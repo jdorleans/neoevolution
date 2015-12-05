@@ -1,7 +1,6 @@
 package org.neoevolution.core.activation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -9,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
  */
 public interface ActivationFunction<T extends ActivationFunctionType> {
 
-    @JsonUnwrapped
     T getType();
 
     double calculate(double input);

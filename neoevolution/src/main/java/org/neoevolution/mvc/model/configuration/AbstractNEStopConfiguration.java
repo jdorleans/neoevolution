@@ -9,7 +9,7 @@ public abstract class AbstractNEStopConfiguration
 
     private static final long serialVersionUID = -4476670834461032225L;
 
-    protected Double fitness;
+    protected Double bestFitness;
 
     protected Integer maxGeneration;
 
@@ -17,19 +17,22 @@ public abstract class AbstractNEStopConfiguration
 
 
     protected AbstractNEStopConfiguration() {
+        super();
         assertAll = false;
-        fitness = 0.9;
+        bestFitness = 0.9;
         maxGeneration = 100;
     }
 
 
-    public Double getFitness() {
-        return fitness;
+    @Override
+    public Double getBestFitness() {
+        return bestFitness;
     }
-    public void setFitness(Double fitness) {
-        this.fitness = fitness;
+    public void setBestFitness(Double bestFitness) {
+        this.bestFitness = bestFitness;
     }
 
+    @Override
     public Integer getMaxGeneration() {
         return maxGeneration;
     }
@@ -37,6 +40,7 @@ public abstract class AbstractNEStopConfiguration
         this.maxGeneration = maxGeneration;
     }
 
+    @Override
     public Boolean isAssertAll() {
         return assertAll;
     }

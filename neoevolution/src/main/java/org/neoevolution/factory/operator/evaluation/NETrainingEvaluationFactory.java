@@ -1,5 +1,6 @@
 package org.neoevolution.factory.operator.evaluation;
 
+import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.core.error.NEErrorFunctionType;
 import org.neoevolution.core.operator.evaluation.TrainingEvaluation;
 import org.neoevolution.mvc.model.configuration.ErrorConfiguration;
@@ -12,5 +13,8 @@ public abstract class NETrainingEvaluationFactory
         <T extends TrainingEvaluation, C extends ErrorConfiguration<NEErrorFunctionType>>
         extends TrainingEvaluationFactory<T, NEErrorFunctionType, C> {
 
+    protected NETrainingEvaluationFactory(FitnessCalculator fitnessCalculator) {
+        super(fitnessCalculator);
+    }
 
 }

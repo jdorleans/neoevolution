@@ -1,9 +1,10 @@
 package org.neoevolution.sample.xor.factory;
 
+import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.factory.algorithm.AbstractNEStopAlgorithmFactory;
 import org.neoevolution.sample.xor.core.XORAlgorithm;
-import org.neoevolution.sample.xor.mvc.model.XORConfiguration;
 import org.neoevolution.sample.xor.core.XOREvaluation;
+import org.neoevolution.sample.xor.mvc.model.XORConfiguration;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -12,9 +13,9 @@ import org.neoevolution.sample.xor.core.XOREvaluation;
 public class XORAlgorithmFactory extends AbstractNEStopAlgorithmFactory
         <XORAlgorithm, XOREvaluation, XORConfiguration> {
 
-    public XORAlgorithmFactory() {
+    public XORAlgorithmFactory(FitnessCalculator fitnessCalculator) {
         super();
-        evaluationFactory = new XOREvaluationFactory();
+        evaluationFactory = new XOREvaluationFactory(fitnessCalculator);
     }
 
     @Override

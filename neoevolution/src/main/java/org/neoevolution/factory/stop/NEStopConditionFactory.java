@@ -19,7 +19,7 @@ public class NEStopConditionFactory<C extends StopConfiguration>
     @Override
     public void configure(C configuration) {
         super.configure(configuration);
-        stopCondition.add(new FitnessStop(configuration.getFitness()));
+        stopCondition.add(new FitnessStop(configuration.getBestFitness()));
         stopCondition.add(new GenerationStop(configuration.getMaxGeneration()));
         stopCondition.setAssertAll(configuration.isAssertAll());
     }

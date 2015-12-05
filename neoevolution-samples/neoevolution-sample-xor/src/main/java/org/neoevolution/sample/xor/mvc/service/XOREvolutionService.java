@@ -1,5 +1,6 @@
 package org.neoevolution.sample.xor.mvc.service;
 
+import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.mvc.service.NEEvolutionService;
 import org.neoevolution.sample.xor.factory.XORAlgorithmFactory;
 import org.neoevolution.sample.xor.mvc.model.XORConfiguration;
@@ -13,7 +14,11 @@ import org.springframework.stereotype.Service;
  * @since 1.0
  */
 @Service
-public class XOREvolutionService extends NEEvolutionService<XOREvolution, XORConfiguration, XOREvolutionRepository> {
+public class XOREvolutionService extends NEEvolutionService
+        <XOREvolution, XORConfiguration, XOREvolutionRepository, XORAlgorithmFactory> {
+
+    @Autowired
+    private FitnessCalculator fitnessCalculator;
 
     @Autowired
     protected XOREvolutionService(XOREvolutionRepository repository, XORConfigurationService configurationService) {
@@ -27,7 +32,7 @@ public class XOREvolutionService extends NEEvolutionService<XOREvolution, XORCon
 
     @Override
     protected XORAlgorithmFactory createFactory() {
-        return new XORAlgorithmFactory();
+        return new XORAlgorithmFactory(fitnessCalculator);
     }
 
 }

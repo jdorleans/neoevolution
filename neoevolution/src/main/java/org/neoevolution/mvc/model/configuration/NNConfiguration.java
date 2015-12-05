@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
  * @since 1.0
  */
-public abstract class NNConfiguration extends AbstractEntity {
+public abstract class NNConfiguration extends AbstractEntity implements Cloneable {
 
     private static final long serialVersionUID = -2459309402975620977L;
 
@@ -92,6 +92,12 @@ public abstract class NNConfiguration extends AbstractEntity {
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof NNConfiguration && super.equals(obj));
+    }
+
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
 

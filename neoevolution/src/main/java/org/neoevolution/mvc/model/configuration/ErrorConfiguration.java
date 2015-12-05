@@ -8,6 +8,8 @@ import org.neoevolution.core.error.ErrorFunctionType;
  */
 public interface ErrorConfiguration<T extends ErrorFunctionType> {
 
+    Double getMaxFitness();
+
     T getErrorFunctionType();
 
 }
