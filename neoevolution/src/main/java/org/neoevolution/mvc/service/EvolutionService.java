@@ -47,12 +47,10 @@ public abstract class EvolutionService<T extends Evolution<C>, C extends NNConfi
 
     public T evolve(C configuration, Boolean create)
     {
-        T evolution = createEvolution(configuration);
-        create(evolution, create);
-
         NNAlgorithm algorithm = createAlgorithm(configuration);
         algorithm.evolve();
 
+        T evolution = createEvolution(configuration);
         evolution.setFinished(true);
         evolution.setPopulation(algorithm.getPopulation());
         return create(evolution, create);

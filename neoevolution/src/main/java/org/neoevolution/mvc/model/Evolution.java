@@ -3,8 +3,6 @@ package org.neoevolution.mvc.model;
 import org.neo4j.ogm.annotation.Relationship;
 import org.neoevolution.mvc.model.configuration.NNConfiguration;
 
-import static org.neo4j.ogm.annotation.Relationship.INCOMING;
-
 /**
 * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
 * @since 1.0
@@ -16,7 +14,7 @@ public abstract class Evolution<C extends NNConfiguration> extends AbstractEntit
     @Relationship(type="EVOLVES")
     protected Population population;
 
-    @Relationship(type="CONFIG", direction = INCOMING)
+    @Relationship(type="CONFIG")
     protected C configuration;
 
     protected Boolean finished;

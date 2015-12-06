@@ -36,6 +36,9 @@ public class NeuronService extends AbstractInnovationEntityService<Neuron, Neuro
     }
 
     @Override
+    protected void afterCreate(Neuron entity, boolean updateReference) { }
+
+    @Override
     protected void beforeUpdate(Neuron entity, Neuron dbEntity) {
         entity.setInputs(dbEntity.getInputs());
         entity.setOutputs(dbEntity.getOutputs());

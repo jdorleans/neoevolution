@@ -34,10 +34,12 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
 
     // FIND //
 
+    @Transactional(readOnly = true)
     public T find(Long id) {
         return repository.findOne(id);
     }
 
+    @Transactional(readOnly = true)
     public List<T> find(List<Long> ids)
     {
         List<T> entities = new ArrayList<>(ids.size());
@@ -53,6 +55,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
         return entities;
     }
 
+    @Transactional(readOnly = true)
     public T find(T entity) {
         return (entity != null ? repository.findOne(entity.getId()) : null);
     }
@@ -84,7 +87,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
         if (entity != null) {
             entity.setId(null);
             beforeCreate(entity, updateReference);
-            e = repository.save(entity);
+            e = repository.save(entity, 0);
             afterCreate(entity, updateReference);
         }
         return e;
@@ -122,7 +125,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
 
             if (dbEntity != null) {
                 beforeUpdate(entity, dbEntity);
-                e = repository.save(entity);
+                e = repository.save(entity, 0);
                 afterUpdate(entity, dbEntity);
             }
         }
@@ -186,7 +189,9 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
     }
 
     protected void beforeCreate(T entity, boolean updateReference) { }
-    protected void afterCreate(T entity, boolean updateReference) { }
+    protected void afterCreate(T entity, boolean updateReference) {
+        repository.save(entity, 1);
+    }
 
     protected void beforeUpdate(T entity, T dbEntity) { }
     protected void afterUpdate(T entity, T dbEntity) { }

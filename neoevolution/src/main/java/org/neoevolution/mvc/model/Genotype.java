@@ -40,7 +40,7 @@ public class Genotype extends AbstractFitnessEntity {
 
 
     public Genotype() {
-        this(1L, 1L, new TreeSet<Neuron>(), new TreeSet<Neuron>());
+        this(1L, 1L, new TreeSet<>(), new TreeSet<>());
     }
 
     public Genotype(Long innovation, Long generation, SortedSet<Neuron> inputs, SortedSet<Neuron> outputs)
