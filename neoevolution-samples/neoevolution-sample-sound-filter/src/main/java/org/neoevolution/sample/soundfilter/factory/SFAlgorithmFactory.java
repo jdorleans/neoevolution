@@ -1,5 +1,6 @@
 package org.neoevolution.sample.soundfilter.factory;
 
+import org.neoevolution.core.error.FitnessCalculator;
 import org.neoevolution.factory.algorithm.AbstractNEStopAlgorithmFactory;
 import org.neoevolution.sample.soundfilter.core.SFAlgorithm;
 import org.neoevolution.sample.soundfilter.core.SFEvaluation;
@@ -12,9 +13,9 @@ import org.neoevolution.sample.soundfilter.mvc.model.SFConfiguration;
 public class SFAlgorithmFactory extends AbstractNEStopAlgorithmFactory
         <SFAlgorithm, SFEvaluation, SFConfiguration> {
 
-    public SFAlgorithmFactory() {
+    public SFAlgorithmFactory(FitnessCalculator fitnessCalculator) {
         super();
-        evaluationFactory = new SFEvaluationFactory();
+        evaluationFactory = new SFEvaluationFactory(fitnessCalculator);
     }
 
     @Override

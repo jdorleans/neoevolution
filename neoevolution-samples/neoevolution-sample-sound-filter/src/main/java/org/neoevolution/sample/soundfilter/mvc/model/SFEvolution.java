@@ -1,7 +1,7 @@
 package org.neoevolution.sample.soundfilter.mvc.model;
 
+import org.neo4j.ogm.annotation.NodeEntity;
 import org.neoevolution.mvc.model.Evolution;
-import org.springframework.data.neo4j.annotation.NodeEntity;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
