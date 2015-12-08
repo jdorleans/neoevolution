@@ -57,12 +57,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert-core</artifactId>
-            <version>2.0M10</version>
-        </dependency>
-
         <!-- LIBGDX -->
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
