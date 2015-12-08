@@ -11,7 +11,7 @@ import org.neoevolution.sample.xor.mvc.model.XORConfiguration;
  */
 public class XOREvaluationFactory extends NETrainingEvaluationFactory<XOREvaluation, XORConfiguration> {
 
-    protected XOREvaluationFactory(FitnessCalculator fitnessCalculator) {
+    public XOREvaluationFactory(FitnessCalculator fitnessCalculator) {
         super(fitnessCalculator);
     }
 
