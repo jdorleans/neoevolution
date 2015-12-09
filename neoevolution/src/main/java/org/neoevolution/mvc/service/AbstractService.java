@@ -2,6 +2,7 @@ package org.neoevolution.mvc.service;
 
 import org.neoevolution.mvc.model.AbstractEntity;
 import org.springframework.data.neo4j.repository.GraphRepository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public abstract class AbstractService<T extends AbstractEntity, R extends GraphR
         return create(entities, false);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<T> create(Iterable<T> entities, boolean updateReference)
     {
         List<T> es = new ArrayList<>(CAPACITY);

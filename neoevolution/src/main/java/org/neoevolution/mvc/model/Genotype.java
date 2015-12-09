@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.Transient;
 import org.neoevolution.mvc.json.InnovationArraySerializer;
 import org.neoevolution.util.MapUtils;
 
@@ -36,6 +37,7 @@ public class Genotype extends AbstractFitnessEntity {
     @Relationship(type="NEURON")
     private Set<Neuron> neurons;
 
+    @Transient
     private Set<Synapse> synapses;
 
 

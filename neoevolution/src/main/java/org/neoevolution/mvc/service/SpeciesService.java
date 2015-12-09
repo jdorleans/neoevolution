@@ -33,7 +33,7 @@ public class SpeciesService extends AbstractFitnessEntityService<Species, Specie
 
         if (genotypes != null)
         {
-            genotypeService.create(genotypes, updateReference);
+            genotypeService.create(entity.getBestGenotype(), updateReference);
 
             if (updateReference) {
                 updateBestGenotype(entity, genotypes);

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.Transient;
 import org.neo4j.ogm.annotation.typeconversion.Convert;
 import org.neoevolution.core.activation.ActivationFunction;
 import org.neoevolution.mvc.converter.ActivationToStringConverter;
@@ -29,7 +30,8 @@ public class Neuron extends Gene {
 
     private NeuronType type;
 
-    private transient Double impulses;
+    @Transient
+    private Double impulses;
 
     @Convert(ActivationToStringConverter.class)
     @JsonDeserialize(using = ActivationDeserializer.class)
