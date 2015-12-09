@@ -25,7 +25,7 @@ public class SFValidationController {
 
     public static final String INPUT_FILE1 = "sound/mix-cello-piano";
     public static final String INPUT_FILE2 = "sound/mix-female-piano";
-    public static final int TIME_FRAME = 21;
+    public static final int TIME_FRAME = 80;
 
     @Autowired
     private GenotypeService service;
@@ -51,18 +51,14 @@ public class SFValidationController {
 
             int inFrames;
             int timeFrame = TIME_FRAME;
-            double[] inBuffer = new double[timeFrame];
 
             do {
+                double[] inBuffer = new double[timeFrame];
                 inFrames = inFile.readFrames(inBuffer, timeFrame);
                 List<Double> inputs = new ArrayList<>(timeFrame);
 
-                for (int i = 0; i < inFrames; i++) {
+                for (int i = 0; i < timeFrame; i++) {
                     inputs.add(inBuffer[i]);
-                }
-
-                while (inputs.size() < timeFrame) {
-                    inputs.add(0d);
                 }
                 outputs.addAll(activation.activate(genotype, inputs));
             }
@@ -86,7 +82,7 @@ public class SFValidationController {
         try {
             String outPath = getClass().getClassLoader().getResource("").getPath() + outputName +"-out.wav";
 
-            int sampleRate = 44100;		// Samples per second
+            int sampleRate = 16000;		// Samples per second
             int size = outputs.size();
             double[] buffer = new double[size];
             WavFile wavFile = WavFile.newWavFile(new File(outPath), 1, size, 16, sampleRate);
