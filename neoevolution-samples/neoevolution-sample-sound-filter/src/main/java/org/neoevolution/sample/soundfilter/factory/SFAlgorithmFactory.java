@@ -5,6 +5,7 @@ import org.neoevolution.factory.algorithm.AbstractNEStopAlgorithmFactory;
 import org.neoevolution.sample.soundfilter.core.SFAlgorithm;
 import org.neoevolution.sample.soundfilter.core.SFEvaluation;
 import org.neoevolution.sample.soundfilter.mvc.model.SFConfiguration;
+import org.neoevolution.sample.soundfilter.mvc.service.SFValidationService;
 
 /**
  * @author Jonathan D'Orleans <jonathan.dorleans@gmail.com>
@@ -13,14 +14,17 @@ import org.neoevolution.sample.soundfilter.mvc.model.SFConfiguration;
 public class SFAlgorithmFactory extends AbstractNEStopAlgorithmFactory
         <SFAlgorithm, SFEvaluation, SFConfiguration> {
 
-    public SFAlgorithmFactory(FitnessCalculator fitnessCalculator) {
+    private SFValidationService validationService;
+
+    public SFAlgorithmFactory(FitnessCalculator fitnessCalculator, SFValidationService validationService) {
         super();
         evaluationFactory = new SFEvaluationFactory(fitnessCalculator);
+        this.validationService = validationService;
     }
 
     @Override
     protected SFAlgorithm creation() {
-        return new SFAlgorithm();
+        return new SFAlgorithm(validationService);
     }
 
 }

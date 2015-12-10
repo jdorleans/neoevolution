@@ -16,7 +16,7 @@ public class SFEvaluation extends TrainingEvaluation {
 
     public static final String INPUT_FILE = "sound/mix-cello-piano.wav";
     public static final String OUTPUT_FILE = "sound/piano.wav";
-    public static final int TIME_FRAME = 80;
+    public static final int TIME_FRAME = 16;
 
     public SFEvaluation() {
         super();
@@ -39,15 +39,19 @@ public class SFEvaluation extends TrainingEvaluation {
                 double[] outBuffer = new double[timeFrame];
                 inFrames = inFile.readFrames(inBuffer, timeFrame);
                 outFrames = outFile.readFrames(outBuffer, timeFrame);
-                SampleData sample = new SampleData(timeFrame, timeFrame);
 
-                for (int i = 0; i < timeFrame; i++) {
-                    sample.addInput(inBuffer[i]);
-                    sample.addOutput(outBuffer[i]);
+                if (inFrames > 0 && outFrames > 0)
+                {
+                    SampleData sample = new SampleData(timeFrame, timeFrame);
+
+                    for (int i = 0; i < timeFrame; i++) {
+                        sample.addInput(inBuffer[i]);
+                        sample.addOutput(outBuffer[i]);
+                    }
+                    data.add(sample);
                 }
-                data.add(sample);
             }
-            while (inFrames % timeFrame == 0 && outFrames % timeFrame == 0);
+            while (inFrames == timeFrame && outFrames == timeFrame);
 
             inFile.close();
             outFile.close();

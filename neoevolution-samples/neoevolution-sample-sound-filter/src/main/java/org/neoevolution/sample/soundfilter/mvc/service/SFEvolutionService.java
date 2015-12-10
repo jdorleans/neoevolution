@@ -21,6 +21,9 @@ public class SFEvolutionService extends NEEvolutionService
     private FitnessCalculator fitnessCalculator;
 
     @Autowired
+    private SFValidationService validationService;
+
+    @Autowired
     protected SFEvolutionService(SFEvolutionRepository repository, SFConfigurationService configurationService) {
         super(repository, configurationService);
     }
@@ -32,7 +35,7 @@ public class SFEvolutionService extends NEEvolutionService
 
     @Override
     protected SFAlgorithmFactory createFactory() {
-        return new SFAlgorithmFactory(fitnessCalculator);
+        return new SFAlgorithmFactory(fitnessCalculator, validationService);
     }
 
 }
