@@ -11,14 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 1.0
  */
 @RestController
-@RequestMapping("/soundfilter/validate")
+@RequestMapping("/soundfilter/{id}/validate")
 public class SFValidationController {
 
     @Autowired
     private SFValidationService service;
 
 
-    @RequestMapping(value = "/{id}")
     public void validate(@PathVariable Long id) {
         service.validate(id);
     }
