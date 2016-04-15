@@ -24,8 +24,7 @@ public class NeoEvolutionConfiguration {
 
     @Bean
     @Autowired
-    public Map<String, ActivationFunction> activationFunctions(List<ActivationFunction> activations)
-    {
+    public Map<String, ActivationFunction> activationFunctions(List<ActivationFunction> activations) {
         Map<String, ActivationFunction> functions = new HashMap<>(activations.size());
         for (ActivationFunction activation : activations) {
             functions.put(activation.getType().getName(), activation);
@@ -34,8 +33,8 @@ public class NeoEvolutionConfiguration {
     }
 
     @Bean
-    public Map<String, ErrorFunction> errorFunctions(List<ErrorFunction> errors)
-    {
+    @Autowired
+    public Map<String, ErrorFunction> errorFunctions(List<ErrorFunction> errors) {
         Map<String, ErrorFunction> functions = MapUtils.createHashMap(errors.size());
         for (ErrorFunction error : errors) {
             functions.put(error.getType().getName(), error);

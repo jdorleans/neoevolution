@@ -8,8 +8,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
-import org.springframework.data.neo4j.server.Neo4jServer;
-import org.springframework.data.neo4j.server.RemoteServer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.annotation.PostConstruct;
@@ -24,35 +22,20 @@ import static org.springframework.web.context.WebApplicationContext.SCOPE_SESSIO
  * @since 1.0
  */
 @Configuration
-@PropertySource("classpath:neoevolution.properties")
+@PropertySource("classpath:ogm.properties")
 @EnableNeo4jRepositories("org.neoevolution.mvc.repository")
 @EnableTransactionManagement
 public class NENeo4jConfiguration extends Neo4jConfiguration {
 
     private static final String MODEL_PACKAGE = "org.neoevolution.mvc.model";
 
-    @Value("${neoevolution.neo4j.login}")
-    private String login;
-
-    @Value("${neoevolution.neo4j.password}")
-    private String password;
-
-    @Value("${neoevolution.neo4j.url}")
-    private String url;
-
-    @Value("#{'${neoevolution.neo4j.packages}'.replaceAll('\\s*', '').split(',')}")
+    @Value("#{'${packages}'.replaceAll('\\s*', '').split(',')}")
     private List<String> packages;
 
 
     @PostConstruct
     private void init() throws IOException {
         packages.add(MODEL_PACKAGE);
-    }
-
-
-    @Override
-    public Neo4jServer neo4jServer() {
-        return new RemoteServer(url, login, password);
     }
 
     @Override
